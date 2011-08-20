@@ -53,7 +53,7 @@ IDLMethod::stub_arglist_get () const
 		retval += i->type->stub_decl_arg_get (i->id, i->direction);
 
 		if (i != back)
-			retval += ',';
+			retval += ", ";
 	}
 
 	return retval;
@@ -121,9 +121,9 @@ IDLMethod::stub_do_call (ostream &ostr,
 
 	// Handle user exceptions
 	ostr << indent << "if (_ev->_major == ::CORBA_USER_EXCEPTION)" << endl
-	     << indent++ << "{" << endl;
+	     << indent << "{" << endl;
 
-	ostr << indent << IDL_CORBA_NS "::RepositoryId const repo_id = "
+	ostr << ++indent << IDL_CORBA_NS "::RepositoryId const repo_id = "
 	     << "::CORBA_exception_id (_ev._orbitcpp_cobj ());" << endl;
 
 	if (m_raises.size ()) // Are there any known user exceptions?
@@ -176,7 +176,7 @@ IDLMethod::skel_ret_get () const
 string 
 IDLMethod::skel_arglist_get () const
 {
-	string retval = "::PortableServer_Servant _servant,";
+	string retval = "::PortableServer_Servant _servant, ";
 
 	for (ParameterList::const_iterator i = m_parameterinfo.begin ();
 	     i != m_parameterinfo.end (); i++)
