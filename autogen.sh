@@ -30,7 +30,10 @@ DIE=0
 }
 
 # Check for automake, the required version is set in Makefile.am
-(automake-1.4 --version) < /dev/null > /dev/null 2>&1 ||{
+# We assume 1.4 as the minimum requirement here
+(automake --version | head -1 | awk '{ split($NF, major_minor, ".");
+                                       int_ver = major_minor[1] * 100 + major_minor[2];
+                                       if (int_ver < 104) { exit 1 } }') || {
 	echo
 	echo "You must have at minimum automake version 1.4 installed."
 	echo "Download the appropriate package for"
@@ -59,9 +62,9 @@ do
   echo processing $i
   (cd $i; \
     libtoolize --copy --force; \
-    aclocal-1.4 $ACLOCAL_FLAGS;
+    aclocal $ACLOCAL_FLAGS;
     if test "$i" != "libIDL"; then autoheader; fi; \
-    automake-1.4 --add-missing --copy $am_opt; \
+    automake --add-missing --copy $am_opt; \
     if test "$i" != "libIDL"; then autoheader; fi; \
     autoconf)
 done
