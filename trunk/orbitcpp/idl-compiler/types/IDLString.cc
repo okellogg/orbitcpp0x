@@ -40,9 +40,9 @@ IDLString::const_decl_write (ostream          &header,
 			     const IDLTypedef *active_typedef) const
 {
 	header << indent;
-	if (scope.scope_implementation() == IDLScopeImplementation::by_namespace) 
+	if (scope.scope_implementation() == IDLScopeImplementation::by_namespace)
 		header << "extern ";
-		
+
 
 	header << char_ << " const* const " << cpp_id << ";\n";
 	module << char_ << " const* const " << scope.get_cpp_typename() << "::" << cpp_id << " = _orbitcpp::StringProperties<" << char_ << ">::convert(" << value << ");\n";
@@ -56,9 +56,13 @@ IDLString::typedef_decl_write (ostream          &ostr,
 			       const IDLTypedef *active_typedef) const
 {
 	string target_id = target.get_cpp_identifier ();
-	
-	ostr << indent << "typedef " << char_ << "* " << target_id << ';' << endl;	
+
+#ifdef IDL2CPP0X
+	ostr << indent << "typedef " << String_ << " " << target_id << ';' << endl;
+#else
+	ostr << indent << "typedef " << char_ << "* " << target_id << ';' << endl;
 	ostr << indent << "typedef ::CORBA::" << String_ << "_var " << target_id << "_var;" << endl;
+#endif
 }
 
 string
@@ -68,6 +72,18 @@ IDLString::stub_decl_arg_get (const string     &cpp_id,
 {
 	string retval;
 
+#ifdef IDL2CPP0X
+	switch (direction)
+	{
+	case IDL_PARAM_IN:
+		retval = "const " + String_ + "& " + cpp_id;
+		break;
+	case IDL_PARAM_INOUT:
+	case IDL_PARAM_OUT:
+		retval = String_ + "& " + cpp_id;
+		break;
+	}
+#else
 	switch (direction)
 	{
 	case IDL_PARAM_IN:
@@ -80,6 +96,7 @@ IDLString::stub_decl_arg_get (const string     &cpp_id,
 		retval = "::CORBA::" + String_ + "_out " + cpp_id;
 		break;
 	}
+#endif
 
 	return retval;
 }
@@ -91,9 +108,25 @@ IDLString::stub_impl_arg_pre (ostream        &ostr,
 			      IDL_param_attr  direction,
 			      const IDLTypedef *active_typedef) const
 {
-	// Do nothing
+#ifdef IDL2CPP0X
+	switch (direction)
+	{
+	case IDL_PARAM_IN:
+		break;
+	case IDL_PARAM_INOUT:
+		ostr << indent << "const " << char_ << " *_" << cpp_id
+		     << " = " << cpp_id << ".c_str ();" << endl;
+		ostr << indent << char_ << "* _c_" << cpp_id
+		     << " = CORBA_string_dup (_" << cpp_id << ");"
+		     << endl;
+		break;
+	case IDL_PARAM_OUT:
+		ostr << indent << char_ << " *_c_" << cpp_id << " = NULL;" << endl;
+		break;
+	}
+#endif
 }
-	
+
 string
 IDLString::stub_impl_arg_call (const string   &cpp_id,
 			       IDL_param_attr  direction,
@@ -101,6 +134,20 @@ IDLString::stub_impl_arg_call (const string   &cpp_id,
 {
 	string retval;
 
+#ifdef IDL2CPP0X
+	switch (direction)
+	{
+	case IDL_PARAM_IN:
+		retval = cpp_id + ".c_str ()";
+		break;
+	case IDL_PARAM_INOUT:
+		retval = "&_c_" + cpp_id;
+		break;
+	case IDL_PARAM_OUT:
+		retval = "&_c_" + cpp_id;
+		break;
+	}
+#else
 	switch (direction)
 	{
 	case IDL_PARAM_IN:
@@ -113,10 +160,11 @@ IDLString::stub_impl_arg_call (const string   &cpp_id,
 		retval = "&(" + char_ + "*&) " + cpp_id;
 		break;
 	}
+#endif
 
 	return retval;
 }
-	
+
 void
 IDLString::stub_impl_arg_post (ostream        &ostr,
 			       Indent         &indent,
@@ -124,7 +172,10 @@ IDLString::stub_impl_arg_post (ostream        &ostr,
 			       IDL_param_attr  direction,
 			       const IDLTypedef *active_typedef) const
 {
-	// Do nothing
+#ifdef IDL2CPP0X
+	if (direction != IDL_PARAM_IN)
+		ostr << indent << cpp_id << " = _c_" << cpp_id << ";" << endl;
+#endif
 }
 
 
@@ -133,9 +184,13 @@ IDLString::stub_impl_arg_post (ostream        &ostr,
 string
 IDLString::stub_decl_ret_get (const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	return String_;
+#else
 	return char_ + "*";
+#endif
 }
-	
+
 void
 IDLString::stub_impl_ret_pre (ostream &ostr,
 			      Indent  &indent,
@@ -159,9 +214,13 @@ IDLString::stub_impl_ret_post (ostream &ostr,
 			       Indent  &indent,
 			       const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	ostr << indent << "return " << String_ << " (_retval);" << endl;
+#else
 	ostr << indent << "return _retval;" << endl;
+#endif
 }
-	
+
 
 
 
@@ -171,7 +230,7 @@ IDLString::skel_decl_arg_get (const string     &c_id,
 			      const IDLTypedef *active_typedef) const
 {
 	string retval;
-	
+
 	switch (direction)
 	{
 	case IDL_PARAM_IN:
@@ -183,7 +242,7 @@ IDLString::skel_decl_arg_get (const string     &c_id,
 		break;
 	}
 
-	return retval;	
+	return retval;
 }
 
 void
@@ -193,16 +252,38 @@ IDLString::skel_impl_arg_pre (ostream        &ostr,
 			      IDL_param_attr  direction,
 			      const IDLTypedef *active_typedef) const
 {
-	// Do nothing
+#ifdef IDL2CPP0X
+	if (direction != IDL_PARAM_IN)
+	{
+		ostr << indent << String_ << " _cpp_" << c_id;
+		if (direction == IDL_PARAM_INOUT)
+			ostr << " (*" << c_id << ")";
+		ostr << ";" << endl;
+	}
+#endif
 }
-	
+
 string
 IDLString::skel_impl_arg_call (const string   &c_id,
 			       IDL_param_attr  direction,
 			       const IDLTypedef *active_typedef) const
 {
 	string retval;
-	
+
+#ifdef IDL2CPP0X
+	switch (direction)
+	{
+	case IDL_PARAM_IN:
+		retval =  String_ + " (" + c_id + ")";
+		break;
+	case IDL_PARAM_INOUT:
+		retval = "_cpp_" + c_id;
+		break;
+	case IDL_PARAM_OUT:
+		retval = "_cpp_" + c_id;
+		break;
+	}
+#else
 	switch (direction)
 	{
 	case IDL_PARAM_IN:
@@ -215,10 +296,11 @@ IDLString::skel_impl_arg_call (const string   &c_id,
 		retval = "::CORBA::" + String_ + "_out (*" + c_id + ")";
 		break;
 	}
+#endif
 
-	return retval;	
+	return retval;
 }
-	
+
 void
 IDLString::skel_impl_arg_post (ostream        &ostr,
 			       Indent         &indent,
@@ -226,7 +308,15 @@ IDLString::skel_impl_arg_post (ostream        &ostr,
 			       IDL_param_attr  direction,
 			       const IDLTypedef *active_typedef) const
 {
-	// Do nothing
+#ifdef IDL2CPP0X
+	if (direction != IDL_PARAM_IN)
+	{
+		ostr << indent << "const char *_" << c_id << " = _cpp_"
+		     << c_id << ".c_str ();" << endl;
+		ostr << indent << "*" << c_id << " = CORBA_string_dup (_"
+		     << c_id << ");" << endl;
+	}
+#endif
 }
 
 
@@ -243,7 +333,11 @@ IDLString::skel_impl_ret_pre (ostream &ostr,
 			      Indent  &indent,
 			      const IDLTypedef *active_typedef) const
 {
-	ostr << indent << char_ << "* _retval = 0;\n";
+#ifdef IDL2CPP0X
+	ostr << indent << String_ << " _retval;" << endl;
+#else
+	ostr << indent << char_ << "* _retval = 0;" << endl;
+#endif
 }
 
 void
@@ -261,14 +355,23 @@ IDLString::skel_impl_ret_post (ostream &ostr,
 			       Indent  &indent,
 			       const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	ostr << indent << "const char *_c_retval = _retval.c_str ();" << endl;
+	ostr << indent << "return CORBA_string_dup (_c_retval);" << endl;
+#else
 	ostr << indent << "return _retval;" << endl;
+#endif
 }
 
 
 string
 IDLString::get_cpp_member_typename (const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	return String_;
+#else
 	return "CORBA::" + String_ + "_var";
+#endif
 }
 
 string
@@ -280,7 +383,11 @@ IDLString::get_c_member_typename (const IDLTypedef *active_typedef) const
 string
 IDLString::member_decl_arg_get (const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	return "const " + String_ + "&";
+#else
 	return char_ + " const*";
+#endif
 }
 
 void
@@ -289,8 +396,13 @@ IDLString::member_impl_arg_copy (ostream      &ostr,
 				 const string &cpp_id,
 				 const IDLTypedef *active_typedef) const
 {
-	ostr << indent << cpp_id << " = _par_" << cpp_id
-	     << ';' << endl;
+	ostr << indent;
+#ifdef IDL2CPP0X
+	// ostr << "_" << cpp_id << " = " << String_ << " (_par_" << cpp_id << ")";
+	ostr << "_";
+#endif
+	ostr << cpp_id << " = " << "_par_" << cpp_id;
+	ostr << ';' << endl;
 }
 
 void
@@ -309,9 +421,17 @@ IDLString::member_pack_to_c (ostream      &ostr,
 			     const string &c_id,
 			     const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	ostr << indent << "{" << endl;
+	ostr << ++indent << "const char *_cstr = "
+	     << cpp_id << ".c_str ();" << endl;
+	ostr << indent << c_id << " = CORBA_string_dup (_cstr);" << endl;
+	ostr << --indent << "}" << endl;
+#else
 	ostr << indent << c_id << " = "
 	     << "CORBA::" << string_ << "_dup (" << cpp_id << ")"
 	     << ';' << endl;
+#endif
 }
 
 void
@@ -321,8 +441,12 @@ IDLString::member_unpack_from_c (ostream      &ostr,
 				 const string &c_id,
 				 const IDLTypedef *active_typedef) const
 {
-	ostr << indent << cpp_id << " = CORBA::" << string_ << "_dup (" << c_id << ")"
-	     << ';' << endl;
+#ifdef IDL2CPP0X
+	ostr << indent << cpp_id << " = " << String_;
+#else
+	ostr << indent << cpp_id << " = CORBA::" << string_ << "_dup";
+#endif
+	ostr << " (" << c_id << ");" << endl;
 }
 
 void
@@ -335,12 +459,17 @@ IDLString::create_union_accessors(IDLUnion const& un, IDLCaseStmt const& case_st
 	string full_member_name = (un.is_fixed ()) ?
 		"m_target._u." + member_name :
 		"m_target->_u." + member_name;
-	
+
 	// Getter accessor
+#ifdef IDL2CPP0X
+	header << indent << String_ << " " << member_name << " () const { return "
+		<< String_ << "(" << full_member_name << "); }" << endl;
+#else
 	header << indent << char_ << " const* "
 		<< member_name << " () const { return "
 		<< full_member_name << "; }" << endl;
-	
+#endif
+
 
 	// Setter accessor
 	string discr_val;
@@ -348,52 +477,77 @@ IDLString::create_union_accessors(IDLUnion const& un, IDLCaseStmt const& case_st
 		discr_val = un.get_discriminator_default_value ();
 	else
 		discr_val = *(case_stmt.labelsBegin());
-	
 
+
+#ifdef IDL2CPP0X
+	// void z(const std::string&);
+	header << indent << "void " << member_name
+	       << " (const " << String_ << " &val);" << endl << endl;
+
+	module << "void "
+	       << un.get_cpp_method_prefix () << "::" << member_name
+	       << " (const " << String_ << " &val)" << endl
+	       << "{" << endl;
+
+	module << ++mod_indent << "const " << char_
+	       << " *_cstr = val.c_str ();" << endl;
+	module << mod_indent << "_clear_member ();" << endl;
+	module << mod_indent << "_d (" << discr_val << ");" << endl;
+
+	module << mod_indent << full_member_name
+	       << " = CORBA_string_dup (_cstr);" << endl;
+
+	module << --mod_indent << "}" << endl << endl;
+#else
 	// void z(const String_var&);
 	header << indent << "void " << member_name
 		 << " (CORBA::" << String_ << "_var const& val);" << endl << endl;
 	
-	module << mod_indent << "void "
+	module << "void "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " (CORBA::" << String_ << "_var const& val)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << "_clear_member ();" << endl;
+	module << ++mod_indent << "_clear_member ();" << endl;
 	module << mod_indent << "_d (" << discr_val << ");" << endl;
 
-	module << mod_indent << full_member_name << " = CORBA::" << string_ << "_dup(val);";
+	module << mod_indent << full_member_name
+		 << " = CORBA::" << string_ << "_dup(val);" << endl;
 
 	module << --mod_indent << "}" << endl << endl;
+#endif
 
 	// void z(const char*)
 	header << indent << "void " << member_name
 		 << " (" << char_ << " const* val);" << endl << endl;
-	
-	module << mod_indent << "void "
+
+	module << "void "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " (" << char_ << " const* val)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << "_clear_member ();" << endl;
+	module << ++mod_indent << "_clear_member ();" << endl;
 	module << mod_indent << "_d (" << discr_val << ");" << endl;
 
-	module << mod_indent << full_member_name << " = CORBA::" << string_ << "_dup(val);";
+	module << mod_indent << full_member_name << " = ";
+	module << "CORBA::" << string_ << "_dup(val);" << endl;
 	module << --mod_indent << "}" << endl << endl;
 
+#ifndef IDL2CPP0X
 	// void z(char*)
 	header << indent << "void " << member_name
 		 << " (" << char_ << "* val);" << endl << endl;
-	
-	module << mod_indent << "void "
+
+	module << "void "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " (" << char_ << "* val)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << "_clear_member ();" << endl;
+	module << ++mod_indent << "_clear_member ();" << endl;
 	module << mod_indent << "_d (" << discr_val << ");" << endl;
 
 	module << mod_indent << full_member_name << " = val;";
 
 	module << --mod_indent << "}" << endl << endl;
+#endif
 }

@@ -85,6 +85,9 @@ IDLCompound::write_packing_impl (ostream &ostr,
 	{
 		IDLMember &member = (IDLMember &) **i;
 		string cpp_id = member.get_cpp_identifier ();
+#ifdef IDL2CPP0X
+		cpp_id.insert (0, "_");
+#endif
 		string c_id = "_c_struct." + member.get_c_identifier ();
 		
 		member.getType ()->member_pack_to_c (ostr, indent, cpp_id, c_id);
@@ -104,6 +107,9 @@ IDLCompound::write_packing_impl (ostream &ostr,
 	{
 		IDLMember &member = (IDLMember &) **i;
 		string cpp_id = member.get_cpp_identifier ();
+#ifdef IDL2CPP0X
+		cpp_id.insert (0, "_");
+#endif
 		string c_id = "_c_struct." + member.get_c_identifier ();
 
 		member.getType ()->member_unpack_from_c (ostr, indent, cpp_id, c_id);
@@ -120,14 +126,52 @@ IDLCompound::write_member_decls (ostream &ostr,
 		return;
 	ostr << indent << "// members" << endl;
 
+#ifdef IDL2CPP0X
+	for (const_iterator i = begin (); i != end (); i++)
+	{
+		IDLMember &member = (IDLMember &) **i;
+		const IDLType *t = member.getType ();
+		const string typ = t->get_cpp_member_typename ();
+		const string id = member.get_cpp_identifier ();
+		ostr << indent << "void " << id << " (";
+		if (!t->is_scalar ())
+			ostr << "const ";
+		ostr << typ;
+		if (!t->is_scalar ())
+			ostr << "&";
+		ostr << " value) { _" << id << " = value; }" << endl;
+		if (t->is_scalar ())
+		{
+			ostr << indent << typ << " " << id
+				 << "() const { return _" << id << "; }" << endl;
+		}
+		else
+		{
+			ostr << indent << "const " << typ << "& " << id
+				 << "() const { return _" << id << "; }" << endl;
+			ostr << indent << typ << "& " << id << "() { return _"
+				 << id << "; }" << endl;
+		}
+	}
+	ostr << endl;
+	ostr << --indent << "private:" << endl;
+	++indent;
+#endif
 	for (const_iterator i = begin (); i != end (); i++)
 	{
 		IDLMember &member = (IDLMember &) **i;
 		ostr << indent << member.getType ()->get_cpp_member_typename ()
 			 << " ";
+#ifdef IDL2CPP0X
+		ostr << "_";
+#endif
 		ostr << member.get_cpp_identifier () << ";" << endl;
 	}
 	ostr << endl;
 
+#ifdef IDL2CPP0X
+	ostr << --indent << "public:" << endl;
+	++indent;
+#endif
 }
 

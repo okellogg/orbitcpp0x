@@ -28,6 +28,7 @@
 #include "IDLSequence.h"
 
 #include "IDLTypedef.h"
+#include "IDLString.h"
 
 IDLSequence::IDLSequence (const IDLType &element_type,
 			  unsigned int   length) :
@@ -64,12 +65,35 @@ IDLSequence::typedef_decl_write (ostream          &ostr,
 	
 	ostr << indent << "typedef " << cpp_type << " " << cpp_typedef
 	     << ";" << endl;
-		
+	
+#ifdef IDL2CPP0X
+	/* General remark:
+	 * Conversion of sequences to C++0x is work in progress.
+	 * Currently, only sequence<string> is converted to C++0x.
+	 * This code is hacky right now - once all
+	 * sequence classes are converted to C++0x it will be cleaned up.
+	 */
+	if (cpp_type.find ("StringUnboundedSeq") != std::string::npos)
+	{
+		ostr << indent << "typedef " << cpp_typedef << "& "
+		     << cpp_typedef << "_out;" << endl;
+	}
+	else
+	{
+		/* Create smart pointers.
+		   This code will be changed soon - see remark above.  */
+		ostr << indent << "typedef " << IDL_IMPL_NS << "::Sequence_var<"
+		     << cpp_typedef << "> " << cpp_typedef << "_var;" << endl;
+		ostr << indent << "typedef " << IDL_IMPL_NS << "::Sequence_out<"
+		     << cpp_typedef << "> " << cpp_typedef << "_out;" << endl;
+	}
+#else
 	// Create smart pointers
 	ostr << indent << "typedef " << IDL_IMPL_NS << "::Sequence_var<" << cpp_typedef << "> "
 	     << cpp_typedef << "_var;" << endl;
 	ostr << indent << "typedef " << IDL_IMPL_NS << "::Sequence_out<" << cpp_typedef << "> "
 	     << cpp_typedef << "_out;" << endl;
+#endif
 }
 
 string
@@ -131,8 +155,6 @@ IDLSequence::stub_impl_arg_post (ostream          &ostr,
 				 IDL_param_attr    direction,
 				 const IDLTypedef *active_typedef) const
 {
-	string cpp_type = get_cpp_member_typename(active_typedef);
-	
 	if (direction == IDL_PARAM_INOUT)
 	{
 		// Load back values
@@ -142,8 +164,17 @@ IDLSequence::stub_impl_arg_post (ostream          &ostr,
 
 	if (direction == IDL_PARAM_OUT)
 	{
+		string ref = "->";
+#ifdef IDL2CPP0X
+		// This is hacky. See "general remark" above.
+		string cpp_type = m_element_type.get_seq_typename (m_length);
+		if (cpp_type.find ("StringUnboundedSeq") != std::string::npos)
+			ref = ".";
+#else
+		string cpp_type = get_cpp_member_typename(active_typedef);
 		ostr << indent << cpp_id << " = new " << cpp_type << ";" << endl;
-		ostr << indent << cpp_id << "->_orbitcpp_unpack ("
+#endif
+		ostr << indent << cpp_id << ref << "_orbitcpp_unpack ("
 		     << "*_c_" << cpp_id << ");" << endl;
 	}
 	
@@ -156,7 +187,11 @@ IDLSequence::stub_impl_arg_post (ostream          &ostr,
 string
 IDLSequence::stub_decl_ret_get (const IDLTypedef *active_typedef) const
 {
+#ifdef IDL2CPP0X
+	return get_cpp_member_typename(active_typedef);
+#else
 	return get_cpp_member_typename(active_typedef) + "*";
+#endif
 }
 	
 void
@@ -184,9 +219,15 @@ IDLSequence::stub_impl_ret_post (ostream          &ostr,
 {
 	string cpp_type = get_cpp_member_typename(active_typedef);
 	
-	ostr << indent << cpp_type << " *_cpp_retval = new "
-	     << cpp_type << ";" << endl;
-	ostr << indent << "_cpp_retval->_orbitcpp_unpack (*_c_retval);" << endl;
+	ostr << indent << cpp_type;
+#ifdef IDL2CPP0X
+	ostr << " _cpp_retval;" << endl;
+	ostr << indent << "_cpp_retval.";
+#else
+	ostr << " *_cpp_retval = new " << cpp_type << ";" << endl;
+	ostr << indent << "_cpp_retval->";
+#endif
+	ostr << "_orbitcpp_unpack (*_c_retval);" << endl;
 	ostr << indent << "CORBA_free (_c_retval);" << endl << endl;
 	ostr << indent << "return _cpp_retval;" << endl;
 }
@@ -227,6 +268,7 @@ IDLSequence::skel_impl_arg_pre (ostream          &ostr,
 {
 	string cpp_id = "_cpp_" + c_id;
 	string cpp_type = get_cpp_member_typename(active_typedef);
+	string elem_type = m_element_type.get_c_member_typename();
 
 	switch (direction)
 	{
@@ -236,7 +278,12 @@ IDLSequence::skel_impl_arg_pre (ostream          &ostr,
 		ostr << indent << cpp_id << "._orbitcpp_unpack (*" << c_id << ");" << endl;
 		break;
 	case IDL_PARAM_OUT:
-		ostr << indent << cpp_type << "::_var_type " << cpp_id << ";" << endl;
+		ostr << indent << cpp_type;
+#ifdef IDL2CPP0X
+		if (elem_type != "CORBA_string")
+			ostr << "::_var_type";
+#endif
+		ostr << " " << cpp_id << ";" << endl;
 		break;
 	}
 }
@@ -256,16 +303,21 @@ IDLSequence::skel_impl_arg_post (ostream          &ostr,
 				 IDL_param_attr    direction,
 				 const IDLTypedef *active_typedef) const
 {
-	string cpp_type = get_cpp_member_typename(active_typedef);
-	
 	if (direction == IDL_PARAM_INOUT)
 		ostr << indent << "_cpp_" << c_id << "._orbitcpp_pack"
 		     << " (*" << c_id << ");" << endl;
 
 	if (direction == IDL_PARAM_OUT)
 	{
+		string ref = "->";
+#ifdef IDL2CPP0X
+		string cpp_type = m_element_type.get_seq_typename (m_length);
+		// This is hacky. See "general remark" above.
+		if (cpp_type.find ("StringUnboundedSeq") != std::string::npos)
+			ref = ".";
+#endif
 		ostr << indent << "*" << c_id << " = "
-		     << "_cpp_" << c_id << "->_orbitcpp_pack ();" << endl;
+		     << "_cpp_" << c_id << ref << "_orbitcpp_pack ();" << endl;
 	}
 }
 
@@ -283,8 +335,11 @@ IDLSequence::skel_impl_ret_pre (ostream          &ostr,
 				Indent           &indent,
 				const IDLTypedef *active_typedef) const
 {
-	ostr << indent << get_cpp_member_typename(active_typedef)
-	     << "::_var_type _cpp_retval;" << endl;
+	ostr << indent << get_cpp_member_typename(active_typedef);
+#ifndef IDL2CPP0X
+	ostr << "::_var_type";
+#endif
+	ostr << " _cpp_retval;" << endl;
 }
 
 void
@@ -301,7 +356,16 @@ IDLSequence::skel_impl_ret_post (ostream          &ostr,
 				 Indent           &indent,
 				 const IDLTypedef *active_typedef) const
 {
-	ostr << indent << "return _cpp_retval->_orbitcpp_pack ();" << endl << endl;
+	string ref = ".";
+#ifdef IDL2CPP0X
+	string cpp_type = m_element_type.get_seq_typename (m_length);
+	// ostr << "// cpp_type : " << cpp_type << endl;
+	// This is hacky. See "general remark" above.
+	if (cpp_type.find ("StringUnboundedSeq") != std::string::npos)
+		ref = ".";
+#endif
+	ostr << indent << "return _cpp_retval" << ref << "_orbitcpp_pack ();"
+	     << endl << endl;
 }
 
 
@@ -348,6 +412,11 @@ IDLSequence::get_seq_typename (unsigned int      length,
 	std::string c_member_typename_base = get_c_member_typename_base (active_typedef);
 	std::string cpp_member_typename = get_cpp_member_typename (active_typedef);
 
+#ifdef IDL2CPP0X
+	if (c_member_typename_base == "CORBA_string")
+		tmp = g_strdup (IDL_IMPL_NS "::StringUnboundedSeq");
+	else
+#endif
 	if (length)
 		tmp = g_strdup_printf (
 			IDL_IMPL_NS "::SimpleBoundedSeq< " IDL_IMPL_NS "::seq_traits< %s, %s, %s, CORBA_sequence_%s, &TC_CORBA_sequence_%s_struct>, %d >",
@@ -384,6 +453,11 @@ IDLSequence::member_impl_arg_copy (ostream          &ostr,
 			      const string     &cpp_id,
 			      const IDLTypedef *active_typedef) const
 {
+	ostr << indent;
+#ifdef IDL2CPP0X
+	ostr << "_";
+#endif
+	ostr << cpp_id << " = _par_" << cpp_id << ';' << endl;
 }
 
 void

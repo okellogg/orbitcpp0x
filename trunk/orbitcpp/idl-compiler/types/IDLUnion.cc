@@ -169,7 +169,7 @@ IDLUnion::stub_impl_arg_pre (ostream          &ostr,
 		break;
 	case IDL_PARAM_OUT:
 		if (!is_fixed ())
-			ostr << c_id << " = " << c_type << "__alloc ()"
+			ostr << indent << c_id << " = " << c_type << "__alloc ()"
 			     << ";" << endl;
 		break;
 	}		
@@ -479,8 +479,11 @@ IDLUnion::member_impl_arg_copy (ostream          &ostr,
 				const string     &cpp_id,
 				const IDLTypedef *active_typedef) const
 {
-	ostr << indent << cpp_id << " = "
-	     << "_par_" << cpp_id << ";" << endl;
+	ostr << indent;
+#ifdef IDL2CPP0X
+	ostr << "_";
+#endif
+	ostr << cpp_id << " = " << "_par_" << cpp_id << ";" << endl;
 }
 
 void

@@ -98,7 +98,11 @@ IDLPassXlate::doStruct (IDL_tree  node,
 
 	// Create forward declaration
 	m_header << indent;
+#ifdef IDL2CPP0X
+	m_header << "class ";
+#else
 	m_header << "struct ";
+#endif
 	m_header << strct.get_cpp_identifier () << ";" << endl << endl;
 
 	// Create _out and _var typedef
@@ -107,7 +111,13 @@ IDLPassXlate::doStruct (IDL_tree  node,
 	
 	// Create the struct itself
 	m_header << indent;
+#ifdef IDL2CPP0X
+	m_header << "class ";
+#else
 	m_header << "struct ";
+#endif
+	m_header << strct.get_cpp_identifier () << endl
+		 << indent << "{" << endl;
 
 	++indent;
 	struct_create_traits (strct);
@@ -160,6 +170,11 @@ void IDLPassXlate::struct_create_members (const IDLStruct &strct)
 {
 	strct.write_member_decls (m_header, indent);
 
+#ifndef IDL2CPP0X
+	// Create _var typedef
+	m_header << indent << "typedef " << strct.get_cpp_identifier ()
+		 << "_var _var_type;" << endl << endl;
+#endif
 	
 	// Create default constructor
 	m_header << indent << strct.get_cpp_identifier () << "();" << endl;
@@ -174,6 +189,9 @@ void IDLPassXlate::struct_create_members (const IDLStruct &strct)
 		IDLMember &member = (IDLMember &) **i;
 
 		member.getType ()->member_init_cpp (m_module, mod_indent,
+#ifdef IDL2CPP0X
+						    "_" + 
+#endif
 						    member.get_cpp_identifier ());
 	}
 
@@ -198,6 +216,9 @@ void IDLPassXlate::struct_create_converters (const IDLStruct &strct)
 		IDLMember &member = (IDLMember &) **i;
 
 		member.getType ()->member_init_cpp (m_module, mod_indent,
+#ifdef IDL2CPP0X
+						    "_" + 
+#endif
 						    member.get_cpp_identifier ());
 	}
 	m_module << mod_indent << "_orbitcpp_unpack (_c_struct);" << endl;
@@ -213,6 +234,12 @@ void IDLPassXlate::struct_create_typedefs (const IDLStruct &strct)
 	const string data_prefix = IDL_IMPL_NS "::Data";
 	const string data_var = data_prefix + "_var< " + strct.get_cpp_identifier () + ">";
 
+#ifdef IDL2CPP0X
+	m_header << indent << "typedef "
+		 << strct.get_cpp_identifier () << "& "
+		 << strct.get_cpp_identifier () << "_out;"
+		 << endl;
+#else
 	m_header << indent << "typedef " << data_var << " "
 		 << strct.get_cpp_identifier () << "_var;"
 		 << endl;
@@ -229,6 +256,7 @@ void IDLPassXlate::struct_create_typedefs (const IDLStruct &strct)
 			 << strct.get_cpp_identifier () << "_out;"
 			 << endl;
 	}
+#endif
 }
 
 void IDLPassXlate::struct_create_any (const IDLStruct &strct)

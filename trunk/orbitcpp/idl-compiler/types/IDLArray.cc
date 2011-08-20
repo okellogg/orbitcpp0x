@@ -826,6 +826,9 @@ IDLArray::member_impl_arg_copy (ostream          &ostr,
 	string member_id = cpp_id;
 	string param_id = "_par_" + member_id;
 	
+#ifdef IDL2CPP0X
+	member_id.insert (0, "_");
+#endif
 	ostr << indent << copy_func << " (" << member_id << ", " << param_id
 	     << ");" << endl;
 }
@@ -886,11 +889,10 @@ IDLArray::create_union_accessors(IDLUnion const& un, IDLCaseStmt const& case_stm
 	module << mod_indent << slice_type << " "
 		<< un.get_cpp_method_prefix () << "::" << member_name
 		<< " () const" << endl
-		<< mod_indent++ << "{" << endl;
+		<< mod_indent << "{" << endl;
 
-	 module << mod_indent << member_cpp_type << " _ret;" << endl;
-	 member_unpack_from_c (
-			 module, mod_indent, "_ret", full_member_name);
+	 module << ++mod_indent << member_cpp_type << " _ret;" << endl;
+	 member_unpack_from_c (module, mod_indent, "_ret", full_member_name);
 
 	 // FIXME: leaks memory
 	 module << mod_indent << "return " << member_cpp_type << "_dup(_ret);" << endl;
