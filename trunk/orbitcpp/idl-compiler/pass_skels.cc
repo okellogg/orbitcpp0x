@@ -89,7 +89,8 @@ IDLPassSkels::create_method_skel (const IDLInterface &iface,
 	// print header
 	m_module << mod_indent << method.skel_ret_get () << " "
 		 << skel_name << " (" + method.skel_arglist_get () + ") throw ()" << endl
-		 << mod_indent++ << "{" << endl;
+		 << mod_indent << "{" << endl;
+	++mod_indent;
 
 	// inherited => call up base "passthru"
 	if (&iface != &of)
@@ -347,13 +348,19 @@ IDLPassSkels::doInterfaceEPVs (IDLInterface &iface)
 		 << "::PortableServer_ServantBase__epv _base_epv;" << endl;
 
 	// base_epv def
-	m_module << mod_indent++ <<  "::"
+	m_module << mod_indent <<  "::"
 		 << "PortableServer_ServantBase__epv "
 		 << iface.get_cpp_poa_method_prefix () << "::_base_epv = {" << endl;
+	++mod_indent;
 
 	m_module << mod_indent << "NULL, // _private" << endl
 		 << mod_indent << iface.get_cpp_poa_typename () << "::_orbitcpp_fini," << endl
-		 << mod_indent << "NULL  // _default_POA" << endl;
+		 << mod_indent << "NULL, // default_POA" << endl
+		 << mod_indent << "NULL, // add_ref" << endl
+		 << mod_indent << "NULL, // remove_ref" << endl
+		 << mod_indent << "NULL, // get_interface" << endl
+		 << mod_indent << "NULL, // is_a" << endl
+		 << mod_indent << "NULL  // non_existent" << endl;
 
 	m_module << --mod_indent << "};" << endl << endl;
 
@@ -372,11 +379,11 @@ IDLPassSkels::doInterfaceEPVs (IDLInterface &iface)
 		 << iface.get_c_poa_vepv () << " _vepv;" << endl;
 
 	// vepv def
-	m_module << mod_indent++ << IDL_IMPL_C_NS_NOTUSED
+	m_module << mod_indent << IDL_IMPL_C_NS_NOTUSED
 		 << iface.get_c_poa_vepv() << ' '
 		 << iface.get_cpp_poa_method_prefix () << "::_vepv = {" << endl;
 
-	m_module << mod_indent << '&' << iface.get_cpp_poa_typename ()
+	m_module << ++mod_indent << '&' << iface.get_cpp_poa_typename ()
 		 << "::_base_epv," << endl;
 
 	for (IDLInterface::BaseList::const_iterator i = iface.m_allbases.begin ();
@@ -411,11 +418,11 @@ void
 IDLPassSkels::defineEPV (IDLInterface &iface,
 			 IDLInterfaceRight &of)
 {
-	m_module << mod_indent++ << IDL_IMPL_C_NS_NOTUSED
+	m_module << mod_indent << IDL_IMPL_C_NS_NOTUSED
 		 << of.get_c_poa_epv () << ' '
 		 << iface.get_cpp_poa_method_prefix () << "::"
 		 << "_" << of.get_c_typename () << "_epv = {" << endl;
-	m_module << mod_indent << "0, // _private" << endl;
+	m_module << ++mod_indent << "0, // _private" << endl;
 
 	IDL_tree body_list = IDL_INTERFACE(of.getNode()).body;
   
@@ -470,9 +477,9 @@ IDLPassSkels::doInterfaceFinalizer (IDLInterface &iface)
 		 << "::_orbitcpp_fini ("
 		 <<  "::PortableServer_Servant servant, "
 		 <<  "::CORBA_Environment *ev)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << mod_indent << "{" << endl;
 
-	m_module << mod_indent << "//Call C _fini():" << endl
+	m_module << ++mod_indent << "//Call C _fini():" << endl
 		 << mod_indent << IDL_IMPL_C_NS_NOTUSED
 		 << iface.get_c_poa_typename () << "__fini (servant, ev);" << endl << endl;
 	
@@ -520,10 +527,10 @@ IDLPassSkels::doInterfaceDerive(IDLInterface &iface) {
 	m_header << "public virtual "
 		 << IDL_POA_NS "::ServantBase" << endl;
 	
-	m_header << indent++ << "{" << endl;
+	m_header << indent << "{" << endl;
 
 	// C interface
-	m_header << indent << "// C interface" << endl;
+	m_header << ++indent << "// C interface" << endl;
 	m_header << --indent << "public:" << endl;
 	indent++;
 	doInterfaceAppServant(iface);
@@ -577,7 +584,8 @@ IDLPassSkels::doInterfaceDerive(IDLInterface &iface) {
 
 	m_module << mod_indent << iface.get_cpp_typename_ptr () << " "
 		 << iface.get_cpp_poa_method_prefix () << "::" << "_this()" << endl
-		 << mod_indent++ << "{" << endl;
+		 << mod_indent << "{" << endl;
+	++mod_indent;
 
 	m_module << mod_indent << "PortableServer::POA_var rootPOA = _default_POA ();" << endl << endl;
 	
