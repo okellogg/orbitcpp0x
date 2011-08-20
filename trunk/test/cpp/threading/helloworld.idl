@@ -1,0 +1,14 @@
+module test {
+	interface Worker {
+		void ping ();
+	};
+
+	interface Master {
+		void create_thread ();
+		void submit_work (in Worker server);
+	};
+
+	interface Dual : Worker, Master {
+	};
+};
+

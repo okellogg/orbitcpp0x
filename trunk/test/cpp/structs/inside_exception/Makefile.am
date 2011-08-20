@@ -1,0 +1,15 @@
+idlname = test
+
+include $(top_srcdir)/test/cpp/Makefile.am_fragment
+
+SUBDIRS=generated
+check_PROGRAMS=client server
+
+# Server is linked with stubs and skels:
+server_SOURCES= server.cc test-impl.cc test-impl.h test.idl
+server_LDADD= generated/libtestSkels.a generated/libtestStubs.a $(testcpp_libs)
+
+# Client is linked with stubs:
+client_SOURCES= client.cc test.idl
+client_LDADD= generated/libtestStubs.a $(testcpp_libs)
+

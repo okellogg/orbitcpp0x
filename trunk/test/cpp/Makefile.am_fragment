@@ -1,0 +1,10 @@
+testcpp_libs = $(top_builddir)/orbitcpp/orb-cpp/libORBit-2-cpp.la $(ORBITCPP_LIBS)
+
+INCLUDES = -I$(top_builddir)   -I$(top_srcdir) \
+	$(ORBITCPP_CFLAGS) \
+  -Igenerated \
+  -D_ORBITCPP_TESTCODE
+
+idl_file = $(idlname).idl
+
+EXTRA_DIST = $(idl_file)

@@ -1,0 +1,1780 @@
+2008-02-08  Eugene Sizikov  <esizikov@gmail.com>
+
+	* test/tut.h
+	* test/tut_reporter.h
+	* test/tut_restartable.h:
+	Removed files which aren't used anymore.
+
+	* test/Makefile.am (noinst_INCLUDES)
+	* test/test_factory.cc
+	* test/test_policy.cc:
+	Updated path to used TUT's headers.
+
+	* test/main.cc:
+	Changed TUT's URL to the current one, which is
+	http://tut-framework.sourceforge.net/
+
+2008-02-04  Tor Lillqvist  <tml@novell.com>
+
+	* MAINTAINERS: Update syntax to match commit requirement. Mention
+	orbitcpp is unmaintained, correct murrayc's e-mail.
+
+2008-01-22  Tor Lillqvist  <tml@novell.com>
+
+	Fixes to build on Windows.
+
+	* configure.in: Use the --enable-runtime-pseudo-reloc linker
+	switch on Windows. Needed by the test programs.
+
+	* orbitcpp/idl-compiler/Makefile.am
+	(libORBit_idl_backend_cpp_la_LDFLAGS): Use -no-undefined so that
+	libtool bothers building a DLL on Windows. Should not hurt on Unix
+	either. Use -module -avoid-version instead of specifying any
+	libtool versioning information. Using -version-info means that on
+	Windows the DLL basename gets libtool versioning cruft inserted,
+	producing a name like libORBit-idl-backend-cpp-10.dll. Thus it
+	would not be found using just the "-l cpp" flag to orbit-idl-2.
+	(libORBit_idl_backend_cpp_la_LIBADD): Link with ORBITCPP_IDL_LIBS.
+
+	* orbitcpp/idl-compiler/types/Makefile.am (INCLUDES): Drop extra
+	trailing slash which confuses mingw.
+
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/services/name/Makefile.am: Use -no-undefined so that we
+	do get a DLL on Windows.
+
+	* test/Makefile.am (check_PROGRAMS): client_server.cc uses POSIX
+	APIs, so don't bother with test_runner on Windows.
+
+2007-11-17  Eugene Sizikov  <esizikov@gmail.com>
+
+	* orbitcpp/orb-cpp/orbitcpp_policy.cc
+	* orbitcpp/orb-cpp/orbitcpp_policy.h:
+    Implemented copy and destroy methods of the CORBA::Policy class.
+
+	* orbitcpp/orb-cpp/orbitcpp_poaexceptionlist.h:
+    Added missing PortableServer/POA/AdapterAlreadyExists exception.
+
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h:
+    Used allocbuf instead(max) of new elem_t[max] in SequenceBase constructor;
+    added check for a successfull allocation of the memory buffer, throws
+    CORBA::NO_MEMORY exception if NULL is returned. 
+
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbbitcpp/orb-cpp/orbitcpp_poa.h:
+    Imlpemeted create_POA and find_POA methods of the PortableServer::POA class.
+
+    * test/cpp/policy:
+    Added a primitive client-server test suite for CORBA:Policy support.
+
+    * test/cpp:
+    Aded the Template Unit Tests (TUT) Framework for C++ headers;
+    implemented a couple of test cases as wrappers for existing factory and
+    policy tests. We do need a massive testing of all new stuff. I would very
+    appreciate if somebody assisting me in integrating all existing tests into
+    the TUT-powered regression testing suite. 
+
+    * test/cpp/*/Makefile.am:
+    Test suites are now going to be compiled only when it is explicitly 
+    required: one should now type 'make check' for tests to be built.
+
+2006-11-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/orbitcpp_policy.h
+	* orbitcpp/orb-cpp/orbitcpp_policy.cc:
+	Apply patch by Eugene Sizikov <eugene_beast@mail.ru> to progress
+	bug 364703.
+
+2006-01-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/orb-cpp/smartpointers/arrayfixed_var.h:
+	Apply patch by Elijah Newren to resolve bug 344714.  Address
+	constness problem with arrays.
+
+2006-01-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/orb-cpp/poa-cpp-skels.h:
+	Patch from bug 322490 by Vladimir Panov applied. Improve
+	compilation with Intel compiler (extra/spurious level of
+	indirection with PortableServer_Servant removed).
+
+2006-01-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_tools.cc
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h
+	* orbitcpp/orb-cpp/poa-cpp-skels.cc:
+	Patch from bug 325442 by Vladimir Panov applied. Improve
+	compilation with Sun compiler (return value from unimplemented
+	functions, function pointer casting, and std namespace
+	stuff). Most of it anyway, dropped the return ""; from the
+	function in orbitcpp/idl-compiler/types/IDLArray.cc since its
+	return type was void.
+
+2005-08-09 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/orb-cpp/orbitcpp_traits.h
+	* orbitcpp/orb-cpp/smartpointers/arrayfixed_var.h:
+	Pass array properties through to to seq_traits_array to support
+	packing and unpacking.
+
+2005-08-09 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/orb-cpp/orbitcpp_traits.h:
+	Eliminate seg fault in array test case. But instead abort on
+	execution.
+
+2005-08-04 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/arrays/of_structs/test.idl:
+	Added test case contributed by Ilguiz Latypov.
+
+2005-04-26 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/helloworld/static.mk:
+	Added a relatively simple makefile as an example for others.
+
+2005-04-07 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.h
+	* orbitcpp/idl-compiler/types/IDLSimpleType.ccIDLSimpleType.cc
+	* orbitcpp/orb-cpp/orbitcpp_traits.h:
+	Fix enum so it works properly again. Was trying to make the C++
+	enum type the same as the C enum type and it didn't quite work.
+
+2005-03-08 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/Makefile.am
+	* orbitcpp/idl-compiler/types/IDLElement.cc
+	* orbitcpp/idl-compiler/types/Makefile.am
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/smartpointers/Makefile.am:
+	Correct include directory confusion. Couldn't build from directory
+	other than source directory. Which was messing up make distcheck.
+
+2005-03-01 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/smartpointers/data_var.h:
+	Added const to conversion operator.
+
+2005-01-12 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/threading/server_thread.cc:
+	Replaced call to assert() with g_assert().
+
+2005-01-04 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/threading/helloworld.idl:
+	Sigh. Forgot to at this in previous check in.
+	Added test/example by Nick Glencross <nickg@glencros.demon.co.uk>.
+
+2004-12-21 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in
+	* test/cpp/Makefile.am
+	* test/cpp/threading/Makefile.am
+	* test/cpp/threading/client.cc
+	* test/cpp/threading/helloworld-impl.cc
+	* test/cpp/threading/helloworld-impl.h
+	* test/cpp/threading/server.cc
+	* test/cpp/threading/server_thread.cc
+	* test/cpp/threading/server_thread.h
+	* test/cpp/threading/generated/Makefile.am:
+	Added test/example by Nick Glencross <nickg@glencros.demon.co.uk>.
+
+2004-12-20 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in
+	* test/cpp/Makefile.am
+	* test/cpp/delegate/Makefile.am
+	* test/cpp/delegate/client.cc
+	* test/cpp/delegate/helloworld-impl.cc
+	* test/cpp/delegate/helloworld-impl.h
+	* test/cpp/delegate/helloworld.idl
+	* test/cpp/delegate/server.cc
+	* test/cpp/delegate/generated/Makefile.am:
+	Added test/example by Nick Glencross <nickg@glencros.demon.co.uk>.
+
+2004-12-15 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLCompoundSeqElem.cc
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/orb-cpp/orbitcpp_any.h
+	* orbitcpp/orb-cpp/orbitcpp_string_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_traits.h:
+	Fix broken forward declaration behaviour.
+
+	* test/cpp/everything/everything.idl:
+	Added test that exercised broken forward declaration behaviour.
+	Also removed some old conditional compilation directives.
+
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLModule.h:
+	Allow array to determine parent scope by calculating it when
+	needed. Complete fix of broken typedef behaviour.
+
+	* orbitcpp/idl-compiler/pass_idl_it.cc:
+	Don't need to handle type_spec of typedef.
+
+	* orbitcpp/idl-compiler/error.h
+	* orbitcpp/idl-compiler/language.cc:
+	Use assertions to make debugging easier.
+	
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLTypedef.cc
+	* orbitcpp/idl-compiler/types/IDLTypedef.h:
+	Fix broken typedef behaviour. Wasn't correctly creating typedef
+	objects but substituting aliased type in place.
+
+2004-12-14 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/everything/everything.idl:
+	Added test to exercise broken typedef behavior.
+	
+orbitcpp_1_3_10:
+
+2004-12-14 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/Makefile.am_fragment:
+	Changed duplicate include top_builddir to top_srcdir. This
+	preventing building when top_builddir != top_srcdir. Which is
+	the case for make distcheck.
+	
+	* NEWS
+	* configure.in:
+	Prepare for 1.3.10 release.
+
+	* test/cpp/factory/factory.idl:
+	Added factory IDL file which I forgot in last check in.
+
+2004-12-08 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in
+	* test/cpp/Makfile.am
+	* test/cpp/factory/Makefile.am
+	* test/cpp/factory/client.cc
+	* test/cpp/factory/factory-impl.cc
+	* test/cpp/factory/factory-impl.h
+	* test/cpp/factory/server.cc
+	* test/cpp/factory/generated/Makefile.am:
+	Quickly hacked together example of factory.
+
+2004-11-30 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/error.h
+	* orbitcpp/idl-compiler/pass_idl_it.h
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/pass_skels.h
+	* orbitcpp/idl-compiler/pass_stubs.h
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLArrayList.h
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.cc
+	* orbitcpp/idl-compiler/types/IDLBoolean.h
+	* orbitcpp/idl-compiler/types/IDLCompound.cc
+	* orbitcpp/idl-compiler/types/IDLCompound.h
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLType.cc
+	* orbitcpp/idl-compiler/types/IDLType.h
+	* orbitcpp/idl-compiler/types/IDLTypedef.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h
+	* orbitcpp/idl-compiler/types/IDLVoid.cc:
+	Try and reduce unecessary include dependencies.
+
+	* orbitcpp/idl-compiler/types/IDLInterface.h:
+	Keep a closed list during traversal of bases to prevent repeated
+	output when have diamond inheritance structure.
+
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/error.h
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/pass.h
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.cc
+	* orbitcpp/idl-compiler/types/IDLCompound.h:
+	Try and reduce unecessary include dependencies.
+
+2004-11-26 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.h:
+	Traverse inheritance spec in proper order.
+
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLUnion.cc
+	* orbitcpp/idl-compiler/types/IDLUnion.h:
+	Copy code into IDLUnion to allow unions to be created from just
+	the IDL_tree element.
+
+2004-11-04 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/language.cc:
+	Translate ident constants by using their str member (hope this
+	is right).
+	
+	* orbitcpp/idl-compiler/types/IDLInterface.h:
+	Bug fixed, don't double populate m_allbases one of them should
+	have had m_all_mi_bases as the destination.
+
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Clean up code slightly by removing pointless if statement.
+
+2004-11-03 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Remove debugging print statement.
+
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLInhibited.h:
+	Fix problem with with namespace getting dropped.
+
+2004-10-29 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Put :: in front of stub type.
+
+	* orbitcpp/idl-compiler/base.cc:
+	Correct problem with punctuation characters in file names.
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/idl-compiler/types/IDLSequence.h:
+	Correct problem with member name generation for sequence of sequence.
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h:
+	Include _var_type in sequence to make things work without
+	requiring an active_typedef.
+
+	* orbitcpp/idl-compiler/types/IDLTypedef.cc:
+	Extract ident properly from simple declaration.
+
+	* orbitcpp/idl-compiler/types/IDLArray.cc:
+	Eliminate use of active_typedef. Just rely on ident within
+	IDL_TYPE_ARRAY node.
+
+	* orbitcpp/idl-compiler/types/IDLInhibited.h:
+	Include _ in POA prefix.
+
+2004-10-27 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types.cc:
+	Correct arguments pass to new IDLArray.
+
+	* orbitcpp/idl-compiler/main.cc:
+	Return error code on exception so that orbit-idl-2 can correctly		signal failure of compilation.
+
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLArrayList.cc
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.cc:
+	Allow arrays to be constructed from the two nodes. The node
+	defining the element type and the node defining the dimensions.
+
+2004-10-20 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h:
+	Add _out_type member to sequences to cope with sequences that
+	don't have an active typedef but are used as an out argument.
+	Also fixed a small error in sequence code generation.
+
+	* orbitcpp/idl-compiler/types/IDLInhibited.h:
+	Removed remnants of debugging print.
+
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLScope.cc
+	* orbitcpp/idl-compiler/types/IDLScope.h:
+	Fix namespace generation code to use IDL_tree properly rather
+	than rely on getParentScope() or IDL_NODE_UP().
+
+	* orbitcpp/idl-compiler/language.cc
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLAny.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLBoolean.h
+	* orbitcpp/idl-compiler/types/IDLElement.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.h
+	* orbitcpp/idl-compiler/types/IDLException.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLModule.h
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/idl-compiler/types/IDLStruct.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLTypedef.h
+	* orbitcpp/idl-compiler/types/IDLUnion.cc
+	* orbitcpp/idl-compiler/types/IDLUnion.h:
+	Don't rely on IDLElement to work out qualified names using
+	getParentScope(). Make use of code in IDLInhibited to do that
+	using IDL_tree.
+
+	* orbitcpp/idl-compiler/types.cc:
+	Make use of new struct code instead of inhibited struct.
+
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h:
+	Allow struct to be fully constructed from just IDL_tree node.
+	Correct instantiation of IDLAttribute.
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc:
+	Removed further reliance on active_typedef.
+
+	* orbitcpp/idl-compiler/types/IDLScope.cc:
+	g_assert rather than throw.
+
+2004-10-14 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h:
+	Reduce use of getParentScope(). Replaced with parent_interface()
+	which is inspects IDL_tree.
+
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLElement.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLScope.cc
+	* orbitcpp/idl-compiler/types/IDLScope.h:
+	Get rid of getTopLevelInterface() method. Replace with
+	query interface_child() which works on IDL_tree rather
+	than chain of getParentScope() calls.
+
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.h:
+	Allow enums to be constructed from IDL_tree node only.
+
+	* orbitcpp/idl-compiler/types/IDLSequence.h:
+	Don't rely on active_typedef argument for code generation.
+	Probably a few bugs in here. But can't test until other things
+	are fixed.
+
+2004-10-13 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Correct check for interface as a forward declaration is an interface
+	too.
+
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h:
+	Eliminate static std::vector which was preventing .so file from
+	being loaded.
+
+orbitcpp_post_interface_right_3:
+
+2004-10-13 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/language.cc
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/pass.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLOperation.h:
+	Revised IDLAttribute to allow construction from the two
+	IDL_tree nodes that define an attribute.
+
+orbitcpp_post_interface_right_2:
+
+2004-10-6 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/language.cc
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/pass.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/pass_stubs.cc
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLOperation.h:
+	Reduce argument requirements for IDLOperation to allow
+	construction of IDLOperations with just the OP_DCL node and the
+	owning IDLInterfaceRight. Just need to finish doing the same
+	thing for IDLAttributes and things will almost be finished.
+
+orbitcpp_post_interface_right_1:
+
+2004-10-5 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/pass_skels.h
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.cc
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLObject.cc:
+	Introduce new type IDLInterfaceRight which is the "right way"
+	to implement the interface representation. That is it uses
+	only imformation gained via the IDL_tree node passed to its
+	constructor.  This lets it work with both un-inhibited and
+	inhibited interfaces.  Also the construction of data members,
+	base lists and so on, should be done within the constructor.
+	This entails a number of changes to method signatures.
+	Unfortunately the getItem() method is hard to implement correctly
+	at the moment. To do so requires changes to the way types are
+	constructed.
+
+	* orbitcpp/idl-compiler/types.h:
+	Delete an unused member variable.
+
+orbitcpp_pre_interface_right_1:
+
+2004-08-26 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/main.cc:
+	Applied patch by Magnus Therning to fix bug #150801.
+
+2004-07-05 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in
+	* test/cpp/poa/generated/Makefile.am:
+	Added rest of required automake/autoconf stuff to build poa test.
+	Closes #145332.
+	
+
+2004-06-22 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/orb-cpp/orbitcpp_exception.h
+	* orbitcpp/orb-cpp/poa-cpp-common.h:
+	Moved _orbitcpp_get_repoid() down to CORBA::Exception. Revised
+	macros, pre-generated code, and idl compiler to implement this
+	function.
+
+2004-05-28 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Wrap all skeleton functions statements in try block so that we
+	can catch exceptions generated by alloc statements.
+
+2004-05-27 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/poa-cpp-common.cc
+	* orbitcpp/orb-cpp/poa-cpp-common.h
+	* orbitcpp/orb-cpp/poa-cpp-skels.h:
+	Implement ForwardRequest using output from IDL compiler.
+
+2004-05-26 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/any/simple/client.cc
+	* test/cpp/arrays/simple_types/client.cc
+	* test/cpp/arrays/simple_types/server.cc
+	* test/cpp/helloworld/client.cc
+	* test/cpp/helloworld/server.cc
+	* test/cpp/poa/client.cc
+	* test/cpp/poa/server.cc
+	* test/cpp/sequences/atomic_types/client.cc
+	* test/cpp/sequences/atomic_types/server.cc:
+	Switch from ORB_ptr to ORB_var and rely on automatic destroy
+	of ORB.
+
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc
+	* orbitcpp/orb-cpp/orbitcpp_orb.h
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Change init_level rather than object reference count when
+	_duplicate'ing and release'ing ORB's.
+	
+	* orbitcpp/orb-cpp/orbitcpp.h
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_var_smartptr.h:
+	Removed deprecated code.
+
+	* test/cpp/helloworld/client.cc:
+	Clean up ORB using destroy() and don't leak any references.
+
+2004-05-21 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/poa-cpp-skels.cc
+	* orbitcpp/orb-cpp/poa-cpp-skels.h
+	* test/cpp/Makefile.am
+	* test/cpp/poa/Makefile.am
+	* test/cpp/poa/client.cc
+	* test/cpp/poa/helloworld-impl.cc
+	* test/cpp/poa/helloworld-impl.h
+	* test/cpp/poa/helloworld.idl
+	* test/cpp/poa/server.cc:
+	Test servant locator behaviour. Hacked around problems with _this().
+	Can't take object reference to ServantLocator or ServantActiviator
+	so have to pass around reference to servant object directly.
+	
+
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/orbitcpp_smartptr.h
+	* orbitcpp/orb-cpp/poa-cpp-skels.cc
+	* orbitcpp/orb-cpp/poa-cpp-skels.h:
+	Revised to compile code submitted by Bo Li. Added
+	ObjectId_to_string(), ObjectId_to_wstring(), string_to_ObjectId(),
+	wstring_to_ObjectId(). Use CORBA::Object to simulate
+	PortableServer::ServantManager.
+
+2004-05-20 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp.h
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/poa-cpp-skels.cc
+	* orbitcpp/orb-cpp/poa-cpp-skels.h:
+	Added (untested, buggy) support for servant locators and servant
+	activators.
+
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Don't need to emit const_cast in generated code.
+
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Use throw specifications to remove calls to _orbitcpp::error() in
+	skels code. Reduces the amount of C++ source but increases object
+	code size (~5%). Since there were a lot of skel functions that didn't
+	catch (...) and call _orbitcpp::error().
+
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.h:
+	Provide template for _orbitcpp_Servant to reduce amount of
+	code in cpp-skells.{h,cc}. Helps keep reference_to_servant()
+	and id_to_servant() in line with idl-compiler.
+
+orbitcpp_1_3_9:
+
+2004-05-11 Bowie Owens <bowie.owens@csiro.au>
+	* NEWS
+	* configure.in:
+	Preparation for release 1.3.9.
+
+2004-05-06 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/orb-cpp/orbitcpp_string_seq.h
+	* orbitcpp/orb-cpp/smartpointers/string_var.h
+	* test/cpp/everything/everything.idl
+	* test/cpp/sequences/string/test.idl:
+	Added support for wstring. Closes bug #141972.
+
+	* orbitcpp/idl-compiler/types/IDLCompoundSeqElem.cc
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_traits.h:
+	Move away from template partial specialization with traits.
+
+	* test/cpp/sequences/string/test.idl:
+	Exercise bug #141972.
+
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLAny.cc
+	* orbitcpp/idl-compiler/types/IDLAny.h
+	* orbitcpp/idl-compiler/types/IDLBoolean.cc
+	* orbitcpp/idl-compiler/types/IDLBoolean.h
+	* orbitcpp/idl-compiler/types/IDLCompoundSeqElem.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLEnum.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/idl-compiler/types/IDLSimpleType.cc
+	* orbitcpp/idl-compiler/types/IDLSimpleType.h
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/idl-compiler/types/IDLUserDefSimpleType.cc
+	* orbitcpp/idl-compiler/types/IDLUserDefSimpleType.h
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_any.h
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_smartptr.h
+	* orbitcpp/orb-cpp/orbitcpp_string_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h
+	* orbitcpp/orb-cpp/smartpointers/sequence_out.h
+	* orbitcpp/orb-cpp/smartpointers/sequence_var.h:
+	Major revisions to get to compile with GCC 3.4. Simplifications
+	include:
+	- Merge all kinds of sequence down into Simple{Unb,B}oundedSequence
+	  using traits classes and more consistent member typedefs.
+	- Eliminated _mgr types.
+	- Made enum a typedef of C enum so that C++ enum == C enum. Brought
+	  enum constants into right namespace using const variables.
+
+2004-05-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass.h
+	* orbitcpp/orb-cpp/orbitcpp_exception.h
+	* orbitcpp/orb-cpp/orbitcpp_object.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h
+	* orbitcpp/orb-cpp/smartpointers/sequence_out.h
+	* orbitcpp/orb-cpp/smartpointers/sequence_var.h:
+	Revised to compile with GCC 3.4.
+
+2004-04-28 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.cc:
+	Don't throw UnknownUserException when confronted with an unknown
+	user exception. UnknownUserException is only for DII. Closes
+	#140122.
+
+
+2004-04-27 Bowie Owens <bowie.owens@csiro.au>
+	* Makefile.am
+	* configure.in
+	* ORBit-CosNaming-2.0-cpp.pc.in:
+	Added pkg-config data for name service.
+
+	* configure.in
+	* orbitcpp/Makefile.am
+	* orbitcpp/services/Makefile.am
+	* orbitcpp/services/name/Makefile.am:
+	Added Makefile.am's to build name service. Uses
+	Makefile_generated.am_fragment to help build the name service.
+
+	* Makefile.am
+	* test/cpp/Makefile_generated.am_fragment:
+	Use backend in build directory to build tests without first
+	installing orbitcpp.
+
+2004-04-15 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLAny.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLSequence.h
+	* orbitcpp/idl-compiler/types/IDLSimpleType.h
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLType.cc
+	* orbitcpp/idl-compiler/types/IDLType.h
+	* orbitcpp/idl-compiler/types/IDLTypedef.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h
+	* test/cpp/unions/struct/test.idl:
+	Revise union setter and getter code generation. Closes bug #115493
+	in that test/cpp/everything/everything.idl now compiles. The code
+	is now in a better position to more closely match the standard.
+	Union support still needs a lot of work, so I'm going to open
+	serveral RFE's to document where it needs the work.
+
+	* test/cpp/sequences/atomic_types/test.idl:
+	Test code generation for sequence of TypeCodes.
+
+2004-04-14 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_exception.h
+	* orbitcpp/idl-compiler/types/IDLException.cc:
+	Use function template to generate code for commuting C exceptions
+	to C++ exceptions. Reduces lines of code in X-cpp-common.cc and
+	reduces size of object code produced.
+
+2004-03-30 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* test/cpp/arrays/simple_types/test.idl:
+	Added a fix and test for bug #138421. If we have:
+
+	typedef T vec[m];
+	typedef vec mat[n];
+
+	Then for copying purposes mat is effectively:
+
+	typedef T mat[n][m];
+
+	Of course if T is also an array we recurse further.
+
+2004-03-26 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLCompound.cc:
+	Push pack and unpack function definitions into header if they
+	are empty. Eliminates a lot of unused variable warnings and
+	allows compiler to optimize these out.
+
+2004-03-22 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLStruct.cc:
+	Corrected some more brokeness with fixed length structs.
+
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* test/cpp/arrays/of_structs/test.idl:
+	Change struct to always require conversion in generated code
+	since a great deal of reinterpret_cast<> casting is required
+	to make the C++ compiler happy. Closes bug #137694.  Had to fix
+	IDLArray to correctly use is_fixed and to deal with fixed length
+	structs within array. Revised test to check for bug #137694.
+
+2004-03-15 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLTypeCode.cc
+	* orbitcpp/idl-compiler/types/IDLTypeCode.h:
+	Specialize member_pack_to_c() to avoid using CORBA::is_nil().
+
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h:
+	Added pack_elem() and unpack_elem() since these are needed for
+	sequences of TypeCode's. Haven't tested them but they compile.
+
+2004-03-09 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLArray.cc:
+	Free slice not zero-th element of slice. Bug picked up
+	by any test below.
+
+	* test/cpp/any/simple/test.idl:
+	Make test more stringent by exercising code generation 
+	for arrays of any.
+
+	* orbitcpp/idl-compiler/types/IDLAny.cc:
+	Get rid of some WRITEME warnings relating to packing
+	and unpacking from C.
+
+2004-03-04 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLAny.cc
+	* orbitcpp/idl-compiler/types/IDLAny.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/idl-compiler/types/IDLArray.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/idl-compiler/types/IDLSequence.h
+	* orbitcpp/idl-compiler/types/IDLSimpleType.cc
+	* orbitcpp/idl-compiler/types/IDLSimpleType.h
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/idl-compiler/types/IDLStruct.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLType.h
+	* orbitcpp/idl-compiler/types/IDLUnion.cc
+	* orbitcpp/idl-compiler/types/IDLUnion.h:
+	Get rid of some WRITE ME warnings related to member_init_cpp().
+	Pretty much everything can be default constructed safely.  To do
+	this I have added a class IDLDefaultConstructed that implements
+	member_init_cpp() and made most of the types inherit from it.
+
+2004-03-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h:
+	Super typedef and superclass did not match for bounded sequence.
+
+2003-12-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/types/IDLArray.cc
+	* orbitcpp/orb-cpp/smartpointers/arrayfixed_var.h
+	* orbitcpp/orb-cpp/smartpointers/arrayvariable_out.h
+	* orbitcpp/orb-cpp/smartpointers/arrayvariable_var.h:
+	Revise array properties class to use function pointers instead
+	of partial template specialization. Since the syntax for
+	the specializations is hard to get right for GCC 2.95. Besides
+	this is simpler (I think so anyway).
+
+2003-11-26 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLCompound.h
+	* orbitcpp/idl-compiler/types/IDLModule.h
+	* orbitcpp/idl-compiler/types/IDLScope.h
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/idl-compiler/types/IDLSequence.h
+	* orbitcpp/idl-compiler/types/IDLSimpleType.cc
+	* orbitcpp/idl-compiler/types/IDLSimpleType.h
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* orbitcpp/idl-compiler/types/IDLString.h
+	* orbitcpp/idl-compiler/types/IDLType.cc
+	* orbitcpp/idl-compiler/types/IDLType.h
+	* orbitcpp/idl-compiler/types/IDLTypedef.cc
+	* orbitcpp/idl-compiler/types/IDLTypedef.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h
+	* orbitcpp/idl-compiler/types/IDLUserDefScopeType.h
+	* orbitcpp/idl-compiler/types/IDLVoid.cc
+	* orbitcpp/idl-compiler/types/IDLVoid.h:
+	Declare string constants in .h but define them in .cc. Required
+	passing module stream and scope to const_decl_write and adding
+	a new virtual function to IDLScope.
+
+2003-11-24 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h:
+	Define TypeCode_mgr using TypeCode_var.
+	
+2003-11-20 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLString.cc
+	* test/cpp/everything/everything.idl:
+	Fix constness of string constants.
+
+2003-11-19 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* test/cpp/any/simple/client.cc:
+	* test/cpp/any/simple/test.idl:
+	Provide support for putting sequences of basic types through any.
+
+orbitcpp_1_3_8_take_2:
+
+2003-11-10 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/Makefile.am:
+	Added reference to new IDLModule.h file.
+
+orbitcpp_1_3_8:
+
+2003-11-10 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in
+	* NEWS:
+	Prepare for release 1.3.8.
+
+2003-11-07 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/everything/everything.idl:
+	Include a few bits and pieces from problems that people have reported.
+
+2003-11-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/language.h
+	* orbitcpp/idl-compiler/pass.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLException.h
+	* orbitcpp/idl-compiler/types/IDLModule.h
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLType.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h
+	* orbitcpp/idl-compiler/types/IDLUserDefScopeType.h
+	* orbitcpp/idl-compiler/types/IDLUserDefSimpleType.h
+	* orbitcpp/idl-compiler/types/IDLUserDefType.h:
+	Correct problem with isType not getting correctly redefined.
+	Added IDLTypeDiscrim interface for discriminating whether an
+	object represents a type or not. Added node classes IDLNotAType
+	and IDLIsAType for non-types and types respectively.
+
+
+
+2003-10-28 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_exceptionlist.h:
+	Changed IDL:CORBA/X:1.0 to IDL:omg.org/CORBA/X:1.0
+	as reported by Vitaly.Choutko@cern.ch.
+
+2003-10-23 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/types/IDLElement.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLScope.cc
+	* orbitcpp/idl-compiler/types/IDLScope.h
+	* orbitcpp/idl-compiler/types/IDLUserDefScopeType.h:
+	Make IDLScope instances which represent repoened modules share
+	the same ItemList. Slightly adjust replace code to ensure
+	that forward declared interfaces are properly updated when
+	the definition arrives. Closes bug #123995.
+
+2003-10-22 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_gather.h
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInterface.c
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLOperation.h:
+	Undo all of todays changes. Not sure why they mess up the
+	backend library file but they do.
+
+orbitcpp_broken_2003_10_22:
+	* orbitcpp/idl-compiler/IDLMethod.cc
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/pass_gather.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLOperation.cc
+	* orbitcpp/idl-compiler/types/IDLOperation.h:
+	Where possible make more use of IDLInterfaceBase.
+
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Move more member functions from IDLInterface up to IDLInterfaceBase
+	to move towards resolving #123995. Unfortunately fixing the bug
+	this way is blocked by #101455.
+orbitcpp_broken_2003_10_22_pre_1:
+
+2003-10-17 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLScope.cc:
+	Added warning re bug #123995.
+
+2003-10-15 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h:
+	More access specifier work arounds for GCC 3.3. Hopefully, closes
+	#124412.
+
+2003-10-06 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_gather.h
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types/IDLException.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.cc
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/IDLStruct.cc
+	* orbitcpp/idl-compiler/types/IDLStruct.h:
+	Made IDLInhibited a class template to provide a generic way to
+	implement the various inhibited types necessary for getting pramga
+	inhibit properly implemented. Discriminate in types.cc on the
+	up node of an inhibited IDENT to get the right kind of inhibited
+	object. Use existing code to deal with inhibited simple types.
+
+2003-10-03 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInhibited.h:
+	Clean up some debugging prints and format source.
+
+	* orbitcpp/idl-compiler/IDLMethod.h
+	* orbitcpp/idl-compiler/pass_gather.cc
+	* orbitcpp/idl-compiler/types/IDLException.cc
+	* orbitcpp/idl-compiler/types/IDLException.h:
+	Added IDLThrowable interface as a common base class for defined
+	and inhibited exceptions. Implemented IDLInhibitedException
+	using IDLInhibited. Replaced warning about undefined exception
+	with use of IDLInhibitedException. Closes #101455.
+
+
+2003-10-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types.cc
+	* orbitcpp/idl-compiler/types.h
+	* orbitcpp/idl-compiler/types/IDLElement.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLInhibited.cc
+	* orbitcpp/idl-compiler/types/IDLInhibited.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/idl-compiler/types/Makefile:
+	Added a new class IDLInhibited which represents an interface
+	(or other type?) which is referenced but is defined within an
+	inhibit block. This allows the following IDL:
+	#pragma inhibit push
+	module foo {
+	  interface bar {
+	  };
+	};
+	#pragma inhibit pop
+	module B {
+	  interface C {
+	    ::foo::bar get_foo();
+	  };
+	};
+
+	It also paves the way for fixing Bug #101455. Exceptions are
+	a little bit trickier.
+
+2003-9-25 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Need fully qualified name for array property function specialization.
+
+	Just noticed the next couple of dates are messed up, but the
+	descriptions should be right.
+
+2003-27-04 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_string_seq.h:
+	Added comments on public access specifiers that are necessary
+	possibly because of a bug in GCC 3.3.
+
+2003-26-04 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_string_seq.h:
+	Make nested typedef's public to make sure that they are accessible
+	under GCC 3.3. Patch by Alexander Nedotsukov <bland@mail.ru>.
+
+2003-08-04 Bowie Owens <bowie.owens@csiro.au>
+	* configure.in:
+	Define __USE_STD_IOSTREAM when compiling with cxx.
+
+2003-07-30 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_smartptr.h:
+	Added Object_mgr typedef.
+
+2003-07-29 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLAny.cc
+	* test/cpp/any/simple/test.idl:
+	Implement and test typedef on any. Remove an old WRITE ME warning
+	which was implemented a little while ago.
+
+2003-07-17 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_exception.h:
+	Make _orbitcpp_get_repoid const.
+
+2003-07-16 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_object.cc
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Avoid leaking references by duplicating objects that are already
+	owned.
+
+2003-07-14 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_skels.cc
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.cc:
+	Fix names of attribute accessor functions so that they match
+	what the standard dictates (OMG C++ mapping section 1.20).
+	Fix involves both methods and their skel_ wrappers having the
+	same name. Requires compiler to be able to disabiguate function
+	pointers based signature for EPV initialisation.
+
+2003-07-11 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/IDLMethod.cc:
+	Return early on exception to avoid accessing undefined values.
+
+2003-07-09 Bowie Owens <bowie.owens@csiro.au>
+	* test/cpp/any/simple/client.cc:
+	Cleanup all object references and destroy orb before exiting.
+	Print extracted value rather than any object.
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc:
+	Avoid leaking references to objects during string_to_object.
+	* test/cpp/any/simple/test-impl.cc:
+	Properly allocate memory in test code.
+	* orbitcpp/idl-compiler/types/IDLAny.cc:
+	Fix problems with allocation of any objects in generated code.
+	Closes #102648. More thorough testing would probably be a
+	good idea.
+
+2003-07-08 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/smartpointers/data_var.h:
+	Don't delete data when converting to a pointer.
+
+2003-07-07 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/smartpointers/datavar_var.h:
+	Don't delete data when converting to a pointer.
+
+	* test/cpp/everything/everything.idl: 
+	Test interface in, out, inout and return arguments.
+
+2003-07-04 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Reinstate RefCountServerBase. It is part of the standard, but
+	but I'm not sure it will do what it ought to (and I'm too lazy
+	to test it).
+
+2003-07-03 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLElement.cc:
+	Generate static packing/unpacking functions for Unions by
+	reusing code for Structs.
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/orb-cpp/smartpointers/objectptr_out.h:
+	Use in, inout, and out methods rather than relying on implicit
+	casts.
+	
+	* orbitcpp/orb-cpp/orbitcpp_typecode.cc
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h:
+	Added take_copy argument to TypeCode wrap function so that
+	it has same interface as object wrap functions.
+
+	* orbitcpp/idl-compiler/types/IDLAttribAccessor.cc:
+	Fix naming of attribute accessor stubs.
+
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h:
+	Make typedefs protected in base class so that they can be
+	legimately accessed (necessary for GCC 3.3).
+
+2003-07-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h:
+	Fix c_elem_t to be c_value_t.
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.h
+	* orbitcpp/orb-cpp/orbitcpp_var_smartptr.h:
+	Remove SmartPtr since it is redundant.
+
+2003-07-01 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/orb-cpp/orbitcpp_smartptr.h
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h
+	* orbitcpp/orb-cpp/smartpointers/objectptr_out.h
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h:
+	Remove second template argument from ObjectPtr_var and
+	ObjectPtr_out and simplify generated code to match.
+
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Fix a reference leak in servant_to_reference.
+
+2003-06-30 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/Makefile.am 
+	* orbitcpp/idl-compiler/types/Makefile.am:
+	Remove remaining -DORBIT2_INTERNAL_API since it is likely to be
+	the source of problems.
+
+2003-06-27  Murray Cumming  <murrayc@usa.net>
+
+	* tests/cpp/Makefile_generated.am_fragment,
+	  tests/cpp/Makefile.am_fragment: Removed -DORBIT2_INTERNAL_API which 
+	was breaking the build of the tests with newer ORBit2, making it
+	try to include a header that is not installed any more by ORBit2. It
+	does not seem to be necesary, and we can put it directly into the 
+	generated .cc files if necessary for other private-but-installed
+	headers.
+	
+	* Added tests/cpp/everything/ which just tries to generate sources
+	from everything.idl and build them. This idl file is from Bowie Owens
+	and seems to be written by Phil Dawes for orbitcpp 1. This fails at the
+  moment.
+
+2003-06-25 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_poa.h
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Remove (using conditional compilation) some code that is unecessary.
+	
+
+2003-06-23 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Avoid dereferencing null pointer in POA::_duplicate.
+
+	* orbitcpp/idl-compiler/types/IDLStruct.h
+	* orbitcpp/idl-compiler/types/IDLUnion.h:
+	Deleted direct inheritance from IDLType to work around bug in
+	GCC 2.95.
+
+2003-06-18 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_stubs.cc
+	* orbitcpp/idl-compiler/pass_stubs.h
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Merge stub hierarchy down into what used to be interface (common)
+	hierarchy.
+	
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Do not inherit X::Y in POA_X::Y.
+
+	* orbitcpp/idl-compiler/types/IDLCompoundSeqElem.cc
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h:
+	Avoid use of member type for sequence traits. This improves
+	ability to work with forward declared interfaces.
+
+	* orbitcpp/idl-compiler/IDLMethod.cc      
+	* orbitcpp/idl-compiler/base.h            
+	* orbitcpp/idl-compiler/pass.cc           
+	* orbitcpp/idl-compiler/pass.h            
+	* orbitcpp/idl-compiler/pass_gather.cc    
+	* orbitcpp/idl-compiler/pass_stubs.cc     
+	* orbitcpp/idl-compiler/pass_stubs.h      
+	* orbitcpp/idl-compiler/pass_xlate.cc     
+	* orbitcpp/idl-compiler/pass_xlate.h      
+	* orbitcpp/idl-compiler/typesIDLArray.cc       
+	* orbitcpp/idl-compiler/typesIDLElement.cc     
+	* orbitcpp/idl-compiler/typesIDLInterface.cc   
+	* orbitcpp/idl-compiler/typesIDLInterface.h    
+	* orbitcpp/idl-compiler/typesIDLScope.cc       
+	* orbitcpp/idl-compiler/typesIDLScope.h        
+	* orbitcpp/idl-compiler/typesIDLSequence.cc    
+	* orbitcpp/idl-compiler/typesIDLStruct.cc      
+	* orbitcpp/idl-compiler/typesIDLStruct.h       
+	* orbitcpp/idl-compiler/typesIDLType.cc        
+	* orbitcpp/idl-compiler/typesIDLType.h         
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h:
+	Created orbitcpp_1_3_6_simplification branch. Then unwound most
+	of Murray's previous change. Unfortunately, it isn't complete
+	in a number of areas.
+
+2003-06-14  Murray Cumming  <murrayc@usa.net>
+
+	* Fairly large patch to simplify what's generated in the stubs and 
+	skels and common files. Previously the stubs were really in the
+	common namespace, but typedefed back out into the regular stub
+	namespace. That made stuff complicated. This still needs cleaning up 
+	some more, and maybe we can remove the common stuff completely. The
+	tests build, but this is likely to break something in the long term.
+	I tagged cvs with orbitcpp_1_3_6 before doing this.
+	* I also scattered lots or ORBITCPP_IDL_COMPILER_DEBUG() macros
+	all over the place. They really help to discover what line of orbitcpp
+	code produced what part of the generated stubs/skels.
+	See orbitcpp/idl-compiler/debug.h to turn them on
+	
+1.3.6:
+
+2003-06-05 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLElement.cc:
+	Added _is_a check to _narrow to ensure that a nil reference is
+	returned when trying to narrow an object to a type it does not
+	inherit from.
+
+	* orbitcpp/orb-cpp/orbitcpp_types.h:
+	Changed RepositoryId from Char* to Char const* to allow the return
+	value of TypeCode::id to be passed directly to Object::_is_a.
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc:
+	Member sequences should be stored by value not by reference.
+	According to the C++ Language Mapping June 1999 page 27 under
+	Mapping For Struct Types: "With the exception of strings and
+	object references, the type of the C++ struct member is the
+	normal mapping of the OMG IDL member's type."
+
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Avoid use of reinterpret_cast as this causes segmentation faults
+	with objects that use multiple inheritance.
+
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Emit more comprehensive forward declarations by sharing code
+	between doInterface and doForwardDcl.
+
+2003-06-03 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Need to initialise data members in copy constructor (as well as
+	default constructor).
+	
+	* orbitcpp/orb-cpp/smartpointers/data_var.h:
+	Reinstate const conversion operator to allow const access to
+	data in a Data_var.
+	
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h: 
+	Eliminate non-const conversion operator to avoid G++ warnings.
+
+2003-06-02 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/orb-cpp/orbitcpp_object.h
+	* orbitcpp/orb-cpp/orbitcpp_object.cc
+	* orbitcpp/orb-cpp/orbitcpp_typecode.h
+	* orbitcpp/orb-cpp/orbitcpp_typecode.cc:
+	Close #114031. Fix idl compiler generated code
+	for typecodes. Replaced detach_cobj_guarded with
+	duplicate_cobj_guarded and implemented an overload for TypeCodes.
+
+2003-05-29  Murray Cumming  <murrayc@usa.net>
+
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h:
+	Fixed the const operator->() warning temporarily - I think the const
+	was misplaced before. When O_ptr is O*, a const O_ptr is not the same 
+	as a const O*. 
+	Added comments explaining how we probably need to fix this properly.
+
+2003-05-26 Bowie Owens <bowie.owens@csiro.au>
+
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Fix memory leak in generated _this methods.
+
+2003-05-23 Bowie Owens <bowie.owens@csiro.au>
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Need to duplicate unowned object before putting into a _var.
+	
+	* orbitcpp/idl-compiler/pass_stubs.cc:
+	Make stub objects inherit from all their base classes, not just
+	the first one. This is necessary to support widening.
+
+2003-05-22 Bowie Owens <bowie.owens@csiro.au>
+
+	* orbitcpp/idl-compiler/pass_xlate.cc
+	* orbitcpp/idl-compiler/types/IDLElement.h
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/idl-compiler/types/IDLInterface.{h,cc}
+	* orbitcpp/idl-compiler/types/IDLStruct.{h,cc}
+	* orbitcpp/idl-compiler/types/IDLUnion.{h,cc}
+	* orbitcpp/idl-compiler/types/IDLUserDefScopeType.h
+	* orbitcpp/idl-compiler/types/Makefile.am
+	* orbitcpp/idl-compiler/types/IDLCompoundSeqElem.{h,cc}
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h:
+	Close #113407. Replace nested SeqTraits classes with type_seq_traits.
+	type_seq_traits is a class template similar to seq_seq_traits.
+	To generate the necessary output for sequence typedefs IDLInterface,
+	IDLStruct, and IDLUnion were revised to share a common base class
+	IDLCompoundSeqElem which provides get_seq_typename based on the
+	functions get_c_typename and get_cpp_typename from IDLElement.
+
+	* test/cpp/sequences/atomic_types/test.idl:
+	Test for bug #113407. Forward declared interfaces not working
+	with sequences.
+
+	* test/cpp/sequences/Makefile.am:
+	sequences is not a sub-directory of test/cpp/sequences.
+	Or am I missing something?
+
+2003-05-21  Murray Cumming  <murrayc@usa.net>
+
+	* Makefile.am: Undid my previous change because we can not run the
+	tests until after install.
+
+2003-05-21 Bowie Owens <bowie.owens@csiro.au>
+
+	* orbitcpp/idl-compiler/pass_xlate.h
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Redefine doForwardDcl(IDL_tree, IDLScope &) in IDLPassXlate
+	to output forward declarations.
+
+2003-05-18  Murray Cumming  <murrayc@usa.net>
+
+	* Makefile.am: Added test directory to SUBDIRS so everyone sees whether
+	changes break them.
+
+2003-05-01 Bowie Owens <bowie.owens@csiro.au>
+
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Simplify generated _this methods and avoid double activation
+	problem. static bool activated doesn't correctly record if
+	an object is activated, especially if object is activated
+	with a call to POA::activate_object().
+
+	* orbitcpp/orb-cpp/Makefile.am
+	* orbitcpp/orb-cpp/orbitcpp_poaexceptionlist.h
+	* orbitcpp/orb-cpp/orbitcpp_exception.cc
+	* orbitcpp/orb-cpp/orbitcpp_exception.h
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc
+	* orbitcpp/orb-cpp/orbitcpp_poa.h:
+	Added orbitcpp_poaexceptionlist.h which enumerates
+	the PortableServer/POA exceptions the same way
+	orbitcpp_exceptionlist.h enumerates the system exceptions.
+	Made use of this file to implement POA exception classes
+	and CEnvironment::propage_poaex().
+
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Use fully qualified class name in base list so that compiler can
+	properly resolve interfaces in other modules. 
+	
+
+2003-04-22 Bowie Owens <bowie.owens@csiro.au>
+	
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Fix skeleton output, need to dereference inout interface argument
+	for wrappering.
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc
+	* orbitcpp/orb-cpp/orbitcpp_object.h
+	* orbitcpp/orb-cpp/orbitcpp_object.cc:
+	Use _var instead of _ptr in skeleton code to avoid leaking C++
+	wrapper objects. 
+	
+
+	* orbitcpp/orb-cpp/orbitcpp_object.h
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h:
+	Make memory management of CORBA::Object's consistent with
+	memory management of CORBA::Orb and PortableServer::POA. That
+	is, CORBA::release(Object_ptr) should delete the object. This
+	avoids leaks in the ObjectPtr_var assignment operator. (closes
+	#110727)
+
+2003-04-17 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/orb-cpp/orbitcpp_object.h
+	* orbitcpp/orb-cpp/orbitcpp_object.cc:
+	Added _orbitcpp::cobj_guarded which checks for a null pointer
+	before trying to call _orbitcpp_cobj on a CORBA::Object_ptr.
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Use _orbitcpp::cobj_guarded in generated code to avoid
+	dereferencing null pointer if an exception is thrown in
+	method returning an interface.
+
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc:
+	Don't duplicate C ORB since we already own it.
+	Implement CORBA::ORB::_duplicate.
+
+2003-04-14 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/types/IDLInterface.cc:
+	Avoid leaking memory in IDLInterface::member_pack_to_c() by
+	duplicating only C object (not C++).
+
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Ensure ORB reference is release'd in
+	PortableServer::ServantBase::_default_POA.
+	
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h:
+	Uncommented const conversion operator for objectptr_var. This
+	operator is necessary for efficient/const-correct programs.
+	(closes #110235)
+
+	* orbitcpp/idl-compiler/pass_skels.cc:
+	Removed unecessary include of sstream. std::stringstream doesn't
+	seem to be used anywhere and sstream is not available under G++ 2.95.   
+
+
+2003-04-10 Bowie Owens <bowie.owens@csiro.au>
+	* orbitcpp/idl-compiler/main.cc:
+	G++ 3.2 on OSF1 needs exception to be qualified with std::. 
+
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	Output member typedefs _var_type and _ptr_type. (closes #109834)
+
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h:
+	Implemented get_buffer() const on SequenceBase. (closes #110339)
+
+
+2003-04-04  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/orb-cpp/orbitcpp_poa.h: Removed overfluous overloading
+	of CORBA::is_nil
+
+2003-04-02 Bowie Owens <bowie.owens@csiro.au>
+	
+	* orbitcpp/idl-compiler/pass_xlate.cc:
+	* orbitcpp/orb-cpp/orbitcpp_object.cc:
+	Avoid dereferncing null pointer in _duplicate and
+	CORBA::is_nil. (closes #109752 and #109835)
+ 
+2003-04-01 Bowie Owens <bowie.owens@csiro.au>
+	
+	* orbitcpp/orb-cpp/orbitcpp_orb.h
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc:
+	Implemented CORBA::ORB::destroy.
+	
+	* orbitcpp/orb-cpp/orbitcpp_poa.cc:
+	Destroy orb in PortableServer::ServantBase::_default_POA to keep
+	init_level in ORBit src/orb/orb-core/corba-orb.c balanced. (closes
+	#109659)
+	
+2003-04-01  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/pass_xlate.cc (doStruct): Create _var_type
+	typedef in structs as required by the CORBA/C++ standard
+
+	* orbitcpp/orb-cpp/smartpointers/objectptr_var.h (_orbitcpp):
+	Plugged a memory leak in CORBA::Object_var
+
+	* orbitcpp/orb-cpp/orbitcpp_orb.cc: Ref (duplicate) ORB before
+	returning it, since otherwise the final unref of the ORB (when
+	ORB_var goes out of scope) will fail horribly
+
+	* orbitcpp/idl-compiler/types/IDLString.cc (member_init_cpp):
+	Removed unnecessary member initialization
+
+2003-03-28 Bowie Owens <bowie.owens@csiro.au>
+	
+	* orbitcpp/idl-compiler/types/IDLSequence.cc
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h:
+	Implemented IDLSequence::get_seq_typename using sequence traits
+	class template seq_seq_traits. Fixes most of #108644.
+	
+	* orbitcpp/idl-compiler/types/IDLEnum.h
+	* orbitcpp/idl-compiler/types/IDLEnum.cc
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h:
+	Implemented IDLEnum::get_seq_typename using sequence traits
+	class template enum_seq_traits. Closes #109212.
+
+	* test/cpp/sequences/atomic_types/client.cc
+	* test/cpp/sequences/atomic_types/server.cc
+	* test/cpp/sequences/atomic_types/test-impl.h
+	* test/cpp/sequences/atomic_types/test-impl.cc:
+	Extended sequences/atomic_types test to exercise the new code.
+
+1.3.5:
+
+2003-03-15  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc (member_init_cpp):
+	Fixed to allow sequences without a typedef to be members of
+	structures
+
+2003-03-10  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types/IDLSequence.cc (member_init_cpp):
+	Implemented
+	(member_decl_arg_get): Implemented (closes #106320)
+
+2003-03-09  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/pass_stubs.cc (create_method_stub): When
+	stubs are re-implemented for classes that inherit from more than
+	one interface, make sure the correct parent class is used (closes #108047 )
+
+2003-02-12  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types.cc (get_default_value): Oops,
+	removed infinite loop
+
+2003-02-11  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types/IDLInterface.cc (typedef_decl_write): Implemented
+
+2003-02-11  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/IDLCompund.cc: 
+	* orbitcpp/idl-compiler/pass_xlate.cc: 
+	* orbitcpp/idl-compiler/types.cc: Removed usage of deprecated
+	strstream (closes #104527)
+
+2003-02-10  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types/IDLUnion.cc (stub_impl_arg_pre):
+	Fixed to work with fixed-size unions (and also some optimizations
+	that make some _alloc() calls unneccesary)
+
+2003-02-08  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/orb-cpp/*.h:
+	* orbitcpp/orb-cpp/orbitcpp_sequence.h:
+	* orbitcpp/idl-compiler/types/IDLSimpleType.cc (get_seq_typename): 
+	* orbitcpp/orb-cpp/orbitcpp_simple_seq.h (ORBITCPP_CREATE_SIMPLE_TRAITS): 
+	Removed identifiers beginning with a double underscore
+	
+1.3.4:
+
+2003-02-07  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/orb-cpp/orbitcpp_*_seq.h: Yippie! Finally a working
+	length/_length/__length combination!
+	
+	* orbitcpp/orb-cpp/orbitcpp_object.cc: Fixed typo of
+	CORBA::Object::Object where CORBA::Object was meant (fixes
+	#104528)
+
+2003-02-06  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/pass_xlate.cc (union_create_copier): Use
+	member setters instead of trying to access members of the copy
+	source directly
+
+2003-02-05  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/types/IDLUnion.cc: Implemented union
+	return values
+
+	* orbitcpp/idl-compiler/pass_xlate.cc (union_create_internal):
+	Wrote assignment constructor and operator=
+
+	* orbitcpp/idl-compiler/types/IDLUnion.cc: Implemented INOUT and
+	OUT union arguments
+
+	* orbitcpp/idl-compiler/pass_xlate.cc (union_create_members):
+	Implemented 'default' branch of union type trees
+
+1.3.3:
+
+2003-01-28  Murray Cumming  <murrayc@usa.net>
+
+	* Corrected the last fix properly - by specifying the correct
+        include paths in the Makefiles and using full paths for #includes
+        in the source code.
+
+1.3.2:
+	
+2003-01-27  Murray Cumming  <murrayc@usa.net>
+
+	* orbitcpp/orb-cpp/smartpointers/*.h: Use #include path start
+	starts in orbitcpp/orb-cpp. Fixes distcheck.
+	
+2003-01-22  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/orb-cpp/orbitcpp_compound_seq.h: Use the correct
+	__length name for the internal implementation of Sequence::length
+
+2003-01-08  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* orbitcpp/idl-compiler/pass_xlate.{cc,h} (element_write_typecode):
+	New auxilary method to generate static data members of the form
+	`static const ::CORBA::TypeCode_ptr _tc_InterfaceNotFound;' plus
+	the initializer in the .cc file.  Previously the initializer was
+	put into the class body, causing my compiler (GCC 3.2.2 prerelease)
+	to choke.  Apparently only constant initializers of integral type
+	are allowed in the class body.
+
+	(doTypedef): Use the new helper method.
+	(doEnum): ditto
+	(struct_create_any): ditto
+	(union_create_any): ditto
+	(exception_create_any): ditto.
+
+1.3.1:
+
+2003-01-07  Murray Cumming  <murrayc@usa.net>
+
+	* Added docs directory, with the website files. Just type
+	make post-html to upload the documents. This directory is not
+	distributed.
+
+2003-01-06  Murray Cumming  <murrayc@usa.net>
+
+	* test/cpp/any/simple/client.cc, test_impl.cc: Used CORBA::Any instead
+	of CORBA::Any_var where that's what I'm supposed to do, because
+	CORBA_Any_var() has a null underlying instance.
+	But test_out() still throws a refcounting error exception.
+	configure.in: mentioned test/cpp/any/simple/generated/Makefile
+
+2003-01-06  Murray Cumming  <murrayc@usa.net>
+
+	* orbitcpp/orb-cpp/: Split orbitcpp_smartptr.h into individual files in
+	a smartpointers directory.
+
+2002-12-28  Murray Cumming  <murrayc@usa.net>
+
+	* orbitcpp/idl-compiler/types/IDLAny.cc: Implemented
+	the declarations and definitions.
+	* test/cpp/: Added any directory, with a simple example of the use of
+	CORBA::Any. The client segfaults at the moment, while a value is being
+	inserted into the CORBA::Any.
+
+2002-12-27  Murray Cumming  <murrayc@usa.net>
+
+	* Moved orbitcpp/idl-compiler/types/IDLMethod.[h|cc] to 
+	orbitcpp/idl-compiler/ because it's not a type.
+
+2002-12-25  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* autogen.sh: Force use of aclocal-1.4 and automake-1.4.  Later
+	releases have a bug that makes config.status generate broken .deps
+	file names.
+
+1.3.0:
+
+2002-11-02  Murray Cumming  <murrayc@usa.net>
+
+	* configure.in: Use ORBITCPP_VERSION in AM_INIT_AUTOMAKE() instead of
+	non-defined ORBIT_VERSION.
+	* Makefile.am: Distribute the orbitcpp source directory.
+	* tests: Define the idlname in the Makefile.am files so that the 
+	idl files are distributed.
+	* orbitcpp/types/*[.h|cc]: Use full "orbicpp/idl-compiler/" include 
+	paths, needed by make distcheck.
+	
+2002-11-01  Murray Cumming  <murrayc@usa.net>
+
+	* configure.in: Change AM_INTI_AUTOMAKE() name from ORBit to orbitcpp, 
+	so it generates the correct tarball names.
+
+2002-11-01  Murray Cumming  <murrayc@usa.net>
+
+	* configure.in: Check for ORBit2 version 2.5.0, as that's what seems 
+	to be used by GNOME 2.1.x, so I guess it's what we need.
+
+2002-10-02  Murray Cumming  <murrayc@usa.net>
+
+	* Added missing test/cpp/structs/Makefile.am file.
+	* orbitcpp/idl-compiler/main.cc: Removed my debug g_warnings.
+	* tests/cpp: Changed all #includes of *.hh to *.h.
+
+2002-10-02  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* orbitcpp/idl-compiler/ChangeLog: Added new CChangeLog for C++
+	IDL compiler-specific changes
+
+2002-09-30  ERDI Gergo  <cactus@cactus.rulez.org>
+
+	* ORBit-2.0-cpp.pc.in (Cflags): Added location of headers
+
+2002-09-17  Murray Cumming  <murrayc@usa.net>
+
+	* tests/Makefile.am_fragment_generated:
+	Use -l cpp argument to orbit-idl-2 instead of -l c++, because it
+	now looks for a library with that suffix, and I can't use c++ in a
+	library name in Makefile.am, because it complains about invalid
+	characters in a variable.
+	
+

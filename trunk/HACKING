@@ -1,0 +1,66 @@
+So here's my writeup of how I'm going to restructure this big
+mess. The new approach is to be more flexible, but at the same time,
+more high-level.
+
+The new code is to be based on operations one does with CORBA
+types. There are four operations:
+
+   1. Definition
+   2. As parameters to a CORBA interface's method
+   3. As return values of a CORBA interface's method
+   4. As a member of another, composite type
+
+
+1. Definition
+This currently implemented in the pass_* source files, so we won't
+bother with them for the time being.
+
+
+2. As parameters to a CORBA interface's method
+3. As return values of a CORBA interface's method
+These can be broken up into several smaller steps:
+   -- Stub code
+      -- Argument declaration in stub signature
+      -- Preparing for the call
+      -- Doing the call
+      -- Optional post-call stuff
+   -- Skel code
+      (same steps)
+
+Each type implements each of these steps, via the
+{stub,skel}_{decl,impl}_{arg,ret}_* methods. It is perfectly valid to
+do nothing in the pre/post code -- for example, since atomic C++ types
+are simple typedefs of the C types, you can do a call instantly
+without any setup in pre/post-call time.
+
+
+4. As a member of another, composite type
+The steps needed are:
+   -- Getting the C++ type used for composite members of that type
+	(e.g. CORBA::Object --> CORBA::Object_ptr)
+   -- Converting from C++ member type to C member type and vice versa
+
+
+
+PROGRESS STATUS
+===============
+
+y: Should work, but isn't tested
+Y: works and tested
+w: currently working on stuff related to it, might work
+-: not implemented yet
+
+
+TYPE		IN	OUT	INOUT	Ret	Ex	Attrib	Array	Struct	Seq	Union
+
+Simple		Y	Y	Y	Y	Y	Y	Y	Y	y	Y
+String		Y	Y	Y	Y	Y	y	Y	Y	y	Y
+Enums		Y	Y	Y	Y	y	y	y	y	Y	y
+Object		Y	Y	Y	Y	Y	y	Y	Y	y	y
+Array/fixed	Y	Y	Y	Y	Y	y	y	Y	-	y
+Array/var	Y	Y	Y	Y	Y	y	y	Y	-	y
+Struct/fixed	Y	Y	Y	Y	Y	y	Y	Y	y	Y
+Struct/var	Y	Y	Y	Y	Y	y	Y	Y	y	Y
+Sequence	y	y	y	y	y	y	y	y	Y	-
+Union		y	y	y	y	w	y	-	w	-	-
+Any		y	y	y	y	-	-	-	-	y	-

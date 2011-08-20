@@ -1,0 +1,70 @@
+module Test
+{
+	enum Direction
+	{
+		DIR_NORTH,
+		DIR_EAST,
+		DIR_SOUTH,
+		DIR_WEST,
+		nb_directions
+	};
+
+	typedef sequence<long> long_seq;
+	typedef sequence<string> string_seq;
+	/* typedef sequence<long,3> Boundedlong_seq; */
+	typedef sequence<Direction> direction_seq;
+
+	typedef sequence<long_seq> long_mat;
+	
+
+	interface IMaster
+	{
+		/* long_seq operations */
+		void longseq_in(in long_seq seq_in);
+		void longseq_inout(inout long_seq seq_inout);
+		void longseq_out(out long_seq seq_out);
+		long_seq longseq_ret();
+
+		/* string_seq operations */
+		void strseq_in(in string_seq seq_in);
+		void strseq_inout(inout string_seq seq_inout);
+		void strseq_out(out string_seq seq_out);
+		string_seq strseq_ret();
+
+		/* direction_seq operations */
+		void dirseq_in(in direction_seq seq_in);
+		void dirseq_inout(inout direction_seq seq_inout);
+		void dirseq_out(out direction_seq seq_out);
+		direction_seq dirseq_ret();
+
+		/* long_mat operations */
+		void mat_in(in long_mat seq_in);
+		void mat_inout(inout long_mat seq_inout);
+		void mat_out(out long_mat seq_out);
+		long_mat mat_ret();
+	};
+
+	// These should probably go in their own test program since they
+	// aren't really atomic.
+
+	struct DirStruct {
+		Direction dir;
+	};
+	typedef sequence<DirStruct> DirStructSeq;
+	typedef sequence<DirStruct,42> DirStructSeq42;
+
+	// Test IDL compiler for bug #113407.
+	interface DirInterface;
+	typedef sequence<DirInterface> DirInterfaceSeq;
+	typedef sequence<DirInterface,42> DirInterfaceSeq42;
+
+	interface DirInterface {
+		Direction op();
+	};
+
+	typedef sequence<TypeCode> t_seq;
+
+	interface t_seq_i {
+		t_seq op(in t_seq s_in, out t_seq s_out, inout t_seq s_inout);
+	};
+};
