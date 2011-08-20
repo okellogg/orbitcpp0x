@@ -59,15 +59,15 @@ IDLCompound::write_packing_impl (ostream &ostr,
 	// allocated C structure on heap
 	string c_alloc = c_id + "__alloc ()";
 	
-	ostr << indent << c_id << " * "
+	ostr << c_id << " * "
 	     << get_cpp_method_prefix () << "::_orbitcpp_pack () const" << endl
-	     << indent++ << '{' << endl;
-	ostr << indent << c_id << " *_c_struct = " << c_alloc << ';' << endl << endl;
-	ostr << indent++ << "if (!_c_struct)" << endl;
-	ostr << indent-- << "throw CORBA::NO_MEMORY ();" << endl << endl;
-	ostr << indent << "_orbitcpp_pack (*_c_struct);" << endl;
-	ostr << indent << "return _c_struct;" << endl
-	     << --indent << '}' << endl << endl;
+	     << '{' << endl;
+	ostr << ++indent << c_id << " *_c_struct = " << c_alloc << ';' << endl << endl;
+	ostr << indent << "if (!_c_struct)" << endl;
+	ostr << ++indent << "throw CORBA::NO_MEMORY ();" << endl << endl;
+	ostr << --indent << "_orbitcpp_pack (*_c_struct);" << endl;
+	ostr << indent << "return _c_struct;" << endl;
+	ostr << --indent << '}' << endl << endl;
 
 	if (m_items->empty())
 		return;
@@ -76,9 +76,10 @@ IDLCompound::write_packing_impl (ostream &ostr,
 	
 	// Implementation of _orbitcpp_pack that fills a
 	// caller-supplied C structure
-	ostr << indent << "void " << get_cpp_method_prefix () << "::_orbitcpp_pack "
+	ostr << "void " << get_cpp_method_prefix () << "::_orbitcpp_pack "
 	     << "(" << c_id << " &_c_struct) const" << endl
-	     << indent++ << '{' << endl;
+	     << '{' << endl;
+	++indent;
 
 	for (const_iterator i = begin (); i != end (); i++)
 	{
@@ -94,9 +95,10 @@ IDLCompound::write_packing_impl (ostream &ostr,
 
 
 	// Implementation of _orbitcpp_unpack
-	ostr << indent << "void " << get_cpp_method_prefix () << "::_orbitcpp_unpack "
+	ostr << "void " << get_cpp_method_prefix () << "::_orbitcpp_unpack "
 	     << "(const " << c_id << " &_c_struct)" << endl
-	     << indent++ << '{' << endl;
+	     << '{' << endl;
+	++indent;
 
 	for (const_iterator i = begin (); i != end (); i++)
 	{
@@ -109,3 +111,23 @@ IDLCompound::write_packing_impl (ostream &ostr,
 
 	ostr << --indent << '}' << endl << endl;
 }
+
+void
+IDLCompound::write_member_decls (ostream &ostr,
+				 Indent  &indent) const
+{
+	if (size () == 0)
+		return;
+	ostr << indent << "// members" << endl;
+
+	for (const_iterator i = begin (); i != end (); i++)
+	{
+		IDLMember &member = (IDLMember &) **i;
+		ostr << indent << member.getType ()->get_cpp_member_typename ()
+			 << " ";
+		ostr << member.get_cpp_identifier () << ";" << endl;
+	}
+	ostr << endl;
+
+}
+
