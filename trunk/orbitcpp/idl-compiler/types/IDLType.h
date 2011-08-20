@@ -75,7 +75,8 @@ public:
 	// if this type is really an alias, this gets the aliased type
 	IDLType const &getResolvedType() const;
 
-	virtual bool conversion_required () const { return true; };
+	virtual bool conversion_required () const { return true; }
+	virtual bool is_scalar () const { return false; }
 	virtual bool is_fixed () const = 0;
 
 	////////////////////////////////////////////
@@ -181,9 +182,9 @@ public:
 					 const IDLTypedef *active_typedef = 0) const = 0;
 
 	////////////////////////////////////////////
-	// Members of compund types
+	// Members of compound types
 
-	// Compund declaration
+	// Compound declaration
 	virtual string get_cpp_member_typename (const IDLTypedef *active_typedef = 0) const = 0;
 	virtual string get_c_member_typename   (const IDLTypedef *active_typedef = 0) const = 0;
 
