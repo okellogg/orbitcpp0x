@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2011 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -21,7 +22,7 @@
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
  *  Purpose:	IDL compiler type representation
- *
+ *          	Parent class for IDLStruct and IDLException
  *
  */
 
@@ -44,6 +45,9 @@ public:
 
 	void write_packing_impl (ostream &ostr,
 				 Indent  &indent) const;
+
+	virtual void write_member_decls (ostream &ostr,
+					 Indent  &indent) const;
 };
 
 #endif //ORBITCPP_TYPES_IDLCOMPOUND
