@@ -30,6 +30,7 @@
 #include "orbitcpp/idl-compiler/base.h"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 class IDLScope;
 
