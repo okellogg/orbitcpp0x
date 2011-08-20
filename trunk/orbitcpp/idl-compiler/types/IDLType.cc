@@ -59,12 +59,12 @@ void IDLStandardUnionable::create_union_accessors(IDLUnion const& un, IDLCaseStm
 	header << indent << member_cpp_type << " "
 		 << member_name << " () const;" << endl;
 
-	module << mod_indent << member_cpp_type << " "
+	module << member_cpp_type << " "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " () const" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << member_cpp_type << " _ret;" << endl;
+	module << ++mod_indent << member_cpp_type << " _ret;" << endl;
 
 	member.getType ()->member_unpack_from_c (
 		module, mod_indent, "_ret", full_member_name);
@@ -99,12 +99,12 @@ void IDLStandardUnionable::create_union_setter(IDLUnion const& un, IDLCaseStmt c
 	header << indent << "void " << member_name
 		 << " (" << member_cpp_type << " val);" << endl << endl;
 	
-	module << mod_indent << "void "
+	module << "void "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " (" << member_cpp_type << " val)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << "_clear_member ();" << endl;
+	module << ++mod_indent << "_clear_member ();" << endl;
 	module << mod_indent << "_d (" << discr_val << ");" << endl;
 
 	member.getType ()->member_pack_to_c (
@@ -138,12 +138,12 @@ void IDLReferentUnionable::create_union_accessors(IDLUnion const& un, IDLCaseStm
 	header << indent << "void " << member_name
 		 << " (" << member_cpp_type << " const& val);" << endl << endl;
 	
-	module << mod_indent << "void "
+	module << "void "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " (" << member_cpp_type << " const& val)" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << "_clear_member ();" << endl;
+	module << ++mod_indent << "_clear_member ();" << endl;
 	module << mod_indent << "_d (" << discr_val << ");" << endl;
 
 	memb_type.member_pack_to_c (
@@ -158,12 +158,12 @@ void IDLReferentUnionable::create_union_accessors(IDLUnion const& un, IDLCaseStm
 	header << indent << member_cpp_type << " "
 		 << member_name << " () const;" << endl;
 
-	module << mod_indent << member_cpp_type << " "
+	module << member_cpp_type << " "
 		 << un.get_cpp_method_prefix () << "::" << member_name
 		 << " () const" << endl
-		 << mod_indent++ << "{" << endl;
+		 << "{" << endl;
 
-	module << mod_indent << member_cpp_type << " _ret;" << endl;
+	module << ++mod_indent << member_cpp_type << " _ret;" << endl;
 
 	memb_type.member_unpack_from_c (
 		module, mod_indent, "_ret", full_member_name);
