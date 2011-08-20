@@ -1,20 +1,30 @@
-Don't contact us directly - see the web site
+Unfortunately, the web site
 http://orbitcpp.sourceforge.net
-and use the mailing list.
+is more or less abandoned and unmaintained.
 
-orbitcpp is more or less abandoned and unmaintained. This list is of
-historical interest only.
+If you have questions specific to the new IDL to C++0x mapping,
+atm the best place to go is
+http://www.orbzone.org/forum/70
+
+Later, the new standard will be published at the OMG, see
+http://www.omg.org/techprocess/meetings/schedule/IDL_to_C++0x_Language_Mapping_RFP.html
+
+Following people have been maintainers or major contributors to
+the original ORBit-C++ project:
 
 Eugene Sizikov
 E-mail: esizikov@gmail.com
-Userid: esizikov
+gnome Userid: esizikov
 
 Bowie Owens
 E-mail: bowie.owens@csiro.au
-Userid: bowens
+gnome Userid: bowens
 
 Gerdo Erdi <cactus@cactus.rulez.org>
 
 Murray Cumming
 E-mail: murrayc@murrayc.com
-Userid: murrayc
+gnome Userid: murrayc
+
+Philip Dawes <phil@phildawes.net>
+
