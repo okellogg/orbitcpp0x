@@ -57,7 +57,7 @@ void _orbitcpp::release_guarded(CORBA_Object obj) {
 
 
 
-void _orbitcpp::error(char *text) {
+void _orbitcpp::error(const char *text) {
 	std::printf("%s\n",text);
 	std::abort();
 }
