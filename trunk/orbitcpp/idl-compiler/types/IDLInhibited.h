@@ -33,6 +33,7 @@
 #include <libIDL/IDL.h>
 #include "IDLElement.h"
 
+#include <string.h>
 
 struct EmptyType { };
 
