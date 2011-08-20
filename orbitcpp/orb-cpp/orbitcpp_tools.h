@@ -70,7 +70,7 @@ namespace _orbitcpp {
 	inline void release_guarded(CORBA_TypeCode tc) {release_guarded((CORBA_Object)tc);}  
 
   
-	void error(char *text);
+	void error(const char *text);
 }
 
 
