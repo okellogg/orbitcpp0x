@@ -1,0 +1,43 @@
+ORBIT_IDL = orbit-idl-2
+
+testcpp_generated_libs = $(top_builddir)/orbitcpp/orb-cpp/libORBit-2-cpp.la
+
+INCLUDES = -I$(top_builddir) -I$(top_srcdir)      \
+	$(ORBITCPP_CFLAGS) \
+  -Igenerated \
+  -D_ORBITCPP_TESTCODE
+
+c_common_h = $(idlname).h
+c_common = $(c_common_h) $(idlname)-common.c
+c_stub = $(idlname)-stubs.c
+c_skel = $(idlname)-skels.c
+c_all = $(c_common) $(c_stub) $(c_skel)
+
+cpp_common_hh = $(idlname)-cpp-common.h
+cpp_common = $(cpp_common_hh) $(idlname)-cpp-common.cc
+cpp_stub = $(idlname)-cpp-stubs.h $(idlname)-cpp-stubs.cc
+cpp_skel = $(idlname)-cpp-skels.h $(idlname)-cpp-skels.cc
+cpp_lump = $(idlname)-cpp.h $(idlname)-cpp.cc
+cpp_all = $(cpp_common) $(cpp_stub) $(cpp_skel) $(cpp_lump)
+
+# Stubs are built from common .h/.cc, and stubs h/.cc
+stub_sources = 	$(c_common) $(cpp_common) $(c_stub) $(cpp_stub)
+
+# Skels are built from common headers, and stubs h/.cc, and linked to stubs.
+skel_sources = $(c_common_h) $(cpp_common_hh) $(c_skel) $(cpp_skel)
+
+idl_built = $(c_all) $(cpp_all)
+
+idl_file =$(srcdir)/../$(idlname).idl
+
+$(idl_built): $(idl_file)
+	$(ORBIT_IDL) -l c $(idl_file)
+	$(ORBIT_IDL) --backenddir=$(top_builddir)/orbitcpp/idl-compiler/.libs -l cpp $(idl_file)
+
+CLEANFILES = $(idl_built)
+
+maintainer-clean-local:
+	rm -f `cat .cvsignore`
+
+dist-hook:
+	cd $(distdir); touch $(CLEANFILES); rm $(CLEANFILES)

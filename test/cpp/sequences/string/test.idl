@@ -1,0 +1,18 @@
+module Test
+{
+    typedef sequence<string> str_seq;
+    typedef sequence<wstring> wstr_seq;
+
+    interface IMaster
+    {
+	void seq_in    (in    str_seq seq_in);
+	void seq_inout (inout str_seq seq_inout);
+	void seq_out   (out   str_seq seq_out);
+	
+	str_seq seq_ret ();
+    };
+    interface ICompile {
+
+	wstr_seq wstr_test(in wstr_seq s_in, inout wstr_seq s_io, out wstr_seq s_o);
+    };
+};

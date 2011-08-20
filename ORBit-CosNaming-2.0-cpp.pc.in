@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: ORBit-CosNaming-2.0-cpp
+Description: C++ mapping for ORBit-2.0 - Naming Service.
+Version: @ORBITCPP_VERSION@
+Requires: ORBit-2.0
+Libs: -L${libdir} -lORBitCosNaming-2-cpp
+Cflags: -I${includedir}/orbitcpp-2.0
+
+

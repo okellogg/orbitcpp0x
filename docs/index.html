@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <TITLE>orbitcpp</TITLE>
+</HEAD>
+<BODY
+bgcolor="#002000"
+text="#ffffff"
+link="#ff0000"
+vlink="#a0ff00"
+alink="#ffffff">
+
+<A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=646&type=1" width="88" height="31" border="0"></A> 
+
+<center>
+<IMG SRC="orbit-logoC++.gif" width="502" height="267"
+	border="0" alt="orbitcpp">
+<H2>
+C++ bindings for the <A HREF="http://www.labs.redhat.com/orbit/">ORBit</A>&nbsp;
+CORBA ORB</H2>
+
+</center>
+<HR><p>
+
+<H3>Objectives of the Project</H3>
+<p>orbitcpp is a project to develop C++ bindings for the <A HREF="http://www.labs.redhat.com/orbit/">ORBit</A> CORBA ORB. orbitcpp is Free Software (Open Source), licensed under the LGPL.</p>
+
+<p>See the official <a href="http://www.omg.org/technology/documents/formal/corba_language_mapping_specs.htm">CORBA language mapping specifications</a></p>
+
+<H4>
+Primary Objectives</H4>
+
+<UL>
+<LI>
+Provide a spec-compliant C++ corba mapping for ORBit</LI>
+
+<LI>
+To allow programmers to use and write ORBit objects and gnome components
+in C++ with little or no runtime overhead (compared to writing C ones)</LI>
+
+<LI>
+Allow C programmers to use C++ objects without having to deal with any
+of that 'horrible C++ syntax'</LI>
+</UL>
+In short, to C++ programmers, all ORBit objects look like C++ objects,
+and to C programmers, all ORBit objects should look like C objects.
+<H4>
+Secondary Objectives</H4>
+
+<UL>
+<LI>
+Allow C and C++ objects in the same address space to short-circuit calls
+(i.e. no on-the-wire marshalling) for maximum speed.</LI>
+</UL>
+
+
+<p>
+<HR>
+
+
+<H3>License</H3>
+orbitcpp is distributed under the Lesser General Public License (LGPL). See the <A
+	  HREF="http://www.gnu.org/">GNU Project Homepage</A> for more
+	  information.
+
+
+<H3>Download</H3>
+All releases can be downloaded from the <A
+HREF="ftp://ftp.gnome.org/pub/gnome/sources/orbitcpp/">
+GNOME's ftp server</A> or its mirrors.
+
+<HR WIDTH="100%">
+<H3>Mailing List</H3>
+
+orbitcpp has a mailing list for discussion of development and user issues. To join, follow this
+<a href="http://mail.gnome.org/mailman/listinfo/orbitcpp-list">link</a>.
+
+<HR WIDTH="100%">
+<H3>Development</H3>
+
+<p>orbitcpp is in the <a href="http://cvs.gnome.org/lxr/source/orbitcpp">orbitcpp</a> module in GNOME's cvs.</p>
+<p>To check out the latest version:<br/>
+cvs -d :pserver:anonymous@anoncvs.gnome.org:/cvs/gnome login<br/> 
+(hit return as the password)</br/>
+cvs -z3 -d :pserver:anonymous@anoncvs.gnome.org:/cvs/gnome co orbitcpp
+</p>
+
+<HR WIDTH="100%">
+<H3>Bugs/Patches</H3>
+<p>
+Outstanding <a
+href="http://bugzilla.gnome.org/buglist.cgi?product=orbit-cpp&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&changedin=&chfieldfrom=&chfieldto=Now&chfieldvalue=&short_desc=&short_desc_type=substring&long_desc=&long_desc_type=substring&bug_file_loc=&bug_file_loc_type=substring&status_whiteboard=&status_whiteboard_type=substring&keywords=&keywords_type=anywords&op_sys_details=&op_sys_details_type=substring&version_details=&version_details_type=substring&cmdtype=doit&namedcmd=gnome-libs+past+20+days&newqueryname=&order=Reuse+same+sort+as+last+time&form_name=query">orbitcpp bugs</a>
+(<a href="http://bugzilla.gnome.org/buglist.cgi?product=orbit-cpp&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&changedin=&chfieldfrom=&chfieldto=Now&chfieldvalue=&short_desc=&short_desc_type=substring&long_desc=&long_desc_type=substring&bug_file_loc=&bug_file_loc_type=substring&status_whiteboard=&status_whiteboard_type=substring&keywords=PATCH&keywords_type=anywords&op_sys_details=&op_sys_details_type=substring&version_details=&version_details_type=substring&cmdtype=doit&namedcmd=gnome-libs+past+20+days&newqueryname=&order=Reuse+same+sort+as+last+time&form_name=query">patches</a>)<br/>
+Submit a new orbitcpp bug <a href="http://bugzilla.gnome.org/enter_bug.cgi?product=orbit-cpp">here</a>
+</p>
+
+<HR WIDTH="100%">
+<H3>Projects using orbitcpp</H3>
+
+<ul>
+<li><a href="http://www.gtkmm.org">gnomemm</a>, for its C++ Bonobo wrappers</li>
+</ul>
+
+</BODY>
+</HTML>
