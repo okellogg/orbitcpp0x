@@ -51,8 +51,13 @@
 #include "orbitcpp/idl-compiler/types/IDLTypedef.h"
 
 static IDLVoid idlVoid;
+#ifdef IDL2CPP0X
+static IDLString idlString ("CORBA_char", "string", "std::string");
+static IDLString idlWString ("CORBA_wchar", "wstring", "std::wstring");
+#else
 static IDLString idlString ("CORBA_char", "string", "String");
 static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
+#endif
 
 #define ORBITCPP_MAKE_SIMPLE_TYPE(name,cname)			\
 	static class IDL##name : public IDLSimpleType, public IDLTypenameUnused {		\

@@ -53,8 +53,13 @@ public:
 	bool is_fixed () const { return false; };
 	bool conversion_required () const { return true; };
 	string get_c_typename   () const { return "CORBA_" + string_; }
+#ifdef IDL2CPP0X
+	string get_cpp_typename () const { return String_; }
+	string get_cpp_identifier () const { return String_; }
+#else
 	string get_cpp_typename () const { return "CORBA::" + String_ + "_var"; }
 	string get_cpp_identifier () const { return "CORBA::" + String_ + "_var"; }
+#endif
 	
 	////////////////////////////////////////////
 	// Constants
@@ -159,9 +164,9 @@ public:
 				 const IDLTypedef *active_typedef = 0) const;
 
 	////////////////////////////////////////////
-	// Members of compund types
+	// Members of compound types
 
-	// Compund declaration
+	// Compound declaration
 	string get_cpp_member_typename (const IDLTypedef *active_typedef = 0) const;
 	string get_c_member_typename   (const IDLTypedef *active_typedef = 0) const;
 	string member_decl_arg_get (const IDLTypedef *active_typedef = 0) const;

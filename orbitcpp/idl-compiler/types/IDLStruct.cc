@@ -104,10 +104,12 @@ IDLStructBase::typedef_decl_write (ostream          &ostr,
 	ostr << indent << "typedef " << cpp_type << "_out"
 	     << " " << target.get_cpp_identifier () << "_out;" << endl;
 
+#ifndef IDL2CPP0X
 	if (!is_fixed ())
 		// _var typedef
 		ostr << indent << "typedef " << cpp_type << "_var"
 		     << " " << target.get_cpp_identifier () << "_var;" << endl;
+#endif
 }
 
 string
@@ -175,7 +177,8 @@ IDLStructBase::stub_impl_arg_pre (ostream          &ostr,
 			     << cpp_id << "._orbitcpp_pack ();" << endl;
 			break;
 		case IDL_PARAM_OUT:
-			ostr << indent << c_type << " *_c_" << cpp_id << ";" << endl;
+			ostr << indent << c_type << " *_c_" << cpp_id
+			     << " = NULL;" << endl;
 			break;
 		}
 	}
@@ -217,12 +220,17 @@ IDLStructBase::stub_impl_arg_post (ostream          &ostr,
 		     << "(*_c_" << cpp_id << ");" << endl;
 		break;
 	case IDL_PARAM_OUT:
+#ifdef IDL2CPP0X
+		ostr << indent << cpp_id << "._orbitcpp_unpack "
+		     << "(*_c_" << cpp_id << ");" << endl;
+#else
 		if (is_fixed ())
 			ostr << indent << cpp_id << "._orbitcpp_unpack "
 			     << "(*_c_" << cpp_id << ");" << endl;
 		else
 			ostr << indent << cpp_id << " = new " << cpp_type
 			     << " (*_c_" << cpp_id << ");" << endl;
+#endif
 		break;
 	}
 	
@@ -240,11 +248,13 @@ IDLStructBase::stub_decl_ret_get (const IDLTypedef *active_typedef) const
 {
 	string cpp_typename = active_typedef ?
 		active_typedef->get_cpp_typename () : get_cpp_typename ();
+	string maybe_star;
 
-	if (is_fixed ())
-		return cpp_typename;
-	else
-		return cpp_typename + "*";
+#ifndef IDL2CPP0X
+	if (!is_fixed ())
+		maybe_star = "*";
+#endif
+	return cpp_typename + maybe_star;
 }
 	
 void
@@ -285,6 +295,13 @@ IDLStructBase::stub_impl_ret_post (ostream          &ostr,
 			
 		ostr << indent << "return " << cast << "_c_retval;" << endl;
 	} else {
+#ifdef IDL2CPP0X
+		ostr << indent << cpp_typename << " _cpp_retval;" << endl;
+		ostr << indent << "_cpp_retval._orbitcpp_unpack  (";
+		if (!is_fixed ())
+			ostr << "*";
+		ostr << "_c_retval);" << endl;
+#else
 		if (is_fixed ())
 		{
 			ostr << indent << cpp_typename << " _cpp_retval;" << endl;
@@ -295,7 +312,7 @@ IDLStructBase::stub_impl_ret_post (ostream          &ostr,
 			ostr << indent << "_cpp_retval->_orbitcpp_unpack (*_c_retval);" << endl;
 			ostr << indent << "CORBA_free (_c_retval);" << endl;
 		}
-		
+#endif
 		ostr << indent << "return _cpp_retval;" << endl;
 	}
 }
@@ -372,8 +389,11 @@ IDLStructBase::skel_impl_arg_pre (ostream          &ostr,
 			     << ";" << endl;
 			break;
 		case IDL_PARAM_OUT:
-			ostr << indent << cpp_type << "_var " << cpp_id
-			     << ";" << endl;
+			ostr << indent << cpp_type;
+#ifndef IDL2CPP0X
+			ostr << "_var";
+#endif
+			ostr << " " << cpp_id << ";" << endl;
 			break;
 		}
 	}
@@ -387,8 +407,10 @@ IDLStructBase::skel_impl_arg_call (const string     &c_id,
 	if (!conversion_required ())
 		return "*_cpp_" + c_id;
 
+#ifndef IDL2CPP0X
 	if (direction == IDL_PARAM_OUT)
 		return get_cpp_typename () + "_out (_cpp_" + c_id + ")";
+#endif
 
 	return "_cpp_" + c_id;
 }
@@ -401,6 +423,7 @@ IDLStructBase::skel_impl_arg_post (ostream          &ostr,
 			       const IDLTypedef *active_typedef) const
 {
 	string cpp_id = "_cpp_" + c_id;
+	string ref;
 	
 	if (!conversion_required ())
 		// Do nothing
@@ -417,13 +440,18 @@ IDLStructBase::skel_impl_arg_post (ostream          &ostr,
 		     << "(*" << c_id << ");" << endl;
 		break;
 	case IDL_PARAM_OUT:
+#ifdef IDL2CPP0X
+		ref = ".";
+#else
+		ref = "->";
+#endif
 		if (is_fixed())
-			ostr << indent 
-			     << cpp_id << "->_orbitcpp_pack (*" << c_id << ");" << endl;
+			ostr << indent << cpp_id << ref
+			     << "_orbitcpp_pack (*" << c_id << ");" << endl;
 		
 		else
 			ostr << indent << "*" << c_id << " = "
-			     << cpp_id << "->_orbitcpp_pack ();" << endl;
+			     << cpp_id << ref << "_orbitcpp_pack ();" << endl;
 		break;
 	}
 }
@@ -452,9 +480,18 @@ IDLStructBase::skel_impl_ret_pre (ostream          &ostr,
 		active_typedef->get_cpp_typename () : get_cpp_typename ();
 	
 	if (is_fixed ())
+	{
 		ostr << indent << cpp_typename << " _cpp_retval;" << endl;
+	}
 	else
-		ostr << indent << cpp_typename << "_var _cpp_retval = 0;" << endl;
+	{
+		ostr << indent << cpp_typename;
+#ifdef IDL2CPP0X
+		ostr << " _cpp_retval;" << endl;
+#else
+		ostr << "_var _cpp_retval = 0;" << endl;
+#endif
+	}
 }
 
 void
@@ -490,7 +527,14 @@ IDLStructBase::skel_impl_ret_post (ostream          &ostr,
 			ostr << indent << "_cpp_retval._orbitcpp_pack (_c_retval);" << endl;
 			ostr << indent << "return _c_retval;" << endl;
 		} else {
-			ostr << indent << "return _cpp_retval->_orbitcpp_pack ();" << endl;
+			string ref;
+#ifdef IDL2CPP0X
+			ref = ".";
+#else
+			ref = "->";
+#endif
+			ostr << indent << "return _cpp_retval" << ref
+			     << "_orbitcpp_pack ();" << endl;
 		}
 	}
 }
@@ -529,8 +573,11 @@ IDLStructBase::member_impl_arg_copy (ostream          &ostr,
 				 const string     &cpp_id,
 				 const IDLTypedef *active_typedef) const
 {
-	ostr << indent << cpp_id << " = "
-	     << "_par_" << cpp_id << ";" << endl;
+	ostr << indent;
+#ifdef IDL2CPP0X
+	ostr << "_";
+#endif
+	ostr << cpp_id << " = " << "_par_" << cpp_id << ";" << endl;
 }
 
 void

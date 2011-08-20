@@ -56,6 +56,11 @@ IDLCompoundSeqElem::get_seq_typename (unsigned int      length,
 			cpp_member_typename + ", " :
 			"";
 	
+#ifdef IDL2CPP0X
+	if (c_member_typename_base == "CORBA_string")
+		tmp = g_strdup (IDL_IMPL_NS "::StringUnboundedSeq");
+	else
+#endif
 	if (length)
 		tmp = g_strdup_printf (
 			IDL_IMPL_NS "::SimpleBoundedSeq< " IDL_IMPL_NS "::%s< %s, %s %s, CORBA_sequence_%s, &TC_CORBA_sequence_%s_struct>, %d >",

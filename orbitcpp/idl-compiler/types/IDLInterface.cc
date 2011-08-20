@@ -376,8 +376,11 @@ IDLInterfaceBase::member_impl_arg_copy (ostream      &ostr,
 {
 #warning "WRITE ME"
 	// WRITE ME
-	ostr << indent << cpp_id << " = _par_" << cpp_id
-	     << ';' << endl;
+	ostr << indent;
+#ifdef IDL2CPP0X
+	ostr << "_";
+#endif
+	ostr << cpp_id << " = _par_" << cpp_id << ';' << endl;
 }
 
 
