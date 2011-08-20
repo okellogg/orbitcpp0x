@@ -53,7 +53,8 @@ namespace CORBA {
 
     typedef Char *ORBid;
     typedef const Char *RepositoryId;
-    
+
+    // The following functions are _not_ used in IDL2CPP0X mode
     Char* string_alloc(ULong len);
     Char* string_dup(const Char* str);
     void string_free(Char* str);
