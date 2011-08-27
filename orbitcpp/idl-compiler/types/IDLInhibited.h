@@ -50,13 +50,6 @@ class IDLInhibited :
 
 	std::vector<std::string> ns_;
 
-	static std::string handle_keyword(std::string const& s)
-	{
-		if (idlIsCPPKeyword(s))
-			return IDL_CPP_KEY_PREFIX + s;
-
-		return s;
-	}
 public:
 	IDLInhibited(IDL_tree ident)
 	{

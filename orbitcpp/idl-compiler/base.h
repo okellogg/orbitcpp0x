@@ -118,6 +118,7 @@ string idlGetNodeTypeString(IDL_tree node);
 string idlGetTypeString(IDL_tree_type type);
 string idlGetQualIdentifier(IDL_tree ident);
 bool idlIsCPPKeyword(string const &id);
+string handle_keyword(string const& s);
 string idlGetCast(string const &what, string const &type);
 	
 

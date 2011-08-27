@@ -213,6 +213,14 @@ idlIsCPPKeyword(string const &id) {
 }
 
 
+string handle_keyword(string const& s)
+{
+	if (idlIsCPPKeyword(s))
+		return IDL_CPP_KEY_PREFIX + s;
+
+	return s;
+}
+
 
 
 string idlGetCast(string const &what, string const &type) {
