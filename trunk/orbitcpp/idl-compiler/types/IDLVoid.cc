@@ -26,7 +26,7 @@
  */
 
 #include "IDLVoid.h"
-#include "orbitcpp/idl-compiler/error.h"
+#include "error.h"
 
 bool
 IDLVoid::is_fixed () const

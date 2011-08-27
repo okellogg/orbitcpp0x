@@ -26,7 +26,7 @@
 
 #include "IDLEnum.h"
 #include "IDLTypedef.h"
-#include "orbitcpp/idl-compiler/error.h"
+#include "error.h"
 
 IDLEnum::IDLEnum(IDL_tree en)
 :	IDLType (IDLType::T_ENUM),

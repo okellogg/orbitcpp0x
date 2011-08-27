@@ -33,7 +33,7 @@
 #include "IDLCompound.h"
 #include "IDLCompoundSeqElem.h"
 #include "IDLInhibited.h"
-#include "orbitcpp/idl-compiler/error.h"
+#include "error.h"
 
 class IDLStructBase :
 	public virtual IDLTypenameInterface,

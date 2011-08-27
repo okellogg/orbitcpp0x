@@ -28,7 +28,7 @@
 #include "IDLStruct.h"
 
 #include "IDLTypedef.h"
-#include "orbitcpp/idl-compiler/types.h"
+#include "types.h"
 
 IDLStruct::IDLStruct (IDL_tree      node)
 :	IDLCompound (IDL_IDENT(IDL_TYPE_STRUCT(node).ident).str, node, 0),

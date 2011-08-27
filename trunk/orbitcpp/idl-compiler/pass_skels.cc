@@ -27,13 +27,13 @@
 
 
 
-#include "orbitcpp/idl-compiler/language.h"
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/pass_skels.h"
+#include "language.h"
+#include "error.h"
+#include "pass_skels.h"
 
-#include "orbitcpp/idl-compiler/types/IDLOperation.h"
-#include "orbitcpp/idl-compiler/types/IDLAttribAccessor.h"
-#include "orbitcpp/idl-compiler/types/IDLException.h"
+#include "types/IDLOperation.h"
+#include "types/IDLAttribAccessor.h"
+#include "types/IDLException.h"
 
 #include <iostream>
 

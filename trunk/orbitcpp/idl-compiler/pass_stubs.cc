@@ -27,10 +27,10 @@
 
 
 
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/pass_stubs.h"
+#include "error.h"
+#include "pass_stubs.h"
 
-#include "orbitcpp/idl-compiler/types/IDLAttribAccessor.h"
+#include "types/IDLAttribAccessor.h"
 
 
 // IDLPassStubs --------------------------------------------------------------

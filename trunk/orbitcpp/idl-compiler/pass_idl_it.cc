@@ -28,7 +28,7 @@
 
 
 #include "pass_idl_it.h"
-#include "orbitcpp/idl-compiler/error.h"
+#include "error.h"
 
 
 

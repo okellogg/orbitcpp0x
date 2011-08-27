@@ -25,8 +25,8 @@
  */
 
 #include "IDLOperation.h"
-#include "orbitcpp/idl-compiler/types/IDLException.h"
-#include "orbitcpp/idl-compiler/types.h"
+#include "IDLException.h"
+#include "types.h"
 
 
 IDLOperation::IDLOperation (
