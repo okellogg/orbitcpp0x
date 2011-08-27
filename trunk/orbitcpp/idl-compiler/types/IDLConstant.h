@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2011 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,43 +21,41 @@
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
- *  Purpose:	IDL compiler type representation
- *
+ *  Purpose: IDL compiler language representation
  *
  */
 
+#ifndef ORBITCPP_IDLCONSTANT
+#define ORBITCPP_IDLCONSTANT
 
-#ifndef ORBITCPP_TYPES_IDLBOOLEAN
-#define ORBITCPP_TYPES_IDLBOOLEAN
+#include <libIDL/IDL.h>
+#include "language.h"
+#include "IDLElement.h"
 
-#include "IDLSimpleType.h"
-#include "IDLUnionDiscriminator.h"
+class IDLType;
+class IDLScope;
 
-
-class IDLBoolean :
-	public IDLSimpleType,
-	public IDLUnionDiscriminator,
-	public IDLTypenameUnused
-{
+class IDLConstant :
+	public IDLElement,
+	public virtual IDLNotAType,
+	public IDLIdentified {
 protected:
-	std::string get_cpp_identifier () const { return "Boolean"; }
-	std::string get_cpp_typename () const;
-	std::string get_c_typename () const;
+	IDLType	*m_type;
+public:
+	IDLConstant(IDLType *type, std::string const &id, IDL_tree node, IDLScope *parentscope = NULL)
+	:	IDLElement(id,node,parentscope),
+		IDLIdentified (IDL_CONST_DCL(node).ident),
+		m_type(type)
+	{
+	}
 
- public:
-	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
-	virtual ~ IDLBoolean () {}
-
-	std::string get_default_value (std::set<std::string> const &labels) const;
-
-	std::string discr_get_c_typename () const {
-		return get_fixed_c_typename ();
-	}									
-	
-	std::string discr_get_cpp_typename () const {
-		return get_fixed_cpp_typename ();
-	}									
+	string getValue() const {
+		return idlTranslateConstant(IDL_CONST_DCL(getNode()).const_exp);
+	}
+	IDLType *getType() {
+		return m_type;
+	}
 };
 
-#endif //ORBITCPP_TYPES_IDLBOOLEAN
+#endif // ORBITCPP_IDLCONSTANT
 

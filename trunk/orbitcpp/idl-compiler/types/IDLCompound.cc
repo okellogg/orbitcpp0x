@@ -27,7 +27,7 @@
 
 #include "IDLCompound.h"
 #include "IDLType.h"
-#include "language.h"
+#include "IDLMember.h"
 
 void
 IDLCompound::write_packing_decl (ostream &ostr,

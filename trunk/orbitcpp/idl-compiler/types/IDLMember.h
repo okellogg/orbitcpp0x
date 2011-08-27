@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2011 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,43 +21,37 @@
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
- *  Purpose:	IDL compiler type representation
- *
+ *  Purpose: IDL compiler language representation
  *
  */
 
+#ifndef ORBITCPP_IDLMEMBER
+#define ORBITCPP_IDLMEMBER
 
-#ifndef ORBITCPP_TYPES_IDLBOOLEAN
-#define ORBITCPP_TYPES_IDLBOOLEAN
+#include <libIDL/IDL.h>
+#include "language.h"
+#include "IDLInhibited.h"
+#include "IDLType.h"
 
-#include "IDLSimpleType.h"
-#include "IDLUnionDiscriminator.h"
+class IDLScope;
 
-
-class IDLBoolean :
-	public IDLSimpleType,
-	public IDLUnionDiscriminator,
-	public IDLTypenameUnused
-{
+class IDLMember :
+	public IDLElement,
+	public virtual IDLNotAType,
+	public IDLIdentified {
 protected:
-	std::string get_cpp_identifier () const { return "Boolean"; }
-	std::string get_cpp_typename () const;
-	std::string get_c_typename () const;
-
- public:
-	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
-	virtual ~ IDLBoolean () {}
-
-	std::string get_default_value (std::set<std::string> const &labels) const;
-
-	std::string discr_get_c_typename () const {
-		return get_fixed_c_typename ();
-	}									
-	
-	std::string discr_get_cpp_typename () const {
-		return get_fixed_cpp_typename ();
-	}									
+	IDLType	*m_type;
+public:
+	IDLMember(IDLType *type, std::string const &id, IDL_tree node, IDLScope *parentscope = NULL)
+	:	IDLElement (id, node, parentscope),
+		IDLIdentified (simple_dcl_ident(node)),
+		m_type(type)
+	{
+	}
+	IDLType const *getType() const {
+		return m_type;
+	}
 };
 
-#endif //ORBITCPP_TYPES_IDLBOOLEAN
+#endif // ORBITCPP_IDLMEMBER
 

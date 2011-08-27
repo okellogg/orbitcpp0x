@@ -46,6 +46,7 @@
 #include "types/IDLStruct.h"
 #include "types/IDLEnum.h"
 #include "types/IDLUnion.h"
+#include "types/IDLUnionDiscriminator.h"
 #include "types/IDLException.h"
 #include "types/IDLModule.h"
 #include "types/IDLTypedef.h"

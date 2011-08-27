@@ -30,7 +30,8 @@
 #define ORBITCPP_TYPES_IDLENUM
 
 #include "IDLUserDefSimpleType.h"
-#include "language.h"
+#include "IDLUnionDiscriminator.h"
+#include "IDLEnumComponent.h"
 
 class IDLEnum :
 	public IDLUserDefSimpleType,
@@ -50,7 +51,7 @@ public:
 	const_iterator begin() const;
 	const_iterator end() const;
 
-	string get_seq_typename (unsigned int length, const IDLTypedef *active_typedef) const;
+	std::string get_seq_typename (unsigned int length, const IDLTypedef *active_typedef) const;
 
 	std::string get_default_value (std::set<std::string> const &labels) const;
 

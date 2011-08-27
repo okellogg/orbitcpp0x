@@ -27,6 +27,7 @@
 
 #include "IDLStruct.h"
 
+#include "IDLMember.h"
 #include "IDLTypedef.h"
 #include "types.h"
 

@@ -28,6 +28,7 @@
 #include "IDLArray.h"
 
 #include "IDLTypedef.h"
+#include "IDLMember.h"
 #include "IDLCaseStmt.h"
 #include "pass.h"
 #include "pass_xlate.h"

@@ -26,9 +26,6 @@
  *
  */
 
-
-
-
 #include "error.h"
 #include "pass_xlate.h"
 #include <cstdlib>
@@ -36,6 +33,10 @@
 #include "types/IDLTypedef.h"
 #include "types/IDLOperation.h"
 #include "types/IDLAttribAccessor.h"
+#include "types/IDLAttribute.h"
+#include "types/IDLMember.h"
+#include "types/IDLConstant.h"
+#include "types/IDLUnionDiscriminator.h"
 #include "types/IDLCaseStmt.h"
 
 

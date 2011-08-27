@@ -31,7 +31,6 @@
 
 #include "IDLUserDefType.h"
 #include "IDLInhibited.h"
-#include "language.h"
 
 class IDLTypedef :
 	public IDLUserDefType,
