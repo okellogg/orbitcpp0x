@@ -30,7 +30,7 @@
 #define ORBITCPP_TYPES_IDLENUM
 
 #include "IDLUserDefSimpleType.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "language.h"
 
 class IDLEnum :
 	public IDLUserDefSimpleType,

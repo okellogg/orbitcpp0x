@@ -27,7 +27,7 @@
 #ifndef ORBITCPP_TYPES_IDLATTRIBACCESSOR
 #define ORBITCPP_TYPES_IDLATTRIBACCESSOR
 
-#include "orbitcpp/idl-compiler/IDLMethod.h"
+#include "IDLMethod.h"
 
 class IDLAttribute;
 

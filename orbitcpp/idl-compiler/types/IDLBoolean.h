@@ -30,7 +30,7 @@
 #define ORBITCPP_TYPES_IDLBOOLEAN
 
 #include "IDLSimpleType.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "language.h"
 
 
 class IDLBoolean :

@@ -27,7 +27,7 @@
 
 #include "IDLCompound.h"
 #include "IDLType.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "language.h"
 
 void
 IDLCompound::write_packing_decl (ostream &ostr,

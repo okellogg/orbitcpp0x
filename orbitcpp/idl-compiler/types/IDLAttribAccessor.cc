@@ -27,9 +27,9 @@
 #include "IDLAttribAccessor.h"
 
 #include "IDLVoid.h"
-#include "orbitcpp/idl-compiler/types.h"
+#include "types.h"
 #include "IDLInterface.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "language.h"
 
 IDLAttribGetter::IDLAttribGetter (IDLInterfaceRight& iface, IDLAttribute &attr_):
 	IDLMethod (iface),

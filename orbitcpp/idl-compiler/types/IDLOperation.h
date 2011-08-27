@@ -27,8 +27,8 @@
 #ifndef ORBITCPP_TYPES_IDLOPERATION
 #define ORBITCPP_TYPES_IDLOPERATION
 
-#include "orbitcpp/idl-compiler/IDLMethod.h"
-#include "orbitcpp/idl-compiler/types/IDLInhibited.h"
+#include "IDLMethod.h"
+#include "IDLInhibited.h"
 
 class IDLOperation :
 	public IDLInhibited<EmptyType>,

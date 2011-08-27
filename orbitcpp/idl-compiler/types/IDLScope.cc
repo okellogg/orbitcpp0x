@@ -25,7 +25,7 @@
 
 #include "IDLScope.h"
 
-#include "orbitcpp/idl-compiler/error.h"
+#include "error.h"
 
 IDLScope::~IDLScope() {
 	// Can't clean up items because modules share item lists.

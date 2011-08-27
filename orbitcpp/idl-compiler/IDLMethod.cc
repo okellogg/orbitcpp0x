@@ -24,10 +24,10 @@
  *
  */
 
-#include "orbitcpp/idl-compiler/IDLMethod.h"
+#include "IDLMethod.h"
 
-#include "orbitcpp/idl-compiler/types/IDLException.h"
-#include "orbitcpp/idl-compiler/types/IDLInterface.h"
+#include "types/IDLException.h"
+#include "types/IDLInterface.h"
 
 IDLMethod::IDLMethod (IDLInterfaceRight &parent_interface_):
 	parent_interface (parent_interface_)

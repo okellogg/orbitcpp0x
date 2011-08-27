@@ -27,7 +27,7 @@
 #define ORBITCPP_TYPES_IDLELEMENT
 
 #include <libIDL/IDL.h>
-#include "orbitcpp/idl-compiler/base.h"
+#include "base.h"
 #include <string>
 #include <vector>
 #include <algorithm>

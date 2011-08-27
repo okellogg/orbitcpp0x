@@ -31,7 +31,7 @@
 
 #include "IDLUserDefType.h"
 #include "IDLInhibited.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "language.h"
 
 class IDLTypedef :
 	public IDLUserDefType,
