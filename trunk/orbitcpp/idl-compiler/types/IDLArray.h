@@ -35,7 +35,6 @@
 class IDLArray :
 	public IDLElement,
 	public virtual IDLType,
-	protected IDLDefaultConstructed,
 	public IDLIdentified
 {
         typedef IDLElement                 Super;

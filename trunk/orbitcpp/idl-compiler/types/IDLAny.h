@@ -35,7 +35,6 @@
 class IDLAny :
 	public virtual IDLType,
 	private IDLCompoundSeqElem,
-	protected IDLDefaultConstructed,
 	public IDLReferentUnionable,
 	public IDLTypenameUnused
 {

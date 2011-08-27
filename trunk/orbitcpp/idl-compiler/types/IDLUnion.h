@@ -39,7 +39,6 @@ class IDLUnion :
 	public IDLScope,  // IDLScope::m_items holds list of IDLCaseStmt
 	public IDLCompoundSeqElem,
 	public IDLScopeTypeImplementation,
-	protected IDLDefaultConstructed,
 	public IDLReferentUnionable,
 	public IDLIdentified
 {

@@ -39,7 +39,6 @@ class IDLInterfaceBase :
 	public virtual IDLTypenameInterface,
 	public IDLCompoundSeqElem,
 	public virtual IDLType,
-	protected IDLDefaultConstructed,
 	public IDLStandardUnionable {	// FIXME: this is wrong but hard to fix
 public:
 	IDLInterfaceBase () : IDLType (IDLType::T_INTERFACE) {}

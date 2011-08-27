@@ -211,7 +211,7 @@ public:
 	virtual void member_init_cpp (ostream          &ostr,
 				      Indent           &indent,
 				      const string     &cpp_id,
-				      const IDLTypedef *active_typedef = 0) const = 0;
+				      const IDLTypedef *active_typedef = 0) {}
 
 	virtual void member_init_c   (ostream          &ostr,
 				      Indent           &indent,
@@ -234,17 +234,6 @@ public:
 					   const IDLTypedef *active_typedef = 0) const = 0;
 private:
 	Type m_type;
-};
-
-class IDLDefaultConstructed : public virtual IDLType {
-public:
-	virtual void member_init_cpp (ostream          &,
-				      Indent           &,
-				      const string     &,
-				      const IDLTypedef * = 0) const
-	{
-		// No op, default constructor is fine.
-	}
 };
 
 #endif //ORBITCPP_TYPES_IDLTYPE

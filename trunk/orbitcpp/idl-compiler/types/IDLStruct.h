@@ -39,7 +39,6 @@ class IDLStructBase :
 	public virtual IDLTypenameInterface,
 	public IDLCompoundSeqElem,
 	public virtual IDLType,
-	protected IDLDefaultConstructed,
 	public IDLReferentUnionable
 {
 public:
