@@ -50,7 +50,7 @@ simple_dcl_ident(IDL_tree dcl)
 
 
 // constant xlator ------------------------------------------------------------
-static char *idlNumChars = "0123456789abcdef";
+static const char *idlNumChars = "0123456789abcdef";
 
 
 
