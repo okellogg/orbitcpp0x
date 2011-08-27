@@ -36,7 +36,8 @@ std::string IDLArray::get_props_id(IDLTypedef const& target) const
 
 IDLArray::IDLArray (IDL_tree element_type,
 		    IDL_tree       node)
-:	IDLElement  (IDL_IDENT(IDL_TYPE_ARRAY(node).ident).str, node, 0),
+:	IDLType (IDLType::T_ARRAY),
+	IDLElement  (IDL_IDENT(IDL_TYPE_ARRAY(node).ident).str, node, 0),
 	IDLIdentified (IDL_TYPE_ARRAY(node).ident),
 	m_element_type (IDLTypeParser::parseTypeSpec(0, element_type))
 {

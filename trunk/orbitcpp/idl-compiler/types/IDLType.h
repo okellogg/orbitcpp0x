@@ -70,7 +70,16 @@ class IDLType :
 	public virtual IDLUnionable
 {
 public:
-	virtual ~IDLType() {}
+	enum Type {
+		T_VOID, T_ENUM, T_BOOLEAN, T_INTEGER, T_FLOAT, T_FIXED, T_CHAR,
+		T_STRING, T_ANY, T_INTERFACE, T_SEQUENCE, T_ARRAY, T_STRUCT, T_UNION
+	};
+
+	IDLType () { m_type = T_VOID; }   // T_VOID really means "not applicable" here
+	IDLType (Type t) { m_type = t; }
+	virtual ~IDLType () {}
+
+	Type getType() const { return m_type; }
 
 	// if this type is really an alias, this gets the aliased type
 	IDLType const &getResolvedType() const;
@@ -223,6 +232,8 @@ public:
 					   const string     &cpp_id,
 					   const string     &c_id,
 					   const IDLTypedef *active_typedef = 0) const = 0;
+private:
+	Type m_type;
 };
 
 class IDLDefaultConstructed : public virtual IDLType {

@@ -43,6 +43,8 @@ class IDLStructBase :
 	public IDLReferentUnionable
 {
 public:
+	IDLStructBase () : IDLType (IDLType::T_STRUCT) {}
+
 	////////////////////////////////////////////
 	// Creating typedefs
 

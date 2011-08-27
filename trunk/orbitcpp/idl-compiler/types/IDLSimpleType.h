@@ -36,7 +36,6 @@ class IDLSimpleType :
 	public virtual IDLType,
 	public virtual IDLTypenameInterface,
 	private IDLCompoundSeqElem,
-	protected IDLDefaultConstructed, // is this right? init to zero?
 	public IDLStandardUnionable
 {
 protected:
@@ -157,6 +156,11 @@ public:
 	string get_c_member_typename   (const IDLTypedef *active_typedef = 0) const;
 	string member_decl_arg_get (const IDLTypedef *active_typedef = 0) const;
 	
+	void member_init_cpp (ostream          &ostr,
+			      Indent           &indent,
+			      const string     &cpp_id,
+			      const IDLTypedef *active_typedef = 0) const;
+
 	void member_impl_arg_copy (ostream          &ostr,
 				   Indent           &indent,
 				   const string     &cpp_id,

@@ -60,17 +60,19 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 #endif
 
 #define ORBITCPP_MAKE_SIMPLE_TYPE(name,cname)			\
-	static class IDL##name : public IDLSimpleType, public IDLTypenameUnused {		\
+	static class IDL##name : public IDLSimpleType, public IDLTypenameUnused { \
 	protected:						\
-		string get_cpp_identifier () const {	\
-			return #name;		\
+		string get_cpp_identifier () const {		\
+			return #name;				\
 		} 						\
-		string get_cpp_typename () const {	\
+		string get_cpp_typename () const {		\
 			return IDL_CORBA_NS "::" #name;		\
 		} 						\
 		string get_c_typename () const {		\
 			return #cname;				\
 		}						\
+	public:							\
+		IDL##name () : IDLType (IDLType::T_FLOAT) {}	\
 	} idl##name;
 
 
@@ -87,6 +89,7 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 			return #cname;					\
 		}							\
 	public:								\
+		IDL##name () : IDLType (IDLType::T_INTEGER) {}		\
 		std::string get_default_value (std::set<std::string> const &labels) const { \
 			short val = 0;					\
 			char *val_buf = 0;				\
@@ -112,15 +115,16 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 	static class IDL##name : public IDLSimpleType, public IDLUnionDiscriminator, public IDLTypenameUnused {	\
 	protected:									\
 		std::string get_cpp_identifier () const {				\
-			return #name;					\
+			return #name;							\
 		}									\
-		std::string get_cpp_typename () const {				\
+		std::string get_cpp_typename () const {					\
 			return IDL_CORBA_NS "::" #name;					\
 		}									\
-		std::string get_c_typename () const {		       		\
+		std::string get_c_typename () const {		       			\
 			return #cname;							\
 		}									\
 	public:										\
+		IDL##name () : IDLType (IDLType::T_CHAR) {}				\
 		std::string get_default_value (std::set<std::string> const &labels) const { \
 			return "\'\\0\'"; 						\
 		}									\

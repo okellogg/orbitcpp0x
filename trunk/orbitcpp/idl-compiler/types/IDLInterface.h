@@ -42,6 +42,7 @@ class IDLInterfaceBase :
 	protected IDLDefaultConstructed,
 	public IDLStandardUnionable {	// FIXME: this is wrong but hard to fix
 public:
+	IDLInterfaceBase () : IDLType (IDLType::T_INTERFACE) {}
 
 	bool is_fixed () const { return false; };
 		

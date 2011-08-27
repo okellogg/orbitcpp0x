@@ -29,7 +29,8 @@
 #include "orbitcpp/idl-compiler/error.h"
 
 IDLEnum::IDLEnum(IDL_tree en)
-:	IDLUserDefSimpleType(IDL_IDENT(IDL_TYPE_ENUM(en).ident).str, en, 0),
+:	IDLType (IDLType::T_ENUM),
+	IDLUserDefSimpleType(IDL_IDENT(IDL_TYPE_ENUM(en).ident).str, en, 0),
 	IDLIdentified (IDL_TYPE_ENUM(en).ident)
 {
 	IDL_tree l = IDL_TYPE_ENUM(en).enumerator_list;

@@ -44,6 +44,9 @@ protected:
 	std::string get_c_typename () const;
 
  public:
+	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
+	virtual ~ IDLBoolean () {}
+
 	std::string get_default_value (std::set<std::string> const &labels) const;
 
 	std::string discr_get_c_typename () const {

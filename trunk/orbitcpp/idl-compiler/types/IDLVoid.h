@@ -36,6 +36,8 @@ class IDLVoid :
 	public IDLNotUnionable
 {
 public:
+	IDLVoid () : IDLType (IDLType::T_VOID) {}
+
 	bool is_fixed () const;
 	
 	////////////////////////////////////////////
