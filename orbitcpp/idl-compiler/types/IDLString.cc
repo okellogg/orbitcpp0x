@@ -29,6 +29,7 @@
 
 #include "IDLTypedef.h"
 #include "IDLUnion.h"
+#include "IDLCaseStmt.h"
 
 void
 IDLString::const_decl_write (ostream          &header,

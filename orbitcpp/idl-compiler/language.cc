@@ -28,9 +28,9 @@
 
 #include <cstdio>
 #include <cstring>
-#include "orbitcpp/idl-compiler/language.h"
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/types.h"
+#include "language.h"
+#include "error.h"
+#include "types.h"
 #include <algorithm>
 #include <set>
 
@@ -130,30 +130,6 @@ string idlTranslateConstant(IDL_tree const constant) {
 		default:
 			ORBITCPP_NYI("parsing "+idlGetNodeTypeString(constant)+" as a constant")
 	}
-}
-
-// IDLCaseStmt ---------------------------------------------------------------
-IDLCaseStmt::IDLCaseStmt(IDLMember *member, string const &id,
-						 IDL_tree node,IDLScope *parentscope)
-:	IDLElement(id,node,parentscope),
-	IDLIdentified (IDL_LIST(IDL_MEMBER(IDL_CASE_STMT(node).element_spec).dcls).data), // dont handle multiple dcls
-	m_member(member),
-	m_isDefault(false)
-{
-
-	// labels
-	g_assert(IDL_NODE_TYPE(node) == IDLN_CASE_STMT);
-	IDL_tree list = IDL_CASE_STMT(node).labels;
-	g_assert(IDL_NODE_TYPE(list) == IDLN_LIST);
-	while (list) {
-		IDL_tree label = IDL_LIST(list).data;
-		if (label==NULL){
-			m_isDefault=true;
-			break;
-		}
-		m_labels.push_back(idlTranslateConstant(label));
-		list = IDL_LIST(list).next;
-	}	
 }
 
 

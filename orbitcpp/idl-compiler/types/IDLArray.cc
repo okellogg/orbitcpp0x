@@ -28,8 +28,9 @@
 #include "IDLArray.h"
 
 #include "IDLTypedef.h"
-#include "orbitcpp/idl-compiler/pass.h"
-#include "orbitcpp/idl-compiler/pass_xlate.h"
+#include "IDLCaseStmt.h"
+#include "pass.h"
+#include "pass_xlate.h"
 
 std::string IDLArray::get_props_id(IDLTypedef const& target) const
 { return target.get_cpp_identifier() + "Props"; }

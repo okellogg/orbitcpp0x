@@ -29,13 +29,14 @@
 
 
 
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/pass_xlate.h"
+#include "error.h"
+#include "pass_xlate.h"
 #include <cstdlib>
 
 #include "types/IDLTypedef.h"
-#include "orbitcpp/idl-compiler/types/IDLOperation.h"
-#include "orbitcpp/idl-compiler/types/IDLAttribAccessor.h"
+#include "types/IDLOperation.h"
+#include "types/IDLAttribAccessor.h"
+#include "types/IDLCaseStmt.h"
 
 
 // IDLPassXlate --------------------------------------------------------------

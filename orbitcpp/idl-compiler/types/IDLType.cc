@@ -27,8 +27,9 @@
 
 #include "IDLType.h"
 #include "IDLUnion.h"
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/language.h"
+#include "IDLCaseStmt.h"
+#include "error.h"
+#include "language.h"
 
 
 void
