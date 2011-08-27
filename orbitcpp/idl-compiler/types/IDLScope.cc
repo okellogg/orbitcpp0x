@@ -79,6 +79,7 @@ IDLScope::getItem(IDL_tree node) const {
 		first++;
 	}
 	g_assert(false);
+	return NULL;
 }
 
 IDLElement *

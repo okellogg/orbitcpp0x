@@ -108,16 +108,9 @@ IDLAny::stub_impl_arg_call (const string     &cpp_id,
 			    IDL_param_attr    direction,
 			    const IDLTypedef *active_typedef) const
 {
-	switch (direction)
-	{
-	case IDL_PARAM_IN:
-	case IDL_PARAM_INOUT:
-		return "c_" + cpp_id;
-		break;
-	case IDL_PARAM_OUT:
+	if (direction == IDL_PARAM_OUT)
 		return "&c_" + cpp_id;
-		break;
-	}
+	return "c_" + cpp_id;
 }
   
 void
@@ -231,17 +224,9 @@ IDLAny::skel_impl_arg_call (const string     &c_id,
 			    IDL_param_attr    direction,
 			    const IDLTypedef *active_typedef) const
 {
-	switch (direction)
-	{
-	case IDL_PARAM_IN:
-	case IDL_PARAM_INOUT:
-	case IDL_PARAM_OUT:
-		return "_cpp_" + c_id;
-		break;
-		//case IDL_PARAM_OUT:
-		//  return get_cpp_typename () + "_out(_cpp_" + c_id + ")";
-		//  break;
-	}    
+	// if (direction == IDL_PARAM_OUT)
+	// 	return get_cpp_typename () + "_out(_cpp_" + c_id + ")";
+	return "_cpp_" + c_id;
 }
 
 void
