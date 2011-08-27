@@ -33,7 +33,6 @@
 
 class IDLSequence :
 	public virtual IDLType,
-	protected IDLDefaultConstructed,
 	public IDLReferentUnionable
 {
 protected:

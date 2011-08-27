@@ -35,7 +35,6 @@
 class IDLString :
 	public virtual IDLType,
 	private IDLCompoundSeqElem,
-	protected IDLDefaultConstructed,
 	public IDLTypenameUnused
 {
 	std::string char_;
