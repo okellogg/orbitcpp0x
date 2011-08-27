@@ -32,6 +32,7 @@
 
 IDLSequence::IDLSequence (const IDLType &element_type,
 			  unsigned int   length) :
+	IDLType (IDLType::T_SEQUENCE),
 	m_element_type (element_type),
 	m_length (length)
 {

@@ -48,6 +48,8 @@ IDLUnion::doCaseStmt(IDL_tree  node)
 	new IDLCaseStmt(themember,id,node,this);  // attach the case stmt instead
 	// case stmt takes ownership of member
 
+	// @fixme we need to generate the proper amount of scope prefixes for the case labels
+	//        (this is a problem when the switch_type_spec is from a different scope)
 }
 
 void IDLUnion::doSwitchBody(IDL_tree  member_list)
@@ -62,7 +64,8 @@ void IDLUnion::doSwitchBody(IDL_tree  member_list)
 
 IDLUnion::IDLUnion(IDL_tree                     node)
 		   
-:	IDLScope (IDL_IDENT(IDL_TYPE_UNION(node).ident).str, node, 0),
+:	IDLType (IDLType::T_UNION),
+	IDLScope (IDL_IDENT(IDL_TYPE_UNION(node).ident).str, node, 0),
 	IDLIdentified (IDL_TYPE_UNION(node).ident),
 	m_discriminator (dynamic_cast<IDLUnionDiscriminator&>(*IDLTypeParser::parseTypeSpec(0, IDL_TYPE_UNION(node).switch_type_spec)))
 {

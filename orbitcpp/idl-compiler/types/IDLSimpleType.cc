@@ -304,6 +304,32 @@ IDLSimpleType::member_decl_arg_get (const IDLTypedef *active_typedef) const
 }
 
 void
+IDLSimpleType::member_init_cpp (ostream          &ostr,
+			        Indent           &indent,
+			        const string     &cpp_id,
+			        const IDLTypedef *active_typedef) const
+{
+#ifdef IDL2CPP0X
+	ostr << indent;
+	switch (getType ()) {
+	case IDLType::T_FLOAT:
+		ostr << cpp_id << " = " << "0.0;";
+		break;
+	case IDLType::T_INTEGER:
+		ostr << cpp_id << " = " << "0;";
+		break;
+	case IDLType::T_CHAR:
+		ostr << cpp_id << " = " << "0;";
+		break;
+	default:
+		ostr << "// IDLSimpleType::member_init_cpp cannot yet handle type " << getType ();
+		break;
+	}
+	ostr << endl;
+#endif
+}
+
+void
 IDLSimpleType::member_impl_arg_copy (ostream      &ostr,
 				     Indent       &indent,
 				     const string &cpp_id,

@@ -36,7 +36,7 @@
 class IDLUnionDiscriminator;
 
 class IDLUnion :
-	public IDLScope,
+	public IDLScope,  // IDLScope::m_items holds list of IDLCaseStmt
 	public IDLCompoundSeqElem,
 	public IDLScopeTypeImplementation,
 	protected IDLDefaultConstructed,
@@ -44,6 +44,7 @@ class IDLUnion :
 	public IDLIdentified
 {
 	const IDLUnionDiscriminator &m_discriminator;
+	// std::vector<IDLCaseStmt*> m_case_stmts;  // see inheritance from IDLScope
 
 	void doCaseStmt(IDL_tree);
 	void doSwitchBody(IDL_tree  member_list);

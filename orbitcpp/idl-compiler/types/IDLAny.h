@@ -45,6 +45,9 @@ private:
 	string get_c_typename   () const;
 	
 public:
+        IDLAny () : IDLType (IDLType::T_ANY) {}
+        virtual ~ IDLAny () {}
+
 	bool is_fixed () const;
 	
 	////////////////////////////////////////////

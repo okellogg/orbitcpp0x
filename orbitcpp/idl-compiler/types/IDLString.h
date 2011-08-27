@@ -44,7 +44,8 @@ class IDLString :
 
 public:
 	IDLString(std::string const& c, std::string const& s, std::string const& S)
-	:	char_ (c),
+	:	IDLType (IDLType::T_STRING),
+		char_ (c),
 		string_ (s),
 		String_ (S)
 	{
