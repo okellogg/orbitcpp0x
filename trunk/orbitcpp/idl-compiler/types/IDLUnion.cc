@@ -26,7 +26,7 @@
  */
 
 #include "IDLUnion.h"
-
+#include "IDLCaseStmt.h"
 #include "IDLTypedef.h"
 
 void

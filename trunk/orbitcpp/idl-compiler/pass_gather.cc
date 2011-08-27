@@ -28,15 +28,16 @@
 
 
 
-#include "orbitcpp/idl-compiler/error.h"
-#include "orbitcpp/idl-compiler/pass_gather.h"
+#include "error.h"
+#include "pass_gather.h"
 
-#include "orbitcpp/idl-compiler/types/IDLEnum.h"
-#include "orbitcpp/idl-compiler/types/IDLException.h"
-#include "orbitcpp/idl-compiler/types/IDLOperation.h"
-#include "orbitcpp/idl-compiler/types/IDLStruct.h"
-#include "orbitcpp/idl-compiler/types/IDLTypedef.h"
-#include "orbitcpp/idl-compiler/types/IDLUnion.h"
+#include "types/IDLCaseStmt.h"
+#include "types/IDLEnum.h"
+#include "types/IDLException.h"
+#include "types/IDLOperation.h"
+#include "types/IDLStruct.h"
+#include "types/IDLTypedef.h"
+#include "types/IDLUnion.h"
 #include <map>
 
 

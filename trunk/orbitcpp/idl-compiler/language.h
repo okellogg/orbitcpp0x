@@ -25,12 +25,8 @@
  */
 
 
-
-
 #ifndef ORBITCPP_LANGUAGE
 #define ORBITCPP_LANGUAGE
-
-
 
 #include <libIDL/IDL.h>
 #include "base.h"
@@ -38,8 +34,6 @@
 #include <list>
 #include <map>
 #include <set>
-
-
 
 
 // forward --------------------------------------------------------------------
@@ -121,46 +115,8 @@ public:
 };
 
 
-class IDLCaseStmt :
-	public IDLElement,
-	public virtual IDLNotAType,
-	public IDLIdentified {
-public:
-	typedef std::list<std::string>  LabelList;
-	typedef LabelList::const_iterator  const_iterator;
-private:
-	IDLMember *m_member;  
-	LabelList m_labels;
-	bool m_isDefault;
-public:
-	// takes ownership of member
-	IDLCaseStmt (IDLMember    *member,
-		     const string &id,
-		     IDL_tree      node,
-		     IDLScope     *parentscope = 0);
-
-	~IDLCaseStmt() {
-		delete m_member;
-	}
-  
-	const IDLMember& get_member () const {
-		return *m_member;
-	}
-	const_iterator labelsBegin() const {
-		return m_labels.begin();
-	}
-	const_iterator labelsEnd() const {
-		return m_labels.end();
-	}
-	bool isDefault() const {
-		return m_isDefault;
-	}
-};
-
-
-
+class IDLCaseStmt;
 class IDLException;
-
 
 
 

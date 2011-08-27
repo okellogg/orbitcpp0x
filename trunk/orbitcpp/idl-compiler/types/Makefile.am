@@ -14,7 +14,8 @@ headers = 		\
   IDLArrayList.h	\
   IDLAttribAccessor.h	\
   IDLBoolean.h		\
-  IDLCompound.h	\
+  IDLCaseStmt.h		\
+  IDLCompound.h		\
   IDLCompoundSeqElem.h	\
   IDLEnum.h		\
   IDLElement.h		\
@@ -25,13 +26,13 @@ headers = 		\
   IDLObject.h		\
   IDLOperation.h	\
   IDLScope.h		\
-  IDLSequence.h	\
-  IDLSequenceList.h    \
+  IDLSequence.h		\
+  IDLSequenceList.h	\
   IDLSimpleType.h	\
   IDLString.h		\
   IDLStruct.h		\
   IDLType.h		\
-  IDLTypeCode.h	\
+  IDLTypeCode.h		\
   IDLTypedef.h		\
   IDLUnion.h		\
   IDLUserDefScopeType.h \
@@ -45,6 +46,7 @@ modules =		\
   IDLArrayList.cc	\
   IDLAttribAccessor.cc	\
   IDLBoolean.cc		\
+  IDLCaseStmt.cc	\
   IDLCompound.cc	\
   IDLCompoundSeqElem.cc	\
   IDLEnum.cc		\
@@ -56,7 +58,7 @@ modules =		\
   IDLOperation.cc	\
   IDLScope.cc		\
   IDLSequence.cc	\
-  IDLSequenceList.cc    \
+  IDLSequenceList.cc	\
   IDLSimpleType.cc	\
   IDLString.cc		\
   IDLStruct.cc		\
