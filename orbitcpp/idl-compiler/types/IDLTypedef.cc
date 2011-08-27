@@ -26,6 +26,8 @@
  */
 
 #include "IDLTypedef.h"
+#include "types.h"
+#include "language.h"
 
 IDLTypedef::IDLTypedef(IDL_tree node)
 :	IDLUserDefType(IDL_IDENT(simple_dcl_ident(node)).str,node,0),

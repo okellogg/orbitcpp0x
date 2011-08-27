@@ -26,7 +26,10 @@
  */
 
 #include "IDLUnion.h"
+#include "types.h"
+#include "IDLUnionDiscriminator.h"
 #include "IDLCaseStmt.h"
+#include "IDLMember.h"
 #include "IDLTypedef.h"
 
 void

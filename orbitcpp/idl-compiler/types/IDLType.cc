@@ -28,8 +28,8 @@
 #include "IDLType.h"
 #include "IDLUnion.h"
 #include "IDLCaseStmt.h"
+#include "IDLMember.h"
 #include "error.h"
-#include "language.h"
 
 
 void

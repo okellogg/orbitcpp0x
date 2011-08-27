@@ -29,7 +29,7 @@
 #include "IDLVoid.h"
 #include "types.h"
 #include "IDLInterface.h"
-#include "language.h"
+#include "IDLAttribute.h"
 
 IDLAttribGetter::IDLAttribGetter (IDLInterfaceRight& iface, IDLAttribute &attr_):
 	IDLMethod (iface),

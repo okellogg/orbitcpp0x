@@ -38,6 +38,9 @@
 #include "types/IDLStruct.h"
 #include "types/IDLTypedef.h"
 #include "types/IDLUnion.h"
+#include "types/IDLAttribute.h"
+#include "types/IDLConstant.h"
+#include "types/IDLMember.h"
 #include <map>
 
 

@@ -29,6 +29,7 @@
 
 #include "IDLTypedef.h"
 #include "IDLUnion.h"
+#include "IDLMember.h"
 #include "IDLCaseStmt.h"
 
 void

@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 #include <libIDL/IDL.h>
-#include "language.h"
+#include "IDLMember.h"
 #include "IDLElement.h"
 #include "IDLInhibited.h"
 

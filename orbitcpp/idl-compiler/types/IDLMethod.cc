@@ -26,8 +26,8 @@
 
 #include "IDLMethod.h"
 
-#include "types/IDLException.h"
-#include "types/IDLInterface.h"
+#include "IDLException.h"
+#include "IDLInterface.h"
 
 IDLMethod::IDLMethod (IDLInterfaceRight &parent_interface_):
 	parent_interface (parent_interface_)

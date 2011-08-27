@@ -25,13 +25,8 @@
  *
  */
 
-
-
-
 #ifndef ORBITCPP_PASS_XLATE
 #define ORBITCPP_PASS_XLATE
-
-
 
 #include "pass.h"
 #include "pass_idl_it.h"
@@ -39,15 +34,13 @@
 #include "types/IDLStruct.h"
 #include "types/IDLUnion.h"
 #include "types/IDLException.h"
+#include "types/IDLMember.h"
 class IDLMethod;
 #include <libIDL/IDL.h>
 #include <iostream>
 #include <vector>
 #include <set>
 #include <string>
-
-
-
 
 
 class IDLPassXlate : public IDLIteratingPass,public IDLOutputPass {

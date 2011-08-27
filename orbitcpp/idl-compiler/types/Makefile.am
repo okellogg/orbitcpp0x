@@ -13,15 +13,20 @@ headers = 		\
   IDLArray.h		\
   IDLArrayList.h	\
   IDLAttribAccessor.h	\
+  IDLAttribute.h	\
   IDLBoolean.h		\
   IDLCaseStmt.h		\
   IDLCompound.h		\
   IDLCompoundSeqElem.h	\
+  IDLConstant.h		\
   IDLEnum.h		\
+  IDLEnumComponent.h	\
   IDLElement.h		\
   IDLException.h	\
   IDLInhibited.h	\
   IDLInterface.h	\
+  IDLMember.h		\
+  IDLMethod.h		\
   IDLModule.h		\
   IDLObject.h		\
   IDLOperation.h	\
@@ -35,6 +40,7 @@ headers = 		\
   IDLTypeCode.h		\
   IDLTypedef.h		\
   IDLUnion.h		\
+  IDLUnionDiscriminator.h \
   IDLUserDefScopeType.h \
   IDLUserDefSimpleType.h \
   IDLUserDefType.h	\
@@ -54,6 +60,7 @@ modules =		\
   IDLException.cc	\
   IDLInhibited.cc	\
   IDLInterface.cc	\
+  IDLMethod.cc		\
   IDLObject.cc		\
   IDLOperation.cc	\
   IDLScope.cc		\

@@ -32,6 +32,7 @@
 #include "pass_skels.h"
 
 #include "types/IDLOperation.h"
+#include "types/IDLAttribute.h"
 #include "types/IDLAttribAccessor.h"
 #include "types/IDLException.h"
 

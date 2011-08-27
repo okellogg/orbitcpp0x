@@ -27,7 +27,7 @@
 #ifndef ORBITCPP_IDLCOMPILER_IDLMETHOD
 #define ORBITCPP_IDLCOMPILER_IDLMETHOD
 
-#include "types/IDLType.h"
+#include "IDLType.h"
 class IDLInterfaceRight;
 
 class IDLThrowable;

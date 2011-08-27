@@ -28,7 +28,6 @@
 #ifndef ORBITCPP_TYPES_IDLUSERDEFSIMPLETYPE
 #define ORBITCPP_TYPES_IDLUSERDEFSIMPLETYPE
 
-#include "language.h"
 #include "IDLSimpleType.h"
 
 // Handy for things like enum (and maybe fixed?)

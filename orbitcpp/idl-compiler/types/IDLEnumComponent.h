@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2000 Oliver Kelogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,43 +21,32 @@
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
- *  Purpose:	IDL compiler type representation
- *
+ *  Purpose: IDL compiler language representation
  *
  */
 
+#ifndef ORBITCPP_IDLENUMCOMPONENT
+#define ORBITCPP_IDLENUMCOMPONENT
 
-#ifndef ORBITCPP_TYPES_IDLBOOLEAN
-#define ORBITCPP_TYPES_IDLBOOLEAN
+#include <libIDL/IDL.h>
+#include "IDLInhibited.h"
 
-#include "IDLSimpleType.h"
-#include "IDLUnionDiscriminator.h"
+class IDLScope;
 
-
-class IDLBoolean :
-	public IDLSimpleType,
-	public IDLUnionDiscriminator,
-	public IDLTypenameUnused
-{
-protected:
-	std::string get_cpp_identifier () const { return "Boolean"; }
-	std::string get_cpp_typename () const;
-	std::string get_c_typename () const;
-
- public:
-	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
-	virtual ~ IDLBoolean () {}
-
-	std::string get_default_value (std::set<std::string> const &labels) const;
-
-	std::string discr_get_c_typename () const {
-		return get_fixed_c_typename ();
-	}									
-	
-	std::string discr_get_cpp_typename () const {
-		return get_fixed_cpp_typename ();
-	}									
+class IDLEnumComponent :
+	public IDLElement,
+	public virtual IDLNotAType,
+	public IDLIdentified {
+public:
+	IDLEnumComponent(std::string const &id, IDL_tree node, IDLScope *parentscope = NULL)
+	:	IDLElement (id, node, parentscope),
+		IDLIdentified (node)
+	{
+	}
+	string getNSScopedCTypeName() const {
+		return IDL_IMPL_C_NS_NOTUSED + get_c_typename ();
+	}
 };
 
-#endif //ORBITCPP_TYPES_IDLBOOLEAN
+#endif // ORBITCPP_IDLENUMCOMPONENT
 

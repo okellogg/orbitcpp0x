@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2011 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,43 +21,44 @@
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
- *  Purpose:	IDL compiler type representation
- *
+ *  Purpose: IDL compiler language representation
  *
  */
 
+#ifndef ORBITCPP_IDLATTRIBUTE
+#define ORBITCPP_IDLATTRIBUTE
 
-#ifndef ORBITCPP_TYPES_IDLBOOLEAN
-#define ORBITCPP_TYPES_IDLBOOLEAN
+#include <libIDL/IDL.h>
+#include "types.h"
+#include "language.h"
+#include "IDLInhibited.h"
 
-#include "IDLSimpleType.h"
-#include "IDLUnionDiscriminator.h"
+class IDLType;
 
+class IDLAttribute :
+	public IDLInhibited<EmptyType>,
+	public virtual IDLNotAType {
 
-class IDLBoolean :
-	public IDLSimpleType,
-	public IDLUnionDiscriminator,
-	public IDLTypenameUnused
-{
-protected:
-	std::string get_cpp_identifier () const { return "Boolean"; }
-	std::string get_cpp_typename () const;
-	std::string get_c_typename () const;
+	IDL_tree attr_dcl_;
+	IDL_tree simple_dcl_;
 
- public:
-	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
-	virtual ~ IDLBoolean () {}
+	IDLType *m_type;
+  
+public:
 
-	std::string get_default_value (std::set<std::string> const &labels) const;
+	IDLAttribute(IDL_tree attr_dcl, IDL_tree simple_dcl)
+	:	IDLInhibited<EmptyType>(simple_dcl_ident(simple_dcl)),
+		attr_dcl_ (attr_dcl),
+		simple_dcl_ (simple_dcl)
+	{
+		std::string dummy;
+		m_type = IDLTypeParser::parseDcl(simple_dcl, IDL_ATTR_DCL(attr_dcl_).param_type_spec, dummy);
+	}
 
-	std::string discr_get_c_typename () const {
-		return get_fixed_c_typename ();
-	}									
+	IDLType *getType() {return m_type;}
+	bool isReadOnly() {return IDL_ATTR_DCL(attr_dcl_).f_readonly;}
 	
-	std::string discr_get_cpp_typename () const {
-		return get_fixed_cpp_typename ();
-	}									
 };
 
-#endif //ORBITCPP_TYPES_IDLBOOLEAN
+#endif // ORBITCPP_IDLATTRIBUTE
 

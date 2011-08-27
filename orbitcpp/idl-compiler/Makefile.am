@@ -32,7 +32,6 @@ cppbackendlib_LTLIBRARIES = libORBit-idl-backend-cpp.la
 headers = \
 	base.h \
   debug.h \
-  IDLMethod.h \
 	language.h \
 	types.h \
 	pass.h \
@@ -46,7 +45,6 @@ headers = \
 
 modules = \
 	base.cc \
-  IDLMethod.cc \
 	language.cc \
 	types.cc \
 	pass.cc \

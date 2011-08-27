@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2011 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -20,43 +21,26 @@
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
  *
- *  Purpose:	IDL compiler type representation
- *
+ *  Purpose: IDL compiler language representation
  *
  */
 
+#ifndef ORBITCPP_IDLUNIONDISCRIMINATOR
+#define ORBITCPP_IDLUNIONDISCRIMINATOR
 
-#ifndef ORBITCPP_TYPES_IDLBOOLEAN
-#define ORBITCPP_TYPES_IDLBOOLEAN
+#include <string>
+#include <set>
 
-#include "IDLSimpleType.h"
-#include "IDLUnionDiscriminator.h"
-
-
-class IDLBoolean :
-	public IDLSimpleType,
-	public IDLUnionDiscriminator,
-	public IDLTypenameUnused
-{
-protected:
-	std::string get_cpp_identifier () const { return "Boolean"; }
-	std::string get_cpp_typename () const;
-	std::string get_c_typename () const;
-
- public:
-	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
-	virtual ~ IDLBoolean () {}
-
-	std::string get_default_value (std::set<std::string> const &labels) const;
-
-	std::string discr_get_c_typename () const {
-		return get_fixed_c_typename ();
-	}									
-	
-	std::string discr_get_cpp_typename () const {
-		return get_fixed_cpp_typename ();
-	}									
+// An interface implemented by types that can be used as
+// union discriminators
+class IDLUnionDiscriminator {
+public:
+	// retns a default value, given a set of values used to
+	// descriminate members of the union
+	virtual std::string get_default_value (std::set<std::string> const &labels) const = 0;
+	virtual std::string discr_get_c_typename () const = 0;
+	virtual std::string discr_get_cpp_typename () const = 0;
 };
 
-#endif //ORBITCPP_TYPES_IDLBOOLEAN
+#endif // ORBITCPP_IDLUNIONDISCRIMINATOR
 
