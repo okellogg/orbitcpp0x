@@ -1,1 +1,17 @@
 orbitcpp provides a CORBA C++ mapping for ORBit. This version (orbitcpp 2) targets ORBit 2.
+
+August 28, 2008 :
+
+orbitcpp0x is a fork of
+
+  https://svn-archive.gnome.org/svn/orbitcpp/trunk r288
+  (latest revision, dated 2008-02-08)
+
+which extends orbitcpp to support the evolving IDL to C++0x mapping.
+The code is developed such that the existing CORBA 2.2 based mapping remains
+intact, in other words the modifications are made non-destructively.
+
+The new C++0x mapping can be enabled at compile time, by invoking "make" as follows:
+
+  make CPPFLAGS=-DIDL2CPP0X
+
