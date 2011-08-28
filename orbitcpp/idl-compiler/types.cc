@@ -26,9 +26,7 @@
  *
  */
 
-
-
-
+#include <map>
 #include "types.h"
 #include "pass_xlate.h"
 #include "error.h"
@@ -162,7 +160,8 @@ ORBITCPP_MAKE_SIMPLE_TYPE(LongDouble, CORBA_long_double)
 static IDLAny idlAny;
 static IDLObject idlObject;
 static IDLTypeCode idlTypeCode;
-
+typedef std::map<IDL_tree, IDLTypeDiscrim*> EnumMap;
+static EnumMap idlEnums;
 
 
 // IDLTypeParser -------------------------------------------------------------
@@ -236,7 +235,15 @@ switch_typespec:
 			break;
 
 		case IDLN_TYPE_ENUM:
-			type = new IDLEnum(typespec);
+			{
+				EnumMap::iterator i = idlEnums.find(typespec);
+				if (i == idlEnums.end()) {
+					type = new IDLEnum(typespec);
+					idlEnums[typespec] = type;
+				} else {
+					type = idlEnums[typespec];
+				}
+			}
 			break;
 
 		case IDLN_TYPE_UNION:
