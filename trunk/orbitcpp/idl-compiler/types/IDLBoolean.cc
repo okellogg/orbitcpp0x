@@ -39,14 +39,16 @@ IDLBoolean::get_cpp_typename () const
 }
 
 std::string
-IDLBoolean::get_default_value (std::set<std::string> const &labels) const
+IDLBoolean::get_default_value (StringSet const &labels) const
 {
 	std::string val = "";
 
-	if (labels.find ("1") == labels.end())
-		val = "1";
-	else if (labels.find ("0") == labels.end ())
-		val="0";
+	if (labels.find ("1") == labels.end()        // non-standard: should be "TRUE"
+	    && labels.find ("TRUE") == labels.end())
+		val = "true";
+	else if (labels.find ("0") == labels.end ()  // non-standard: should be "FALSE"
+	    && labels.find ("FALSE") == labels.end())
+		val = "false";
 
 	return val;
 }

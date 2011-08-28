@@ -45,20 +45,23 @@ public:
 	typedef std::list<std::string>  LabelList;
 	typedef LabelList::const_iterator  const_iterator;
 private:
-	IDLMember *m_member;  
+	IDLMember *m_member;
 	LabelList m_labels;
 	bool m_isDefault;
 public:
 	// takes ownership of member
 	IDLCaseStmt (IDLMember    *member,
-		     const std::string &id,
+		     // scopePrefix is required for the case of enum discriminant
+		     // from different scope: In C++ the enum values at "case"
+		     // must be prefixed with the (foreign) scope
+		     std::string const &scopePrefix,
 		     IDL_tree      node,
 		     IDLScope     *parentscope = 0);
 
 	~IDLCaseStmt() {
 		delete m_member;
 	}
-  
+
 	const IDLMember& get_member () const {
 		return *m_member;
 	}

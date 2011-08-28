@@ -26,14 +26,16 @@
  */
 
 #include "IDLUnion.h"
+#include "debug.h"
 #include "types.h"
 #include "IDLUnionDiscriminator.h"
 #include "IDLCaseStmt.h"
 #include "IDLMember.h"
 #include "IDLTypedef.h"
+#include "IDLEnum.h"
 
 void
-IDLUnion::doCaseStmt(IDL_tree  node)
+IDLUnion::doCaseStmt(IDL_tree node, std::string scopePrefix)
 {
 	string id;
 
@@ -48,29 +50,35 @@ IDLUnion::doCaseStmt(IDL_tree  node)
 		IDLTypeParser::parseDcl(dcl,IDL_TYPE_DCL(member).type_spec,id);
 	
 	IDLMember *themember = new IDLMember(type,id,dcl);  // don't attach this to the scope
-	new IDLCaseStmt(themember,id,node,this);  // attach the case stmt instead
+	new IDLCaseStmt(themember, scopePrefix, node, this);  // attach the case stmt instead
 	// case stmt takes ownership of member
-
-	// @fixme we need to generate the proper amount of scope prefixes for the case labels
-	//        (this is a problem when the switch_type_spec is from a different scope)
 }
 
 void IDLUnion::doSwitchBody(IDL_tree  member_list)
 {
-	for (; member_list != 0; member_list = IDL_LIST (member_list).next) {
+	std::string scopePrefix = "";
+	IDLEnum *enum_d = dynamic_cast<IDLEnum*>(m_discriminator);
+	if (enum_d)
+	{
+		const IDLScope *discrimScope = enum_d->getParentScope();
+		if (discrimScope != getParentScope())
+			scopePrefix = enum_d->get_cpp_typename() + "::";
+		// *mDebug << "// IDLUnion::doSwitchBody: scopePrefix = " << scopePrefix << endl;
+	}
+	for (; member_list != 0; member_list = IDL_LIST (member_list).next)
+	{
 		IDL_tree casestmt = IDL_LIST (member_list).data;
 		g_assert (IDL_NODE_TYPE (casestmt) == IDLN_CASE_STMT);
 
-		doCaseStmt (casestmt);
+		doCaseStmt (casestmt, scopePrefix);
 	}
 }
 
 IDLUnion::IDLUnion(IDL_tree                     node)
-		   
 :	IDLType (IDLType::T_UNION),
 	IDLScope (IDL_IDENT(IDL_TYPE_UNION(node).ident).str, node, 0),
 	IDLIdentified (IDL_TYPE_UNION(node).ident),
-	m_discriminator (dynamic_cast<IDLUnionDiscriminator&>(*IDLTypeParser::parseTypeSpec(0, IDL_TYPE_UNION(node).switch_type_spec)))
+	m_discriminator (dynamic_cast<IDLUnionDiscriminator*>(IDLTypeParser::parseTypeSpec(0, IDL_TYPE_UNION(node).switch_type_spec)))
 {
 	doSwitchBody(IDL_TYPE_UNION(node).switch_body);
 }
@@ -78,21 +86,26 @@ IDLUnion::IDLUnion(IDL_tree                     node)
 const IDLUnionDiscriminator &
 IDLUnion::get_discriminator () const
 {
-	return m_discriminator;
+	return *m_discriminator;
 }
 
 std::string
 IDLUnion::get_discriminator_default_value () const
 {
-	std::set<std::string> explicit_values;
+	StringSet explicit_values;
 	for (const_iterator i = begin (); i != end (); ++i)
 	{
 		const IDLCaseStmt &case_stmt = static_cast<const IDLCaseStmt&> (**i);
 		if (!case_stmt.isDefault ())
-			explicit_values.insert (*(case_stmt.labelsBegin ()));
+		{
+			for (IDLCaseStmt::const_iterator l = case_stmt.labelsBegin ();
+							 l != case_stmt.labelsEnd (); ++l)
+				explicit_values.insert (*l);
+		}
 	}
-	
-	return m_discriminator.get_default_value (explicit_values);
+	string result = m_discriminator->get_default_value (explicit_values);
+	// *mDebug << "// IDLUnion::get_discriminator_default_value: result = " << result << endl;
+	return result;
 }
 
 bool

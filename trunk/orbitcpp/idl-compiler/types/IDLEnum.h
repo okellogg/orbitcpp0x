@@ -51,9 +51,14 @@ public:
 	const_iterator begin() const;
 	const_iterator end() const;
 
+	void member_init_cpp (ostream          &ostr,
+			      Indent           &indent,
+			      const string     &cpp_id,
+			      const IDLTypedef *active_typedef = 0) const;
+
 	std::string get_seq_typename (unsigned int length, const IDLTypedef *active_typedef) const;
 
-	std::string get_default_value (std::set<std::string> const &labels) const;
+	std::string get_default_value (StringSet const &labels) const;
 
 	std::string discr_get_c_typename () const {
 		return get_fixed_c_typename ();
@@ -65,14 +70,14 @@ public:
 
 	string
 	stub_impl_arg_call (const string     &cpp_id,
-						  IDL_param_attr    direction,
-					  const IDLTypedef *active_typedef) const;
+			    IDL_param_attr    direction,
+			    const IDLTypedef *active_typedef) const;
 	void
 	member_unpack_from_c (ostream      &ostr,
-				     Indent       &indent,
-				     const string &cpp_id,
-				     const string &c_id,
-				     const IDLTypedef *active_typedef) const;
+			      Indent       &indent,
+			      const string &cpp_id,
+			      const string &c_id,
+			      const IDLTypedef *active_typedef) const;
 };
 
 #endif //ORBITCPP_TYPES_IDLENUM

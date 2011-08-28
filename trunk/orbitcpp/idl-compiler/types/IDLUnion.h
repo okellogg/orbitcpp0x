@@ -42,10 +42,10 @@ class IDLUnion :
 	public IDLReferentUnionable,
 	public IDLIdentified
 {
-	const IDLUnionDiscriminator &m_discriminator;
+	IDLUnionDiscriminator *m_discriminator;
 	// std::vector<IDLCaseStmt*> m_case_stmts;  // see inheritance from IDLScope
 
-	void doCaseStmt(IDL_tree);
+	void doCaseStmt(IDL_tree, std::string scopePrefix);
 	void doSwitchBody(IDL_tree  member_list);
 
 public:

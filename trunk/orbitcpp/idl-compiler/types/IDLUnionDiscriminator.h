@@ -28,8 +28,7 @@
 #ifndef ORBITCPP_IDLUNIONDISCRIMINATOR
 #define ORBITCPP_IDLUNIONDISCRIMINATOR
 
-#include <string>
-#include <set>
+#include "base.h"
 
 // An interface implemented by types that can be used as
 // union discriminators
@@ -37,7 +36,7 @@ class IDLUnionDiscriminator {
 public:
 	// retns a default value, given a set of values used to
 	// descriminate members of the union
-	virtual std::string get_default_value (std::set<std::string> const &labels) const = 0;
+	virtual std::string get_default_value (StringSet const &labels) const = 0;
 	virtual std::string discr_get_c_typename () const = 0;
 	virtual std::string discr_get_cpp_typename () const = 0;
 };

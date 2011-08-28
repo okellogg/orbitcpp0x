@@ -27,6 +27,7 @@
 #include "IDLEnum.h"
 #include "IDLTypedef.h"
 #include "error.h"
+#include "debug.h"
 
 IDLEnum::IDLEnum(IDL_tree en)
 :	IDLType (IDLType::T_ENUM),
@@ -56,16 +57,44 @@ IDLEnum::const_iterator IDLEnum::end() const
 	return m_elements.end();
 }
 
-std::string IDLEnum::get_default_value (std::set<std::string> const &labels) const
+void
+IDLEnum::member_init_cpp (ostream          &ostr,
+			  Indent           &indent,
+			  const string     &cpp_id,
+			  const IDLTypedef *active_typedef) const
+{
+#ifdef IDL2CPP0X
+	ostr << indent << cpp_id << " = " << get_cpp_typename () << "::"
+	     << (*begin())->getIdentifier () << ";" << endl;
+#endif
+}
+
+std::string IDLEnum::get_default_value (StringSet const &labels) const
 {
 	string result = "";
+	string scopePrefix = "";
+	StringSet stripped;
+	for (StringSet::iterator i = labels.begin (); i != labels.end (); ++i)
+	{
+		string label = *i;
+		// *mDebug << "// IDLEnum::get_default_value: inlabel = " << label << endl;
+		string::size_type ndx = label.rfind ("::");
+		if (ndx != string::npos)
+		{
+			scopePrefix = label.substr (0, ndx + 2);
+			label = label.substr (ndx + 2);
+			// *mDebug << "// IDLEnum::get_default_value: outlabel = " << label
+			//         << ", scopePrefix = " << scopePrefix << endl;
+		}
+		stripped.insert (label);
+	}
 
 	for (const_iterator i = begin (); i != end (); i++)
 	{
-		string test = (*i)->get_cpp_typename ();
-		if (labels.find (test) == labels.end ())
+		string test = (*i)->getIdentifier ();
+		if (stripped.find (test) == stripped.end ())
 		{
-			result = test;
+			result = scopePrefix + test;
 			break;
 		}
 	}
