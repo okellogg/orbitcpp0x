@@ -211,7 +211,7 @@ public:
 	virtual void member_init_cpp (ostream          &ostr,
 				      Indent           &indent,
 				      const string     &cpp_id,
-				      const IDLTypedef *active_typedef = 0) {}
+				      const IDLTypedef *active_typedef = 0) const {}
 
 	virtual void member_init_c   (ostream          &ostr,
 				      Indent           &indent,
