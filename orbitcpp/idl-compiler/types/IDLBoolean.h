@@ -32,7 +32,6 @@
 #include "IDLSimpleType.h"
 #include "IDLUnionDiscriminator.h"
 
-
 class IDLBoolean :
 	public IDLSimpleType,
 	public IDLUnionDiscriminator,
@@ -47,7 +46,7 @@ protected:
 	IDLBoolean () : IDLType (IDLType::T_BOOLEAN) {}
 	virtual ~ IDLBoolean () {}
 
-	std::string get_default_value (std::set<std::string> const &labels) const;
+	std::string get_default_value (StringSet const &labels) const;
 
 	std::string discr_get_c_typename () const {
 		return get_fixed_c_typename ();

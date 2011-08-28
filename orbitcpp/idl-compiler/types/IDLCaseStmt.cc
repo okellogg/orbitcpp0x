@@ -25,12 +25,15 @@
  */
 
 #include "IDLCaseStmt.h"
+#include "IDLUnion.h"
 #include "base.h"
 #include "language.h"
 
-IDLCaseStmt::IDLCaseStmt(IDLMember *member, string const &id,
-						 IDL_tree node,IDLScope *parentscope)
-:	IDLElement(id,node,parentscope),
+IDLCaseStmt::IDLCaseStmt(IDLMember *member,
+			 std::string const &scopePrefix,
+			 IDL_tree node,
+			 IDLScope *parentscope)
+:	IDLElement(member->getIdentifier(), node, parentscope),
 	IDLIdentified (IDL_LIST(IDL_MEMBER(IDL_CASE_STMT(node).element_spec).dcls).data), // dont handle multiple dcls
 	m_member(member),
 	m_isDefault(false)
@@ -46,7 +49,7 @@ IDLCaseStmt::IDLCaseStmt(IDLMember *member, string const &id,
 			m_isDefault=true;
 			break;
 		}
-		m_labels.push_back(idlTranslateConstant(label));
+		m_labels.push_back(scopePrefix + idlTranslateConstant(label));
 		list = IDL_LIST(list).next;
 	}	
 }

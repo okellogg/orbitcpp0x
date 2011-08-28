@@ -33,6 +33,7 @@
 
 
 #include <libIDL/IDL.h>
+#include <set>
 #include <string>
 #include <iostream>
 
@@ -108,6 +109,7 @@ public:
 };
 
 
+typedef std::set<std::string> StringSet;
 
 
 // Tool functions -------------------------------------------------------------

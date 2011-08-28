@@ -27,6 +27,7 @@
  */
 
 #include "error.h"
+#include "debug.h"
 #include "pass_xlate.h"
 #include <cstdlib>
 
@@ -39,10 +40,14 @@
 #include "types/IDLUnionDiscriminator.h"
 #include "types/IDLCaseStmt.h"
 
+std::ostream *hDebug;
+std::ostream *mDebug;
 
 // IDLPassXlate --------------------------------------------------------------
 void 
 IDLPassXlate::runPass() {
+	hDebug = &m_header;
+	mDebug = &m_module;
 	m_header << "#ifndef ORBITCPP_IDL_" << idlUpper(m_state.m_basename) << "_COMMON" << endl
 		 << "#define ORBITCPP_IDL_" << idlUpper(m_state.m_basename) << "_COMMON" << endl
 		 << endl << endl
@@ -666,8 +671,12 @@ IDLPassXlate::doEnum (IDL_tree  node,
 	IDLEnum idlEnum (node);
 
 
-	m_header << indent << "enum  "
-		<< idlEnum.get_cpp_identifier () << " {\n";
+	m_header << indent << "enum ";
+#ifdef IDL2CPP0X
+	m_header << "class ";
+#endif
+	m_header << idlEnum.get_cpp_identifier () << " {\n";
+	++indent;
 
 	for (IDLEnum::const_iterator i = idlEnum.begin ();
 	     i != idlEnum.end (); i++)
@@ -677,6 +686,7 @@ IDLPassXlate::doEnum (IDL_tree  node,
 			<< (*i)->get_cpp_identifier() << " = "
 			<< (*i)->get_c_typename() << ",\n ";
 	}
+	--indent;
 	m_header << indent << "};\n";
 	
 	m_header << indent << "typedef " << idlEnum.get_cpp_identifier () << "& "

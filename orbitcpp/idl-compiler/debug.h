@@ -23,6 +23,7 @@
  *
  */
 
+#include <iostream>
 
 #ifndef ORBITCPP_IDL_COMPILER_DEBUG_H
 #define ORBITCPP_IDL_COMPILER_DEBUG_H
@@ -46,5 +47,8 @@
 #else    
   #define ORBITCPP_IDL_COMPILER_DEBUG(outputsream)
 #endif //ORBITCPP_DEBUG_ENABLED
+
+extern std::ostream *hDebug;
+extern std::ostream *mDebug;
 
 #endif //ORBITCPP_IDL_COMPILER_DEBUG_H
