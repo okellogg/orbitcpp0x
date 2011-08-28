@@ -58,7 +58,7 @@ public:
 
 protected:
 	typedef IDLElement            Super;
-	ItemList*		      m_items;
+	ItemList* m_items;  // This must be a pointer because reopened modules share the same ItemList, see IDLPassGather::doModule()
 	ScopeList		      m_scopes;
 
 public:
