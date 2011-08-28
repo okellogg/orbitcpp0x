@@ -160,6 +160,9 @@ public:
 	IDLElement(string const &id,IDL_tree node,IDLScope *parentscope = NULL, ReplaceType = no_replace);
 	virtual ~IDLElement();
 
+	string getIdentifier() const {
+		return m_identifier;
+	}
 	IDL_tree getNode() const {
 		return m_node;
 	}
