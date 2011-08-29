@@ -56,6 +56,8 @@ public:
 	void runPass();
 
 protected:
+	void doCodeFrag(IDL_tree node,IDLScope &scope);
+	
 	void doTypedef(IDL_tree node,IDLScope &scope);
 	
 	void doStruct(IDL_tree node,IDLScope &scope);

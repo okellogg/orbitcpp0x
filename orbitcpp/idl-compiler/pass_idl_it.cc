@@ -116,7 +116,7 @@ void IDLIteratingPass::handle_node (IDL_tree node, IDLScope &scope)
 		// murrayc.
 		break;
 	case IDLN_CODEFRAG:
-		//Ignore this unless we think of some need for it. murrayc.
+		doCodeFrag (node, scope);
 		break;
 		
 	case IDLN_INTERFACE:

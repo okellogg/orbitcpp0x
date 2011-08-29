@@ -41,6 +41,8 @@ class IDLScope;
 
 class IDLIteratingPass {
 protected:
+	virtual void doCodeFrag(IDL_tree node,IDLScope &scope) {
+	}
 	virtual void doTypedef(IDL_tree node,IDLScope &scope);
 	virtual void doConstant(IDL_tree node,IDLScope &scope) {
 	}
