@@ -30,6 +30,7 @@
 #include "debug.h"
 #include "pass_xlate.h"
 #include <cstdlib>
+#include <glib.h>
 
 #include "types/IDLTypedef.h"
 #include "types/IDLOperation.h"
@@ -67,6 +68,47 @@ IDLPassXlate::runPass() {
 	runJobs();
 	
 	m_header << endl << "#endif" << endl;
+}
+
+
+void 
+IDLPassXlate::doCodeFrag (IDL_tree  node,
+			  IDLScope &scope)
+{
+	const char *pragma_include_defs = "#pragma include_defs";
+
+	// Adaptation of function ch_output_codefrag() from
+	// ORBit2-2.14.16/src/idl-compiler/orbit-idl-c-headers.c :
+	// The scheme is to reuse an existing
+	//   %{
+	//   #pragma include_defs myfile.h
+	//   %}
+	// in the input file. The assumption is that myfile.h was generated
+	// by "orbit-idl-2 -l c" for "myfile.idl".
+	// We internally change "myfile.h" to "myfile-cpp-common.h"
+	// to avoid yet another kludge (this time for C++) in the IDL file.
+	for (GSList *list = IDL_CODEFRAG(node).lines; list; list = g_slist_next(list))
+	{
+		char *line = static_cast<char*>(list->data);
+		if (!strncmp (line, pragma_include_defs, strlen(pragma_include_defs)-1))
+		{
+			char *ctmp = line + strlen(pragma_include_defs);
+			while (*ctmp && (isspace(*ctmp) || *ctmp == '"')) ctmp++;
+			char *cte = strstr(ctmp, ".h");
+			if (cte)
+			{
+				*cte = '\0';
+				m_header << "#include <" << ctmp << "-cpp-common.h>" << endl;
+			}
+			else
+			{
+				while (*cte && !isspace(*cte) && *cte != '"') cte++;
+				*cte = '\0';
+				m_header << "#include <" << ctmp << ">" << endl;
+			}
+		} else
+			m_header << "// " << line << endl;
+	}
 }
 
 
