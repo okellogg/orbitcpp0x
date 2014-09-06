@@ -1,10 +1,10 @@
 lib_includedir = $(includedir)/orbitcpp-2.0/services/name
 
-idlname=CosNaming
+idlname = CosNaming
 
-include $(top_srcdir)/test/cpp/Makefile_generated.am_fragment
+idl_file = $(ORBIT_IDL_DIR)/CosNaming.idl
 
-idl_file=$(ORBIT_IDL_DIR)/CosNaming.idl
+include ../Makefile_generated.am_fragment
 
 lib_LTLIBRARIES=libORBitCosNaming-2-cpp.la
 
