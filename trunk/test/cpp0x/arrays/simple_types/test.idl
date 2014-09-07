@@ -1,0 +1,29 @@
+module Test
+{
+    typedef long LongArray[10];
+    typedef string StringArray[10];
+
+    interface IFace
+    {
+	void array_method (out LongArray   long_results,
+			   out StringArray string_results);
+
+	void strings_method (in    StringArray array_in,
+			     inout StringArray array_inout);
+
+	StringArray strings_ret ();
+    };
+
+// see #bug 138421
+  interface tran {
+    typedef long TotalLine[4];// 4 longs
+    typedef TotalLine Total[5];// 5 TotalLine s
+    typedef long M[5][4];
+    void      getUnitsSold(in Total tot_in, inout Total tot_inout, out Total tot);
+    void      getUnitsSoldM(in M tot_in, inout M tot_inout, out M tot);
+  };
+
+
+
+};
+

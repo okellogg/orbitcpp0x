@@ -1,0 +1,44 @@
+module Test
+{
+
+  typedef any typedef1;
+  typedef typedef1 typedef2;
+  typedef sequence<typedef1> AnySeq;
+  typedef sequence<typedef2, 10> AnySeq10;
+
+  typedef sequence<octet> OctetSeq;
+
+  interface TestIface
+  {
+    void test_in (in any val_in);
+    void test_inout (inout any val_inout);
+    void test_out (out any val_out);
+    any test_ret ();
+  };
+
+  typedef any AnyArray[10];
+
+  interface AA {
+    attribute any a;
+    readonly attribute any ca;
+    attribute AnyArray v;
+  };
+
+  struct S {
+     any a;
+     AnyArray v;
+  };
+
+  exception E {
+    any a;
+    AnyArray v;
+  };
+
+
+  interface TestIfaceCompileOnly
+  {
+    AnySeq test_seq(in AnySeq asi, out AnySeq aso, inout AnySeq asio);
+    AnySeq10 test_seq10(in AnySeq10 asi, out AnySeq10 aso, inout AnySeq10 asio);
+    AnyArray test_array(in AnyArray asi, out AnyArray aso, inout AnyArray asio);
+  };
+};

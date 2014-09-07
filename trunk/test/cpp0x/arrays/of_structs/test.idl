@@ -1,0 +1,44 @@
+module Test
+{
+    struct Test_st
+    {
+	long   num;
+	string string_one;
+	string string_two;
+    };
+
+    typedef Test_st TestArray[2];
+    
+    interface IMaster
+    {
+	void array_in (in TestArray outer_in);
+	TestArray array_ret ();	
+    };
+
+    // compile only
+    struct NoConversion {
+	long n;
+    };
+
+    typedef NoConversion NCA[5];
+
+    interface I2 {
+    	NCA op(in NCA in_array, out NCA out_array, inout NCA inout_array);
+    };
+
+    typedef octet UUIDArray[16];
+
+    // This will trigger a bug in orbit-idl-2 with the sequence of arrays.
+    typedef UUIDArray UUID;
+
+    // This is a work-around to a bug in orbit-idl-2.
+    struct UUIDStruct
+    {
+        UUIDArray arr;
+    };
+    // typedef UUIDStruct UUID;
+
+    typedef sequence<UUID> Element;
+    typedef sequence<Element> Group;
+	
+};
