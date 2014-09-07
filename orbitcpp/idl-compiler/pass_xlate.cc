@@ -678,6 +678,12 @@ IDLPassXlate::union_create_converters (const IDLUnion &un)
 void
 IDLPassXlate::union_create_typedefs (const IDLUnion &un)
 {
+#ifdef IDL2CPP0X
+	m_header << indent << "typedef "
+		 << un.get_cpp_identifier () << "& "
+		 << un.get_cpp_identifier () << "_out;"
+		 << endl;
+#else
 	if (un.is_fixed ())
 	{
 		m_header << indent << "typedef "
@@ -697,6 +703,7 @@ IDLPassXlate::union_create_typedefs (const IDLUnion &un)
 			 << un.get_cpp_identifier () << "_out;"
 			 << endl;
 	}
+#endif
 }
 
 void IDLPassXlate::union_create_any (const IDLUnion &un)
