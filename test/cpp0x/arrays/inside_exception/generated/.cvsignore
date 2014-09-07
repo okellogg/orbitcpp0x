@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+
+test-cpp*.cc
+test-cpp*.h
+test*.c
+test*.h

@@ -1,0 +1,27 @@
+module Test
+{
+    union UFixed switch (long)
+	{
+        case 0:	 long num_value;
+        default: boolean bool_value;
+	};	
+    
+    union UUnfixed switch (long)
+	{
+        case 0:	 long num_value;
+        default: string str_value;
+	};
+    
+    interface ITst
+    {
+	void fixed_in	 (in UFixed    foo);
+	void fixed_inout (inout UFixed foo);
+	void fixed_out   (out UFixed   foo);
+	UFixed fixed_ret ();
+
+    	void unfixed_in	 (in UUnfixed    foo);
+	void unfixed_inout (inout UUnfixed foo);
+	void unfixed_out   (out UUnfixed   foo);
+	UUnfixed unfixed_ret ();
+    };
+};

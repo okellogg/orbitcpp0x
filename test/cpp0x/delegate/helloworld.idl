@@ -1,0 +1,11 @@
+
+module hellomodule {
+
+  interface Hello {
+	string helloWorld(in string greeting);
+
+	string helloWorld_delegate (in Hello  server,
+                                  in string greeting);
+  };
+};
+
