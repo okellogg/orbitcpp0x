@@ -10,11 +10,11 @@ namespace Test
 	class TestIface_impl: public virtual POA_Test::TestIface
 	{
 	public:
-		virtual SimpleStructArg* test_ret ()
+		virtual SimpleStructArg test_ret ()
 			throw (CORBA::SystemException);
 			
 		virtual void test_in (const SimpleStructArg &in_struct,
-							  const char            *message)
+				      const std::string& message)
 			throw (CORBA::SystemException);
 	};
 	
@@ -25,7 +25,7 @@ namespace Test
 	public:
 		OutputStream_impl (const std::string &member_data);
 		
-		virtual void print (const char *message)
+		virtual void print (const std::string& message)
 			throw (CORBA::SystemException);
 	};
 	

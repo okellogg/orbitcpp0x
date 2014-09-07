@@ -27,12 +27,12 @@ main(int argc, char *argv[])
   	  Test::OutputStream_var stream_ptr = Test::OutputStream::_narrow (stream_obj);
 
 	  std::cout << "Calling test_ret on remote object" << std::endl;
-	  Test::SimpleStructArg *ret_struct = test_iface_ptr->test_ret ();
+	  Test::SimpleStructArg ret_struct = test_iface_ptr->test_ret ();
 	  
   	  const char* message = "TestIface server, from client!";
 	  Test::SimpleStructArg test_struct;
-	  test_struct.stream = stream_ptr;
-	  test_struct.number = ret_struct->number;
+	  test_struct.stream (stream_ptr);
+	  test_struct.number (ret_struct.number());
 	  
 	  std::cout << "Calling test_in on remote object" << std::endl;
 	  test_iface_ptr->test_in (test_struct, message);
