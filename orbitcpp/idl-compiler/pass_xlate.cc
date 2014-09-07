@@ -1392,7 +1392,7 @@ void IDLWriteAnyFuncs::writeInsertFunc (ostream      &ostr,
 	}
 	else if (func == FUNC_NOCOPY) {
 		ident += "*";
-		any_arg = "val, CORBA_FALSE";
+		any_arg = "val, false";
 	}
 
 	ostr << indent << "inline void operator <<= "
@@ -1422,7 +1422,7 @@ void IDLWriteAnyFuncs::writeExtractFunc (ostream      &ostr,
 		any_func = "extract_ptr";
 	}
 	
-	ostr << indent << "inline CORBA::Boolean operator >>= "
+	ostr << indent << "inline bool operator >>= "
 	     << "(const CORBA::Any& the_any, " << ident << " val)" << endl
 	     << indent << "{" << endl;
 	
@@ -1482,12 +1482,12 @@ IDLWriteExceptionAnyFuncs::run ()
 	m_header << indent++ << "{" << endl;
 
 	m_header << indent << "the_any.insert_simple (" << tc << ", "
-		 << "val._orbitcpp_pack(), CORBA_FALSE);" << endl;
+		 << "val._orbitcpp_pack(), false);" << endl;
 
 	m_header << --indent << endl << "}" << endl << endl;
 
 	// Operator >>=
-	m_header << indent << "inline CORBA::Boolean operator >>= "
+	m_header << indent << "inline bool operator >>= "
 		 << "(const CORBA::Any& the_any, "<< cpp_id << " &val)" << endl;
 	m_header << indent << "{" << endl;
 	
@@ -1542,12 +1542,12 @@ IDLWriteArrayAnyFuncs::run()
 
 	
 	// Operator >>=
-	m_header << indent << "inline CORBA::Boolean operator >>= "
+	m_header << indent << "inline bool operator >>= "
 		 << "(CORBA::Any& the_any, " << forany_id << " &_arr)" << endl
 		 << indent << "{" << endl;
 
 	m_header << ++indent << "const " << slice_id << " *tmp;" << endl
-		 << indent << "CORBA::Boolean _retval;" << endl << endl;
+		 << indent << "bool _retval;" << endl << endl;
 
 	m_header << indent << "_retval = the_any.extract_ptr "
 		 << "(" << tc << ", tmp);" << endl;
