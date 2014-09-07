@@ -15,7 +15,7 @@ namespace {
 	    break;
 	default:
 	    std::cerr << "\tstruct_value.string:\t"
-		      << un.struct_value ().str_value << std::endl;
+		      << un.struct_value ().str_value () << std::endl;
 	    break;
 	}
     }
@@ -42,19 +42,18 @@ void ITst_impl::un_out (::Test::UTst_out un)
 {
     std::cerr << "ITst_impl::un_out" << std::endl;
 
-    un = new Test::UTst;
     ::Test::StTst strct;
-    strct.str_value = "String member of StTst";
-    strct.num_value = 42;
-    un->struct_value (strct);
+    strct.str_value ("String member of StTst");
+    strct.num_value (42);
+    un.struct_value (strct);
 }
 
-::Test::UTst* ITst_impl::un_ret ()
+::Test::UTst ITst_impl::un_ret ()
     throw (CORBA::SystemException)
 {
     std::cerr << "ITst_impl::un_ret" << std::endl;
 
-    ::Test::UTst *un = new ::Test::UTst;
+    ::Test::UTst un;
     //un.bool_value (false);
 
     return un;

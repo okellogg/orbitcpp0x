@@ -85,7 +85,7 @@ void test_unfixed (Test::ITst_ptr &test_ptr)
 
 	///////////////////////////////////
 	// <- OUT
-	Test::UUnfixed_var unfixed_out;
+	Test::UUnfixed unfixed_out;
 	std::cerr << "Client::unfixed_out" << std::endl;
 	test_ptr->unfixed_out (unfixed_out);
 	print_un (unfixed_out);
@@ -99,7 +99,7 @@ void test_unfixed (Test::ITst_ptr &test_ptr)
 	///////////////////////////////////
 	// <- RET
 	std::cerr << "Client::fixed_ret" << std::endl;
-	Test::UUnfixed_var unfixed_ret = test_ptr->unfixed_ret ();
+	Test::UUnfixed unfixed_ret = test_ptr->unfixed_ret ();
 	print_un (unfixed_ret);
 }
 

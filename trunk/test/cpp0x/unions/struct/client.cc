@@ -19,9 +19,9 @@ namespace {
 			break;
 		default:
 			std::cerr << "\tstruct_value:\tstring\t"
-					  << un.struct_value ().str_value << std::endl;
+					  << un.struct_value ().str_value () << std::endl;
 			std::cerr << "\tstruct_value:\tnum\t"
-					  << un.struct_value ().num_value << std::endl;
+					  << un.struct_value ().num_value () << std::endl;
 			break;
 		}
     }
@@ -44,7 +44,7 @@ void test_un (Test::ITst_ptr &test_ptr)
 
 	///////////////////////////////////
 	// <- OUT
-	Test::UTst_var un_out;
+	Test::UTst un_out;
 	std::cerr << "Client::un_out" << std::endl;
 	test_ptr->un_out (un_out);
 	print_un (un_out);
@@ -52,7 +52,7 @@ void test_un (Test::ITst_ptr &test_ptr)
 	///////////////////////////////////
 	// <- RET
 	std::cerr << "Client::un_ret" << std::endl;
-	Test::UTst_var un_ret = test_ptr->un_ret ();
+	Test::UTst un_ret = test_ptr->un_ret ();
 	print_un (un_ret);
 }
 
