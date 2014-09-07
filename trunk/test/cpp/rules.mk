@@ -39,5 +39,6 @@ clean: clean-libtool clean-compile clean-checkPROGRAMS
 	$(MAKE) -C generated $@
 
 distclean: clean
+	$(MAKE) -C generated $@
 	$(RM) -r ./$(DEPDIR)
 
