@@ -239,9 +239,14 @@ IDLUnion::stub_impl_arg_post (ostream          &ostr,
 			ostr << indent << cpp_id << "._orbitcpp_unpack "
 			     << "(" << c_id << ");" << endl;
 		} else {
+#ifdef IDL2CPP0X
+			ostr << indent << cpp_id << "._orbitcpp_unpack "
+			     << "(*" << c_id << ");" << endl;
+#else
 			ostr << indent << cpp_id << " = new " << cpp_type << ";" << endl;
 			ostr << indent << cpp_id << "->_orbitcpp_unpack "
 			     << "(*" << c_id << ");" << endl;			
+#endif
 		}
 		break;
 	}
@@ -258,11 +263,13 @@ IDLUnion::stub_decl_ret_get (const IDLTypedef *active_typedef) const
 {
 	string cpp_typename = active_typedef ?
 		active_typedef->get_cpp_typename () : get_cpp_typename ();
-	
-	if (is_fixed ())
-		return cpp_typename;
-	else
-		return cpp_typename + "*";
+	string maybe_star;
+
+#ifndef IDL2CPP0X
+	if (!is_fixed ())
+		maybe_star = "*";
+#endif
+	return cpp_typename + maybe_star;
 }
 	
 void
@@ -296,6 +303,13 @@ IDLUnion::stub_impl_ret_post (ostream          &ostr,
 	string cpp_typename = active_typedef ?
 		active_typedef->get_cpp_typename () : get_cpp_typename ();
 
+#ifdef IDL2CPP0X
+	ostr << indent << cpp_typename << " _cpp_retval;" << endl;
+	ostr << indent << "_cpp_retval._orbitcpp_unpack  (";
+	if (!is_fixed ())
+		ostr << "*";
+	ostr << "_c_retval);" << endl;
+#else
 	if (is_fixed ())
 	{
 		ostr << indent << cpp_typename << " _cpp_retval;" << endl;
@@ -304,8 +318,10 @@ IDLUnion::stub_impl_ret_post (ostream          &ostr,
 		ostr << indent << cpp_typename << " *_cpp_retval = "
 		     << "new " << cpp_typename << ";" << endl;
 		ostr << indent << "_cpp_retval->_orbitcpp_unpack (*_c_retval);" << endl;
-		ostr << indent << "CORBA_free (_c_retval);" << endl;
 	}
+#endif
+	if (!is_fixed ())
+		ostr << indent << "CORBA_free (_c_retval);" << endl;
 		
 	ostr << indent << "return _cpp_retval;" << endl;
 }
@@ -360,12 +376,12 @@ IDLUnion::skel_impl_arg_pre (ostream          &ostr,
 		     << ";" << endl;
 		break;
 	case IDL_PARAM_OUT:
-		if (is_fixed ())
-			ostr << indent << cpp_type << " " << cpp_id
-			     << ";" << endl;
-		else
-			ostr << indent << cpp_type << "_var " << cpp_id
-			     << ";" << endl;
+		ostr << indent << cpp_type;
+#ifndef IDL2CPP0X
+		if (!is_fixed ())
+			ostr << "_var";
+#endif
+		ostr << " " << cpp_id << ";" << endl;
 		break;
 	}
 }
@@ -375,9 +391,10 @@ IDLUnion::skel_impl_arg_call (const string     &c_id,
 			      IDL_param_attr    direction,
 			      const IDLTypedef *active_typedef) const
 {
+#ifndef IDL2CPP0X
 	if (direction == IDL_PARAM_OUT && !is_fixed ())
 		return get_cpp_typename () + "_out (_cpp_" + c_id + ")";
-
+#endif
 	return "_cpp_" + c_id;
 }
 	
@@ -401,11 +418,18 @@ IDLUnion::skel_impl_arg_post (ostream          &ostr,
 		break;
 	case IDL_PARAM_OUT:
 		if (is_fixed ())
+		{
 			ostr << indent << cpp_id << "._orbitcpp_pack (*" << c_id << ")"
 			     << ";" << endl;
-		else
-			ostr << indent << "*" << c_id << " = "
-			     << cpp_id << "->_orbitcpp_pack ();" << endl;
+		} else {
+			ostr << indent << "*" << c_id << " = " << cpp_id;
+#ifdef IDL2CPP0X
+			ostr << ".";
+#else
+			ostr << "->";
+#endif
+			ostr << "_orbitcpp_pack ();" << endl;
+		}
 		break;
 	}
 }
@@ -430,10 +454,15 @@ IDLUnion::skel_impl_ret_pre (ostream          &ostr,
 	string cpp_type = active_typedef ?
 		active_typedef->get_cpp_typename () : get_cpp_typename ();
 
-	if (is_fixed ())
-		ostr << indent << cpp_type << " _cpp_retval;" << endl;
-	else
-		ostr << indent << cpp_type << "_var _cpp_retval = 0;" << endl;
+	ostr << indent << cpp_type;
+#ifndef IDL2CPP0X
+	if (!is_fixed ())
+	{
+		ostr << "_var _cpp_retval = 0;" << endl;
+		return;
+	}
+#endif
+	ostr << " _cpp_retval;" << endl;
 }
 
 void
@@ -460,7 +489,13 @@ IDLUnion::skel_impl_ret_post (ostream          &ostr,
 		ostr << indent << "_cpp_retval._orbitcpp_pack (_c_retval);" << endl;
 		ostr << indent << "return _c_retval;" << endl;
 	} else {
-		ostr << indent << "return _cpp_retval->_orbitcpp_pack ();" << endl;
+		ostr << indent << "return _cpp_retval";
+#ifdef IDL2CPP0X
+		ostr << ".";
+#else
+		ostr << "->";
+#endif
+		ostr << indent << "_orbitcpp_pack ();" << endl;
 	}
 }
 
