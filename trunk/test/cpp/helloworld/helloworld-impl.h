@@ -13,7 +13,11 @@ class Hello_impl : public POA_hellomodule::Hello
 {
 public:
 	//Implement pure virtual method:
+#if defined (IDL2CPP0X)
+	std::string helloWorld(const std::string& greeting) throw (CORBA::SystemException);
+#else
 	char* helloWorld(const char* greeting) throw(CORBA::SystemException);
+#endif
 };
 
 }; // namespace hellomodule
