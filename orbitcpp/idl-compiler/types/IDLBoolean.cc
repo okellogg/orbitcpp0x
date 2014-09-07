@@ -35,7 +35,11 @@ IDLBoolean::get_c_typename () const
 std::string
 IDLBoolean::get_cpp_typename () const
 {
+#if defined (IDL2CPP0X)
+	return "bool";
+#else
 	return IDL_CORBA_NS "::Boolean";
+#endif
 }
 
 std::string

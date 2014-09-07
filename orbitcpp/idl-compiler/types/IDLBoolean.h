@@ -38,7 +38,11 @@ class IDLBoolean :
 	public IDLTypenameUnused
 {
 protected:
+#if defined (IDL2CPP0X)
+	std::string get_cpp_identifier () const { return "bool"; }
+#else
 	std::string get_cpp_identifier () const { return "Boolean"; }
+#endif
 	std::string get_cpp_typename () const;
 	std::string get_c_typename () const;
 
