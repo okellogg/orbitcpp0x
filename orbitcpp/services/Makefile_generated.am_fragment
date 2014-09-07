@@ -28,8 +28,6 @@ skel_sources = $(c_common_h) $(cpp_common_hh) $(c_skel) $(cpp_skel)
 
 idl_built = $(c_all) $(cpp_all)
 
-idl_file =$(srcdir)/../$(idlname).idl
-
 $(idl_built): $(idl_file)
 	$(ORBIT_IDL) -l c $(idl_file)
 	$(ORBIT_IDL) --backenddir=$(top_builddir)/orbitcpp/idl-compiler/.libs -l cpp $(idl_file)
