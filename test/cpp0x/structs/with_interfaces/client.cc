@@ -18,15 +18,15 @@ int main(int argc, char *argv[])
 	
 	///////////////////////////////////
 	// <- RET
-	Test::Test_st_var strct = master_ptr->struct_ret ();
+	Test::Test_st strct = master_ptr->struct_ret ();
 
-    std::cerr << "Client::struct_ret: num = " << strct->num << std::endl;
-	strct->obj_one->print_name ();
-	strct->obj_two->print_name ();
+    std::cerr << "Client::struct_ret: num = " << strct.num() << std::endl;
+	strct.obj_one()->print_name ();
+	strct.obj_two()->print_name ();
 
 	///////////////////////////////////
 	// -> IN
-	strct->num = 42;
+	strct.num (42);
 	
 	master_ptr->struct_in (strct);
 	
@@ -37,12 +37,12 @@ int main(int argc, char *argv[])
 
 	///////////////////////////////////
 	// <- OUT
-	Test::Test_st_var struct_out;
+	Test::Test_st struct_out;
 	master_ptr->struct_out (struct_out);
 
-    std::cerr << "Client::struct_out: num = " << struct_out->num << std::endl;
-	struct_out->obj_one->print_name ();
-	struct_out->obj_two->print_name ();
+    std::cerr << "Client::struct_out: num = " << struct_out.num() << std::endl;
+	struct_out.obj_one()->print_name ();
+	struct_out.obj_two()->print_name ();
 	
 	return 0;
 }

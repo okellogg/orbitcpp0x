@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
 	{
 		std::cerr << "Test::ExTest caught!" << std::endl;
 
-		std::cerr << "Test::ExTest::nums.num_1 = " << ex.nums.num_1 << std::endl;
-		std::cerr << "Test::ExTest::nums.num_2 = " << ex.nums.num_2 << std::endl;
+		std::cerr << "Test::ExTest::nums.num_1 = " << ex.nums().num_1() << std::endl;
+		std::cerr << "Test::ExTest::nums.num_2 = " << ex.nums().num_2() << std::endl;
 		
-		ex.objs.member_1->print_name ();
-		ex.objs.member_2->print_name ();
+		ex.objs().member_1()->print_name ();
+		ex.objs().member_2()->print_name ();
 	}
 
 	return 0;

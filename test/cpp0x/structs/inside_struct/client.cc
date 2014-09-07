@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
 		// -> IN
 		
 		Test::Outer_st outer_in;
-		outer_in.num = 16;
-		outer_in.id = CORBA::string_dup ("OUTER from client");
-		outer_in.struct_member.num = 42;
-		outer_in.struct_member.string_one = CORBA::string_dup ("This is string #1");
-		outer_in.struct_member.string_two = CORBA::string_dup ("This is string #2");
+		outer_in.num (16);
+		outer_in.id (CORBA::string_dup ("OUTER from client"));
+		outer_in.struct_member().num (42);
+		outer_in.struct_member().string_one (CORBA::string_dup ("This is string #1"));
+		outer_in.struct_member().string_two (CORBA::string_dup ("This is string #2"));
 		
 		master_ptr->struct_in (outer_in);
 		
@@ -34,19 +34,19 @@ int main(int argc, char *argv[])
 		
 		///////////////////////////////////
 		// <- RET
-		Test::Outer_st_var struct_ret = master_ptr->struct_ret ();
+		Test::Outer_st struct_ret = master_ptr->struct_ret ();
 		
 		std::cerr << "Client::RET: num = "
-				  << struct_ret->num << std::endl;
+				  << struct_ret.num() << std::endl;
 		std::cerr << "Client::RET: id = "
-				  << struct_ret->id << std::endl;
+				  << struct_ret.id() << std::endl;
 		
 		std::cerr << "Client::RET: struct_member.num = "
-				  << struct_ret->struct_member.num << std::endl;
+				  << struct_ret.struct_member().num() << std::endl;
 		std::cerr << "Client::RET: struct_member.string_one = "
-				  << struct_ret->struct_member.string_one << std::endl;
+				  << struct_ret.struct_member().string_one() << std::endl;
 		std::cerr << "Client::RET: struct_member.string_two = "
-				  << struct_ret->struct_member.string_two << std::endl;
+				  << struct_ret.struct_member().string_two() << std::endl;
 	}
 	
 	return 0;
