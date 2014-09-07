@@ -58,7 +58,7 @@ static IDLString idlString ("CORBA_char", "string", "String");
 static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 #endif
 
-#define ORBITCPP_MAKE_SIMPLE_TYPE(name,cname)			\
+#define ORBITCPP_MAKE_SIMPLE_TYPE(name,cname,classification)	\
 	static class IDL##name : public IDLSimpleType, public IDLTypenameUnused { \
 	protected:						\
 		string get_cpp_identifier () const {		\
@@ -71,7 +71,7 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 			return #cname;				\
 		}						\
 	public:							\
-		IDL##name () : IDLType (IDLType::T_FLOAT) {}	\
+		IDL##name () : IDLType (classification) {}	\
 	} idl##name;
 
 
@@ -89,7 +89,7 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 		}							\
 	public:								\
 		IDL##name () : IDLType (IDLType::T_INTEGER) {}		\
-		std::string get_default_value (std::set<std::string> const &labels) const { \
+		std::string get_default_value (StringSet const &labels) const { \
 			short val = 0;					\
 			char *val_buf = 0;				\
 			std::string val_str;	       			\
@@ -124,7 +124,7 @@ static IDLString idlWString ("CORBA_wchar", "wstring", "WString");
 		}									\
 	public:										\
 		IDL##name () : IDLType (IDLType::T_CHAR) {}				\
-		std::string get_default_value (std::set<std::string> const &labels) const { \
+		std::string get_default_value (StringSet const &labels) const {		\
 			return "\'\\0\'"; 						\
 		}									\
 											\
@@ -143,7 +143,7 @@ static IDLBoolean idlBoolean;
 
 ORBITCPP_MAKE_SIMPLE_CHAR_TYPE(Char, CORBA_char)
 ORBITCPP_MAKE_SIMPLE_CHAR_TYPE(WChar, CORBA_wchar)
-ORBITCPP_MAKE_SIMPLE_TYPE(Octet, CORBA_octet)
+ORBITCPP_MAKE_SIMPLE_TYPE(Octet, CORBA_octet, IDLType::T_INTEGER)
 
 ORBITCPP_MAKE_SIMPLE_INT_TYPE(Short, CORBA_short)
 ORBITCPP_MAKE_SIMPLE_INT_TYPE(UShort, CORBA_unsigned_short)
@@ -152,9 +152,9 @@ ORBITCPP_MAKE_SIMPLE_INT_TYPE(ULong, CORBA_unsigned_long)
 ORBITCPP_MAKE_SIMPLE_INT_TYPE(LongLong, CORBA_long_long)
 ORBITCPP_MAKE_SIMPLE_INT_TYPE(ULongLong, CORBA_unsigned_long_long)
 
-ORBITCPP_MAKE_SIMPLE_TYPE(Float, CORBA_float)
-ORBITCPP_MAKE_SIMPLE_TYPE(Double, CORBA_double)
-ORBITCPP_MAKE_SIMPLE_TYPE(LongDouble, CORBA_long_double)
+ORBITCPP_MAKE_SIMPLE_TYPE(Float, CORBA_float, IDLType::T_FLOAT)
+ORBITCPP_MAKE_SIMPLE_TYPE(Double, CORBA_double, IDLType::T_FLOAT)
+ORBITCPP_MAKE_SIMPLE_TYPE(LongDouble, CORBA_long_double, IDLType::T_FLOAT)
 
 
 static IDLAny idlAny;
