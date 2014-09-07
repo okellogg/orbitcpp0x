@@ -52,11 +52,11 @@ const ::CORBA::TypeCode_ptr _tc_ForwardRequest = (::CORBA::TypeCode_ptr)TC_Porta
 
 inline void operator <<= (CORBA::Any& the_any, ::PortableServer::ForwardRequest const &val)
 {
-	the_any.insert_simple ((CORBA::TypeCode_ptr)TC_PortableServer_ForwardRequest, val._orbitcpp_pack(), CORBA_FALSE);
+	the_any.insert_simple ((CORBA::TypeCode_ptr)TC_PortableServer_ForwardRequest, val._orbitcpp_pack(), false);
 
 }
 
-inline CORBA::Boolean operator >>= (const CORBA::Any& the_any, ::PortableServer::ForwardRequest &val)
+inline bool operator >>= (const CORBA::Any& the_any, ::PortableServer::ForwardRequest &val)
 {
 	const PortableServer_ForwardRequest *ex;
 		if (the_any.extract_ptr ((CORBA::TypeCode_ptr)TC_PortableServer_ForwardRequest, ex))

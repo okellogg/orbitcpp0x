@@ -85,9 +85,9 @@ namespace CORBA {
 
 		// *** FIXME: Need to implement this 
 		// InterfaceDef_ptr _get_interface(); 
-		Boolean _is_a(RepositoryId const repoid);
-		Boolean _non_existent(); 
-		Boolean _is_equivalent(Object_ptr other_object);
+		bool _is_a(RepositoryId const repoid);
+		bool _non_existent(); 
+		bool _is_equivalent(Object_ptr other_object);
 		ULong _hash(::CORBA::ULong maximum); 
 	
 	protected:
@@ -95,7 +95,7 @@ namespace CORBA {
 	};
 	
 		
-	Boolean is_nil(Object_ptr o);
+	bool is_nil(Object_ptr o);
 
 	inline void release(Object_ptr o)
 	{

@@ -146,8 +146,8 @@ namespace CORBA {
 		class BadKind : public UserException { };
 
 		// for all TypeCode kinds
-		Boolean equal(TypeCode_ptr) const;
-		Boolean equivalent(TypeCode_ptr) const;
+		bool equal(TypeCode_ptr) const;
+		bool equivalent(TypeCode_ptr) const;
 		TCKind kind() const;
 		TypeCode_ptr get_compact_typecode() const;
 

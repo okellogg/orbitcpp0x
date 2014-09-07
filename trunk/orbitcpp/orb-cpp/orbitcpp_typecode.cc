@@ -85,10 +85,10 @@ CORBA::TypeCode::_orbitcpp_wrap (CORBA_TypeCode tc, bool take_copy /* = false */
 	return reinterpret_cast <CORBA::TypeCode_ptr> (tc);
 }
 
-CORBA::Boolean
+bool
 CORBA::TypeCode::equal(TypeCode_ptr tc) const
 {
-	CORBA::Boolean retval = false;
+	bool retval = false;
 	CEnvironment ev;
 
 	retval = CORBA_TypeCode_equal(const_cast <CORBA_TypeCode>(&m_target),
@@ -98,10 +98,10 @@ CORBA::TypeCode::equal(TypeCode_ptr tc) const
 	return(retval);
 }
 
-CORBA::Boolean
+bool
 CORBA::TypeCode::equivalent(TypeCode_ptr tc) const
 {
-	CORBA::Boolean retval = false;
+	bool retval = false;
 	CEnvironment ev;
 
 	/* not implemented by ORBit */

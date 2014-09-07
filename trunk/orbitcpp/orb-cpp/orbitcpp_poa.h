@@ -125,7 +125,7 @@ namespace PortableServer {
     
     class ServantBase  {
     public:
-        // virtual CORBA::Boolean _is_a(const char *logical_type_id) throw(CORBA::SystemException);
+        // virtual bool _is_a(const char *logical_type_id) throw(CORBA::SystemException);
 
         virtual ~ServantBase();
         virtual POA_ptr _default_POA();
@@ -244,7 +244,7 @@ namespace PortableServer {
             const CORBA::PolicyList& policies);
         POA_ptr find_POA(
             const std::string& adapter_name,
-            CORBA::Boolean activate_it);
+            bool activate_it);
 
         static void destroy( bool etherealize_objects,
                              bool wait_for_completion );
@@ -316,10 +316,10 @@ namespace PortableServer {
         static POAManager_ptr _narrow( CORBA::Object_ptr obj );
         static POAManager_ptr _nil();
         void activate();
-        void hold_requests(CORBA::Boolean wait_for_completion);
-        void discard_requests(CORBA::Boolean wait_for_completion);
-        void deactivate(CORBA::Boolean etherealize_objects,
-                        CORBA::Boolean wait_for_completion);    
+        void hold_requests(bool wait_for_completion);
+        void discard_requests(bool wait_for_completion);
+        void deactivate(bool etherealize_objects,
+                        bool wait_for_completion);    
         virtual ~POAManager()
         {}
         

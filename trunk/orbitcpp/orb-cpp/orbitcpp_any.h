@@ -59,27 +59,27 @@ namespace CORBA {
 		
 		static Any _orbitcpp_wrap (const CORBA_any *c_any);
 		
-		void insert_simple(CORBA::TypeCode_ptr, void*, Boolean v_copy = CORBA_TRUE);
-		void insert_simple(CORBA::TypeCode_ptr tc,const void* in,Boolean v_copy = CORBA_TRUE) {
+		void insert_simple(CORBA::TypeCode_ptr, void*, bool v_copy = true);
+		void insert_simple(CORBA::TypeCode_ptr tc,const void* in, bool v_copy = true) {
 				insert_simple(tc, const_cast<void*>(in), v_copy);
 		}
 
 		template <class T>
-		Boolean extract(CORBA::TypeCode_ptr tc, T& value) const {
+		bool extract(CORBA::TypeCode_ptr tc, T& value) const {
 			if (m_target._type != tc->_orbitcpp_cobj ())
-				return CORBA_FALSE;
+				return false;
 			
 			value = *reinterpret_cast<T*>(m_target._value);
-			return CORBA_TRUE;
+			return true;
 		}
 		
 		template <class T>
-		Boolean extract_ptr(CORBA::TypeCode_ptr tc, const T*& value) const {
+		bool extract_ptr(CORBA::TypeCode_ptr tc, const T*& value) const {
 			if (m_target._type != tc->_orbitcpp_cobj ())
-				return CORBA_FALSE;
+				return false;
 			
 			value = reinterpret_cast<T*>(m_target._value);
-			return CORBA_TRUE;
+			return true;
 		}
 		// end ORBitcpp extension
 
@@ -94,8 +94,8 @@ namespace CORBA {
 		}
 				
 		struct from_boolean {
-			from_boolean(Boolean b) : val(b) {}
-			Boolean val;
+			from_boolean(bool b) : val(b) {}
+			bool val;
 		};
 		struct from_octet {
 			from_octet(Octet o) : val(o) {}
@@ -110,22 +110,22 @@ namespace CORBA {
 			WChar val;
 		};
 		struct from_string {
-			from_string(char *s, ULong b, Boolean n = CORBA_FALSE)
+			from_string(char *s, ULong b, bool n = false)
 				: val(s), bound(b), nocopy(n) {}
 			from_string(const char *s, ULong b)
 				: val(const_cast<char*>(s)), bound(b), nocopy(0) {}
 			char *val;
 			ULong bound;
-			Boolean nocopy;
+			bool nocopy;
 		};
 		struct from_wstring {
-			from_wstring(WChar *s, ULong b, Boolean n = CORBA_FALSE)
+			from_wstring(WChar *s, ULong b, bool n = false)
 				: val(s), bound(b), nocopy(n) {}
 			from_wstring(const WChar *s, ULong b)
 				: val(const_cast<WChar*>(s)), bound(b), nocopy(0) {}
 			WChar *val;
 			ULong bound;
-			Boolean nocopy;
+			bool nocopy;
 		};
 		/*
 		struct from_fixed {
@@ -138,8 +138,8 @@ namespace CORBA {
 		*/
 		
 		struct to_boolean {
-			to_boolean(Boolean& b) : ref(b) {}
-			Boolean &ref;
+			to_boolean(bool& b) : ref(b) {}
+			bool &ref;
 		};
 		struct to_octet {
 			to_octet(Octet &o) : ref(o) {}
@@ -211,7 +211,7 @@ namespace CORBA {
 			insert_simple(_tc_any, &in);
 		}
 		void operator<<=(Any * in) {
-			insert_simple(_tc_any, in, CORBA_FALSE);
+			insert_simple(_tc_any, in, false);
 		}
 		//void operator<<=(const Exception &);
 		//void operator<<=(Exception *);
@@ -244,71 +244,71 @@ namespace CORBA {
 		}
 		//void operator<<=(from_fixed);
 		
-		Boolean operator>>=(Short& out) const {
+		bool operator>>=(Short& out) const {
 			return extract(_tc_short, out);
 		}
-		Boolean operator>>=(UShort& out) const {
+		bool operator>>=(UShort& out) const {
 			return extract(_tc_ushort, out);
 		}			
-		Boolean operator>>=(Long& out) const {
+		bool operator>>=(Long& out) const {
 			return extract(_tc_long, out);
 		}
-		Boolean operator>>=(ULong& out) const {
+		bool operator>>=(ULong& out) const {
 			return extract(_tc_ulong, out);
 		}
-		Boolean operator>>=(LongLong& out) const {
+		bool operator>>=(LongLong& out) const {
 			return extract(_tc_longlong, out);
 		}
-		Boolean operator>>=(ULongLong& out) const {
+		bool operator>>=(ULongLong& out) const {
 			return extract(_tc_ulonglong, out);
 		}
-		Boolean operator>>=(Float& out) const {
+		bool operator>>=(Float& out) const {
 			return extract(_tc_float, out);
 		}
-		Boolean operator>>=(Double& out) const {
+		bool operator>>=(Double& out) const {
 			return extract(_tc_double, out);
 		}
 		//void operator>>=(LongDouble&) const;
-		Boolean operator>>=(const char *& out) const {
+		bool operator>>=(const char *& out) const {
 			return extract(_tc_string, const_cast<char*&>(out));
 		}
-		Boolean operator>>=(const WChar *& out) const {
+		bool operator>>=(const WChar *& out) const {
 			return extract(_tc_wstring, const_cast<WChar*&>(out));
 		}
 		
-		Boolean operator>>=(to_boolean out) const {
+		bool operator>>=(to_boolean out) const {
 			return extract(_tc_boolean, out.ref);
 		}
-		Boolean operator>>=(to_octet out) const {
+		bool operator>>=(to_octet out) const {
 			return extract(_tc_octet, out.ref);
 		}
-		Boolean operator>>=(to_char out) const {
+		bool operator>>=(to_char out) const {
 			return extract(_tc_char, out.ref);
 		}
-		Boolean operator>>=(to_wchar out) const {
+		bool operator>>=(to_wchar out) const {
 			return extract(_tc_wchar, out.ref);
 		}
 		
-		Boolean operator>>=(to_string out) const;
-		Boolean operator>>=(to_wstring out) const;
+		bool operator>>=(to_string out) const;
+		bool operator>>=(to_wstring out) const;
 
-		Boolean operator>>=(to_object out) const;
-		Boolean operator>>=(Object_ptr& out) const {
+		bool operator>>=(to_object out) const;
+		bool operator>>=(Object_ptr& out) const {
 			return extract(_tc_Object, out);
 		}
 		
 		// Begin Orbit-CPP Extension
-		Boolean operator>>=(Any & out) const {
+		bool operator>>=(Any & out) const {
 			return extract(_tc_any, out);
 		}
 		// End Orbit-CPP Extension
-		Boolean operator>>=(const Any *& out) const {
+		bool operator>>=(const Any *& out) const {
 			return extract_ptr(_tc_any, out);
 		}
 		
 	private:
 		void operator<<=(unsigned char);
-		Boolean operator>>=(unsigned char&) const;
+		bool operator>>=(unsigned char&) const;
 	};
 };
 

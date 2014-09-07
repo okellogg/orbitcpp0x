@@ -57,7 +57,10 @@ public:
 
 	virtual ::PortableServer::Servant incarnate (::PortableServer::ObjectId const& oid,::PortableServer::POA_ptr poa)
 		throw (CORBA::SystemException, ::PortableServer::ForwardRequest) = 0;
-	virtual void etherialize (::PortableServer::ObjectId const& oid,::PortableServer::POA_ptr poa,PortableServer::Servant servant, CORBA::Boolean cleanup_in_progress,CORBA::Boolean remaining_activations)
+	virtual void etherialize (::PortableServer::ObjectId const& oid,
+	                          ::PortableServer::POA_ptr poa,
+				  PortableServer::Servant servant,
+				  bool cleanup_in_progress, bool remaining_activations)
 		throw (CORBA::SystemException) = 0;
 };
 
