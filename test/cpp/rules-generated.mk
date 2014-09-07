@@ -30,5 +30,5 @@ clean: clean-libtool clean-compile clean-checkLIBRARIES
 distclean:
 	$(MAKE) clean
 	$(RM) $(idl_built)
-	$(RM) -r ./$(DEPDIR)
+	$(RM) ./$(DEPDIR)/*
 
