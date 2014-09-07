@@ -87,17 +87,16 @@ void ITst_impl::unfixed_out (::Test::UUnfixed_out un)
 {
     std::cerr << "ITst_impl::unfixed_inout" << std::endl;
 
-    un = new Test::UUnfixed;
-    un->num_value (42);
+    un.num_value (42);
 }
 
-::Test::UUnfixed* ITst_impl::unfixed_ret ()
+::Test::UUnfixed ITst_impl::unfixed_ret ()
     throw (CORBA::SystemException)
 {
     std::cerr << "ITst_impl::unfixed_ret" << std::endl;
 
-    ::Test::UUnfixed *un = new Test::UUnfixed;
-    un->str_value ("Hello client -- via return value");
+    ::Test::UUnfixed un;
+    un.str_value ("Hello client -- via return value");
 
     return un;
 }

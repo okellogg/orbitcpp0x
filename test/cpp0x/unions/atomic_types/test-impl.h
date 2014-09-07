@@ -16,7 +16,7 @@ public:
 	void unfixed_in    (const ::Test::UUnfixed &un)     throw (CORBA::SystemException);
 	void unfixed_inout (::Test::UUnfixed       &un)     throw (CORBA::SystemException);
 	void unfixed_out   (::Test::UUnfixed_out    un_out) throw (CORBA::SystemException);
-	::Test::UUnfixed* unfixed_ret ()                    throw (CORBA::SystemException);
+	::Test::UUnfixed unfixed_ret ()                     throw (CORBA::SystemException);
 };
 
 #endif // TEST_IMPL_HH

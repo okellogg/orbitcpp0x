@@ -12,7 +12,7 @@ public:
 	void un_inout (::Test::UTst       &un)     throw (CORBA::SystemException);
 	void un_out   (::Test::UTst_out    un_out) throw (CORBA::SystemException);
 	
-	::Test::UTst * un_ret ()                   throw (CORBA::SystemException);
+	::Test::UTst un_ret ()                     throw (CORBA::SystemException);
 };
 
 #endif // TEST_IMPL_HH
