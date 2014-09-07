@@ -302,6 +302,8 @@ IDLStructBase::stub_impl_ret_post (ostream          &ostr,
 		if (!is_fixed ())
 			ostr << "*";
 		ostr << "_c_retval);" << endl;
+		if (!is_fixed ())
+			ostr << indent << "CORBA_free (_c_retval);" << endl;
 #else
 		if (is_fixed ())
 		{
