@@ -27,7 +27,8 @@ clean-checkLIBRARIES:
 
 clean: clean-libtool clean-compile clean-checkLIBRARIES
 
-distclean: clean
+distclean:
+	$(MAKE) clean
 	$(RM) $(idl_built)
 	$(RM) -r ./$(DEPDIR)
 
