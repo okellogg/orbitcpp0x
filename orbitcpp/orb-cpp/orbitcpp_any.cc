@@ -62,7 +62,7 @@ CORBA::Any::Any ()
 {
 	m_target._type = _tc_null->_orbitcpp_cobj ();
 	m_target._value = 0;
-	CORBA_any_set_release (_orbitcpp_cobj (), CORBA_FALSE);
+	CORBA_any_set_release (_orbitcpp_cobj (), false);
 }
 
 CORBA::Any::Any (const Any& in)
@@ -75,7 +75,7 @@ CORBA::Any::~Any()
 	free ();
 	
     // dont want the ORBit freekids to 'free' these again
-	CORBA_any_set_release ((CORBA_any *)&m_target, CORBA_FALSE);
+	CORBA_any_set_release ((CORBA_any *)&m_target, false);
 	m_target._value = 0;
 	m_target._type = 0;
 }
@@ -88,7 +88,7 @@ CORBA::Any& CORBA::Any::operator= (const CORBA::Any &in)
 }
 
 void
-CORBA::Any::insert_simple(CORBA::TypeCode_ptr tc, void* value, Boolean v_copy)
+CORBA::Any::insert_simple(CORBA::TypeCode_ptr tc, void* value, bool v_copy)
 {
 	void *new_val;
 	if(v_copy)
@@ -98,7 +98,7 @@ CORBA::Any::insert_simple(CORBA::TypeCode_ptr tc, void* value, Boolean v_copy)
 	if( CORBA_any_get_release((CORBA_any*)&m_target))
 		CORBA_free( m_target._value );
 	m_target._value = new_val;
-	CORBA_any_set_release((CORBA_any*)&m_target,CORBA_TRUE);
+	CORBA_any_set_release((CORBA_any*)&m_target, true);
 
 	if (TypeCode::_orbitcpp_wrap (m_target._type) != tc)
 	{
@@ -128,7 +128,7 @@ CORBA::Any::operator<<=(from_string in)
 	}
 	else
 		m_target._value = ORBit_copy_value(&in.val, m_target._type);
-	CORBA_any_set_release((CORBA_any*)&m_target,CORBA_TRUE);
+	CORBA_any_set_release((CORBA_any*)&m_target, true);
 }
 
 void
@@ -151,15 +151,15 @@ CORBA::Any::operator<<=(from_wstring in)
 	}
 	else
 		m_target._value = ORBit_copy_value(&in.val, reinterpret_cast<CORBA_TypeCode>(m_target._type));
-	CORBA_any_set_release((CORBA_any*)&m_target,CORBA_TRUE);
+	CORBA_any_set_release((CORBA_any*)&m_target, true);
 }
 
-CORBA::Boolean
+bool
 CORBA::Any::operator>>=(to_string out) const
 {
 	::_orbitcpp::CEnvironment _ev;
 	CORBA_TypeCode tmp = CORBA_ORB_create_string_tc (NULL, out.bound, _ev._orbitcpp_cobj ());
-	Boolean ret = extract (CORBA::TypeCode::_orbitcpp_wrap (tmp), const_cast<char*&> (out.val));
+	bool ret = extract (CORBA::TypeCode::_orbitcpp_wrap (tmp), const_cast<char*&> (out.val));
 
 	_ev.clear ();
 	CORBA_Object_release((CORBA_Object)tmp, _ev._orbitcpp_cobj()); // release typecode
@@ -167,28 +167,28 @@ CORBA::Any::operator>>=(to_string out) const
 	return ret;
 }
 
-CORBA::Boolean
+bool
 CORBA::Any::operator>>=(to_wstring out) const
 {
 	::_orbitcpp::CEnvironment _ev;
 	CORBA_TypeCode tmp = CORBA_ORB_create_wstring_tc (NULL, out.bound, _ev._orbitcpp_cobj ());
-	Boolean ret = extract(reinterpret_cast<CORBA::TypeCode_ptr>(tmp), const_cast<WChar*&>(out.val));
+	bool ret = extract(reinterpret_cast<CORBA::TypeCode_ptr>(tmp), const_cast<WChar*&>(out.val));
 
 	_ev.clear ();
 	CORBA_Object_release((CORBA_Object)tmp, _ev._orbitcpp_cobj()); // release typecode
 	return ret;
 }
 
-CORBA::Boolean
+bool
 CORBA::Any::operator>>=(to_object out) const
 {
 	g_warning("I'm not sure if any extraction to objects works or not with ORBit stable -PD");
 	// 1.16.5 widens any object reference and dupes
 
 	if (m_target._type != _tc_Object->_orbitcpp_cobj ())
-		return CORBA_FALSE;
+		return false;
 	
 	out.ref = Object::_orbitcpp_wrap (static_cast<CORBA_Object>(m_target._value));
-	return CORBA_TRUE;
+	return true;
 }
 	

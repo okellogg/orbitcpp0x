@@ -31,18 +31,18 @@ template<class T_slice, CORBA::ULong len>
 class ArrayVariable_forany {
 private:
 	T_slice *m_data;
-	CORBA::Boolean m_nocopy;
+	bool m_nocopy;
 public:
 
 	ArrayVariable_forany() {
 		m_data = NULL;
-		m_nocopy = FALSE;
+		m_nocopy = false;
 	}
-	ArrayVariable_forany(T_slice *data, CORBA::Boolean nocopy = FALSE) {
+	ArrayVariable_forany(T_slice *data, bool nocopy = false) {
 		m_data = data;
 		m_nocopy = nocopy;
   	}
-	ArrayVariable_forany(ArrayVariable_forany<T_slice, len> const &src, CORBA::Boolean nocopy){
+	ArrayVariable_forany(ArrayVariable_forany<T_slice, len> const &src, bool nocopy) {
 		m_data = src.m_data;
 		m_nocopy = nocopy;
 	}
@@ -88,7 +88,7 @@ public:
 		return temp;
 	}
 
-	CORBA::Boolean _nocopy() { return m_nocopy; }
+	bool _nocopy() { return m_nocopy; }
 };
 
 

@@ -162,7 +162,7 @@ PortableServer::POA::create_POA(const std::string& adapter_name, POAManager_ptr 
 
 
 PortableServer::POA_ptr
-PortableServer::POA::find_POA(const std::string& adapter_name, CORBA::Boolean activate_it) {
+PortableServer::POA::find_POA(const std::string& adapter_name, bool activate_it) {
 	CEnvironment ev;
 	PortableServer_POA poa =
 		PortableServer_POA_find_POA(_orbitcpp_cobj(), adapter_name.c_str(), activate_it, ev._orbitcpp_cobj());
@@ -419,7 +419,7 @@ PortableServer::POAManager::activate() {
 
 
 void
-PortableServer::POAManager::hold_requests(CORBA::Boolean wait) {
+PortableServer::POAManager::hold_requests(bool wait) {
 	CEnvironment ev;
 	PortableServer_POAManager_hold_requests(_orbitcpp_cobj(), wait, ev._orbitcpp_cobj());
 	ev.propagate_sysex();
@@ -429,14 +429,14 @@ PortableServer::POAManager::hold_requests(CORBA::Boolean wait) {
 
 
 void
-PortableServer::POAManager::discard_requests (CORBA::Boolean wait) {
+PortableServer::POAManager::discard_requests (bool wait) {
 	CEnvironment ev;
 	PortableServer_POAManager_discard_requests(_orbitcpp_cobj(), wait, ev._orbitcpp_cobj());
 	ev.propagate_sysex();
 }
 
 void
-PortableServer::POAManager::deactivate(CORBA::Boolean etherealize,CORBA::Boolean wait) {
+PortableServer::POAManager::deactivate(bool etherealize, bool wait) {
 	CEnvironment ev;
 	PortableServer_POAManager_deactivate(_orbitcpp_cobj(), etherealize, wait, ev._orbitcpp_cobj());
 	ev.propagate_sysex();

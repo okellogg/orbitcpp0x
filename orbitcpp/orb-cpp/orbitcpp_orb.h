@@ -77,7 +77,7 @@ namespace CORBA {
 		Status send_multiple_requests_oneway( const RequestSeq& ); 
 		Status send_multiple_requests_deferred( const RequestSeq& ); 
 		
-		Boolean poll_next_response();
+		bool poll_next_response();
 		Status get_next_response(Request_out); 
 		
 		typedef char* ObjectId; 
@@ -87,13 +87,13 @@ namespace CORBA {
 		ObjectIdList *list_initial_services(); */
 		Object_ptr resolve_initial_references(const char *identifier);
   
-		Boolean work_pending();
+		bool work_pending();
 		void perform_work();
-		void shutdown(Boolean wait_for_completion);
+		void shutdown(bool wait_for_completion);
 		void destroy();
 		void run();
 
-//      Boolean get_service_information(ServiceType svc_type,ServiceInformation_out svc_info);
+//      bool get_service_information(ServiceType svc_type,ServiceInformation_out svc_info);
 
 		// orbitcpp specific
 		static ORB_ptr _orbitcpp_new_orb();

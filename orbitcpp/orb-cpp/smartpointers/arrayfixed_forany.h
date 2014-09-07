@@ -31,18 +31,18 @@ template<class T_slice, CORBA::ULong len>
 class ArrayFixed_forany {
 private:
 	T_slice *m_data;
-	CORBA::Boolean m_nocopy;
+	bool m_nocopy;
 
 public:
 	ArrayFixed_forany() {
 		m_data = NULL;
 		m_nocopy = FALSE;
 	}
-	ArrayFixed_forany(T_slice *data, CORBA::Boolean nocopy = FALSE) {
+	ArrayFixed_forany(T_slice *data, bool nocopy = FALSE) {
 		m_data = data;
 		m_nocopy = nocopy;
   	}
-	ArrayFixed_forany(ArrayFixed_forany<T_slice, len> const &src, CORBA::Boolean nocopy){
+	ArrayFixed_forany(ArrayFixed_forany<T_slice, len> const &src, bool nocopy) {
 		m_data = src.m_data;
 		m_nocopy = nocopy;
 	}
@@ -93,7 +93,7 @@ public:
 		return temp;
 	}
 
-	CORBA::Boolean _nocopy() { return m_nocopy; }
+	bool _nocopy() { return m_nocopy; }
 };
 
 } //namespace _orbitcpp

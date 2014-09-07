@@ -102,10 +102,10 @@ CORBA::Object_ptr CORBA::Object::_nil() {
 }
 
 
-CORBA::Boolean 
+bool 
 CORBA::Object::_is_a(CORBA::RepositoryId const repoid) {
 	_orbitcpp::CEnvironment ev;
-	Boolean result = CORBA_Object_is_a(_orbitcpp_cobj(), repoid, ev._orbitcpp_cobj());
+	bool result = CORBA_Object_is_a(_orbitcpp_cobj(), repoid, ev._orbitcpp_cobj());
 	ev.propagate_sysex();
 	return result;
 }
@@ -113,10 +113,10 @@ CORBA::Object::_is_a(CORBA::RepositoryId const repoid) {
 
 
 
-CORBA::Boolean 
+bool 
 CORBA::Object::_non_existent() {
 	_orbitcpp::CEnvironment ev;
-	Boolean result = CORBA_Object_non_existent(_orbitcpp_cobj(), ev._orbitcpp_cobj());
+	bool result = CORBA_Object_non_existent(_orbitcpp_cobj(), ev._orbitcpp_cobj());
 	ev.propagate_sysex();
 	return result;
 }
@@ -124,10 +124,10 @@ CORBA::Object::_non_existent() {
 
 
 
-CORBA::Boolean 
+bool 
 CORBA::Object::_is_equivalent(::CORBA::Object_ptr other_object) {
 	_orbitcpp::CEnvironment ev;
-	Boolean result = CORBA_Object_is_equivalent(_orbitcpp_cobj(), other_object->_orbitcpp_cobj(), ev._orbitcpp_cobj());
+	bool result = CORBA_Object_is_equivalent(_orbitcpp_cobj(), other_object->_orbitcpp_cobj(), ev._orbitcpp_cobj());
 	ev.propagate_sysex();
 	return result;
 }
@@ -146,11 +146,11 @@ CORBA::Object::_hash(::CORBA::ULong maximum) {
 
 
 
-CORBA::Boolean
+bool
 CORBA::is_nil(Object_ptr o) {
-	if (o == CORBA_OBJECT_NIL) return TRUE;
+	if (o == CORBA_OBJECT_NIL) return true;
 	_orbitcpp::CEnvironment ev;
-	Boolean result = CORBA_Object_is_nil(o->_orbitcpp_cobj(), ev._orbitcpp_cobj());
+	bool result = CORBA_Object_is_nil(o->_orbitcpp_cobj(), ev._orbitcpp_cobj());
 	ev.propagate_sysex();
 	return result;
 }

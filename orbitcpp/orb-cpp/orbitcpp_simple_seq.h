@@ -59,7 +59,7 @@ namespace _orbitcpp {
 	// Create sequence from flat buffer
 	SimpleUnboundedSeq (size_t max,
 			    size_t length, buffer_t buffer,
-			    CORBA::Boolean release = false):
+			    bool release = false):
 	    Super (max, length, buffer, release)
 	    {
 	    }
@@ -118,7 +118,7 @@ namespace _orbitcpp {
 		
 	// Create sequence from flat buffer
 	SimpleBoundedSeq (size_t length, buffer_t buffer,
-			  CORBA::Boolean release = false):
+			  bool release = false):
 	    Super (max, length, buffer, release)
 	    {
 	    }
@@ -171,7 +171,7 @@ namespace _orbitcpp {
 	// Create sequence from flat buffer
 	StringUnboundedSeq (size_t max,
 		      size_t length, buffer_t buffer,
-		      CORBA::Boolean release = false):
+		      bool release = false):
 	    _max (max),
 	    _length (length),
 	    _buffer (buffer),
@@ -257,7 +257,7 @@ namespace _orbitcpp {
 	elem_t& operator[] (index_t index)             { return _buffer[index]; };
 	const elem_t& operator[] (index_t index) const { return _buffer[index]; };
 	const elem_t* get_buffer() const { return _buffer; }
-	elem_t* get_buffer(CORBA::Boolean orphan = 0)
+	elem_t* get_buffer(bool orphan = 0)
 	{
 		g_assert(!orphan);
 		return _buffer;

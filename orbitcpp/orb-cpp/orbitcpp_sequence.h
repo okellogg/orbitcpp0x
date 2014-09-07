@@ -69,7 +69,7 @@ namespace _orbitcpp {
 	// Create sequence from flat buffer
 	SequenceBase (size_t max,
 		      size_t length, buffer_t buffer,
-		      CORBA::Boolean release = false):
+		      bool release = false):
 	    _max (max),
 	    _length (length),
 	    _buffer (buffer),
@@ -131,7 +131,7 @@ namespace _orbitcpp {
 	elem_t& operator[] (index_t index)             { return _buffer[index]; };
 	const elem_t& operator[] (index_t index) const { return _buffer[index]; };
 	const elem_t* get_buffer() const { return _buffer; }
-	elem_t* get_buffer(CORBA::Boolean orphan = 0)
+	elem_t* get_buffer(bool orphan = 0)
 	{
 		g_assert(!orphan);
 		return _buffer;
@@ -189,16 +189,16 @@ namespace _orbitcpp {
 	    typedef typename traits::c_seq_t c_seq_t;
 
 	    c_seq_t* c_seq = s._orbitcpp_pack();
-	    a.insert_simple(reinterpret_cast<CORBA::TypeCode_ptr>(traits::seq_tc()), c_seq, CORBA_FALSE);
+	    a.insert_simple(reinterpret_cast<CORBA::TypeCode_ptr>(traits::seq_tc()), c_seq, false);
     }
 
     template <class traits>
-    CORBA::Boolean operator>>=(CORBA::Any const& a, SequenceBase<traits>&  s)
+    bool operator>>=(CORBA::Any const& a, SequenceBase<traits>&  s)
     {
 	    typedef typename traits::c_seq_t c_seq_t;
 
 	    c_seq_t const* c_seq;
-	    CORBA::Boolean b = a.extract_ptr(reinterpret_cast<CORBA::TypeCode_ptr>(traits::seq_tc()), c_seq);
+	    bool b = a.extract_ptr(reinterpret_cast<CORBA::TypeCode_ptr>(traits::seq_tc()), c_seq);
 	    if (b)
 		    s._orbitcpp_unpack(*c_seq);
 	    return b;
