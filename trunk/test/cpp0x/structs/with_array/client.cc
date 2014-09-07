@@ -20,20 +20,22 @@ int main (int argc, char *argv[])
 	// -> IN
 	Test::Test_st in_struct;
 
-	in_struct.num = 10;
-	in_struct.text[0] = CORBA::string_dup ("IN string #1");
-	in_struct.text[1] = CORBA::string_dup ("IN string #2");
+	in_struct.num (10);
+	Test::TestArray arr;
+	arr[0] = "IN string #1";
+	arr[1] = "IN string #2";
+	in_struct.text (arr);
 	
 	master_ptr->struct_in (in_struct);
 	
 	
 	///////////////////////////////////
 	// <- RET
-	Test::Test_st_var struct_ret = master_ptr->struct_ret ();
+	Test::Test_st struct_ret = master_ptr->struct_ret ();
 	
-	std::cerr << "Client::RET: num\t" << struct_ret->num << std::endl;
-	std::cerr << "Client::RET: #1\t\t" << struct_ret->text[0] << std::endl;
-	std::cerr << "Client::RET: #1\t\t" << struct_ret->text[0] << std::endl;
+	std::cerr << "Client::RET: num\t" << struct_ret.num() << std::endl;
+	std::cerr << "Client::RET: #1\t\t" << struct_ret.text()[0] << std::endl;
+	std::cerr << "Client::RET: #1\t\t" << struct_ret.text()[1] << std::endl;
 
 
 	return 0;

@@ -17,7 +17,7 @@ public:
 	void struct_out (::Test::Test_st_out struct_out)
 		throw (CORBA::SystemException);
 
-	::Test::Test_st * struct_ret ()
+	::Test::Test_st struct_ret ()
 		throw (CORBA::SystemException);		
 };
 

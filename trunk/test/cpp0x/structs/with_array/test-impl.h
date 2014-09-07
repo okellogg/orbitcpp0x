@@ -11,7 +11,7 @@ public:
 	void struct_in (const ::Test::Test_st &struct_in)
 		throw (CORBA::SystemException);
 
-	::Test::Test_st *struct_ret ()
+	::Test::Test_st struct_ret ()
 		throw (CORBA::SystemException);		
 };
 
