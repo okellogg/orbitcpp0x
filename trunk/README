@@ -13,5 +13,5 @@ intact, in other words the modifications are made non-destructively.
 
 The new C++0x mapping can be enabled at compile time, by invoking "make" as follows:
 
-  make CPPFLAGS=-DIDL2CPP0X
+  make CXXFLAGS="-DIDL2CPP0X -std=c++0x"
 
