@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
 		std::cout << "       Run all tests: example regression" << std::endl;
 		std::cout << "       Run one group: example std::auto_ptr" << std::endl;
 		std::cout << "       Run one test: example std::auto_ptr 3" << std::endl;
-    }
+	}
 
 	tut::runner.get().set_callback (&visi);
 
