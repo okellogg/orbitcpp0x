@@ -1,13 +1,13 @@
 # rules.mk
 # Rules for a test's main directory
 
-include $(top_builddir)/test/cpp/defs.mk
+include $(top_builddir)/test/defs.mk
 
 all:
 	$(MAKE) -C generated
 	$(MAKE) $(check_PROGRAMS)
 
-include $(top_builddir)/test/cpp/rules-common.mk
+include $(top_builddir)/test/rules-common.mk
 
 check_PROGRAMS = client$(EXEEXT) server$(EXEEXT)
 client_OBJECTS = client.$(OBJEXT)

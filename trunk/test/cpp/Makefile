@@ -2,5 +2,5 @@ SUBDIRS = helloworld struct-simple structs unions arrays poa factory delegate th
 	  ### TODO:
           # sequences any everything
 
-include rules-delegate.mk
+include ../rules-delegate.mk
 

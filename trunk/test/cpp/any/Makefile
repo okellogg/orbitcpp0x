@@ -1,3 +1,3 @@
 SUBDIRS := simple
 
-include ../rules-delegate.mk
+include ../../rules-delegate.mk

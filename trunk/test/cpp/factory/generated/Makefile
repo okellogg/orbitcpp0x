@@ -3,7 +3,7 @@ top_builddir := ../../../..
 
 idlname = factory
 
-include ../../rules-generated.mk
+include $(top_builddir)/test/rules-generated.mk
 
 -include ./$(DEPDIR)/$(idlname)-common.Po
 -include ./$(DEPDIR)/$(idlname)-cpp-common.Po

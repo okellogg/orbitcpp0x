@@ -1,11 +1,11 @@
 # rules-generated.mk
 # Rules for a test's subdirectory named "generated"
 
-include $(top_builddir)/test/cpp/defs.mk
+include $(top_builddir)/test/defs.mk
 
 all: $(check_LIBRARIES)
 
-include $(top_builddir)/test/cpp/rules-common.mk
+include $(top_builddir)/test/rules-common.mk
 
 idl_file = ../$(idlname).idl
 
