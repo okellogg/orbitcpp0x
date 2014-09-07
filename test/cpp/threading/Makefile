@@ -5,7 +5,7 @@ idlname = helloworld
 
 server_EXTRA_OBJECTS := server_thread.o
 
-include ../rules.mk
+include $(top_builddir)/test/rules.mk
 
 -include ./$(DEPDIR)/client.Po
 -include ./$(DEPDIR)/$(idlname)-impl.Po
