@@ -714,7 +714,7 @@ IDLPassXlate::doEnum (IDL_tree  node,
 
 
 	m_header << indent << "enum ";
-#ifdef IDL2CPP0X
+#ifdef IDL2CPP11
 	m_header << "class ";
 #endif
 	m_header << idlEnum.get_cpp_identifier () << " {\n";
