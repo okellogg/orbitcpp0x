@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 		const char* message = "Hello server, from client!";
 
 		// The result is stored in a CORBA-aware smartpointer
-		CORBA::String_var reply;
+		std::string reply;
 
 		// Do the actual CORBA call here
 		reply = ptr->helloWorld(message);

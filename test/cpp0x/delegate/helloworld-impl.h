@@ -13,10 +13,10 @@ class Hello_impl : public POA_hellomodule::Hello
 {
 public:
 	//Implement pure virtual method:
-	char* helloWorld(const char* greeting) throw(CORBA::SystemException);
+	std::string helloWorld(const std::string& greeting) throw(CORBA::SystemException);
 
-	char* helloWorld_delegate (hellomodule::Hello_ptr server,
-							 const char* greeting) throw(CORBA::SystemException);
+	std::string helloWorld_delegate (hellomodule::Hello_ptr server,
+					const std::string& greeting) throw(CORBA::SystemException);
 };
 
 }; // namespace hellomodule

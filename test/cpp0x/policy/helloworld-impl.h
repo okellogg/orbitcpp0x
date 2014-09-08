@@ -13,7 +13,7 @@ class Hello_impl : public POA_hellomodule::Hello
 {
 public:
 	//Implement pure virtual method:
-	char* helloWorld(const char* greeting) throw(CORBA::SystemException);
+	std::string helloWorld(const std::string& greeting) throw(CORBA::SystemException);
 };
 
 
