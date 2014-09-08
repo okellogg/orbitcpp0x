@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 		hellomodule::Hello_var ptr2 = hellomodule::Hello::_narrow(obj2);
 
 		// The result is stored in a CORBA-aware smartpointer
-		CORBA::String_var reply;
+		std::string reply;
 
 		// Do the actual CORBA call here
 		reply = ptr1->helloWorld ("Hello world to server #1");

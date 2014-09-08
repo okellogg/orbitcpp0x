@@ -7,7 +7,7 @@
 namespace f {
 
 class Bike : public virtual POA_Factory::AbstractService {
-	void doit (CORBA_char const *mesg)
+	void doit (const std::string& mesg)
 		throw (CORBA::SystemException)
 	{
 		std::cout << "Bike asked to: " << mesg << std::endl;
@@ -21,10 +21,10 @@ class Bike : public virtual POA_Factory::AbstractService {
 };
 
 class Producer : public virtual POA_Factory::Producer {
-	Factory::AbstractService_ptr produce (CORBA_char const *id)
+	Factory::AbstractService_ptr produce (const std::string& id)
 		throw (CORBA::SystemException)
 	{
-		if (std::string(id) == "bike") {
+		if (id == "bike") {
 			Bike* bike = new Bike(); // never reclaimed
 			return bike->_this();
 		}

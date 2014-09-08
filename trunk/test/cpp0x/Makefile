@@ -1,4 +1,4 @@
-SUBDIRS = helloworld struct-simple structs unions arrays poa factory delegate threading policy
+SUBDIRS = helloworld struct-simple poa factory delegate threading policy unions structs arrays
 	  ### TODO:
           # sequences any everything
 
