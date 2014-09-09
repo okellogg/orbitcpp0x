@@ -42,9 +42,9 @@ protected:
 	string get_fixed_cpp_typename() const { return get_cpp_typename(); }
 	string get_fixed_c_typename() const { return get_c_typename(); }
 public:
-	bool conversion_required () const { return false; };
-	bool is_scalar () const { return true; };
-	bool is_fixed () const { return true; };
+	bool conversion_required () const { return false; }
+	bool is_scalar () const { return true; }
+	bool is_fixed () const { return true; }
 	
 	////////////////////////////////////////////
 	// Constants
