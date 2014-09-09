@@ -3,6 +3,7 @@
  *  ORBit-C++: C++ bindings for ORBit.
  *
  *  Copyright (C) 2000 Andreas Kloeckner
+ *  Copyright (C) 2014 Oliver Kellogg
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *  Author:	Andreas Kloeckner <ak@ixion.net>
+ *		Oliver Kellogg <okellogg@users.sourceforge.net>
  *
  *  Purpose:	IDL compiler type representation
  *
@@ -137,9 +139,12 @@ IDLCompound::write_member_decls (ostream &ostr,
 		if (!t->is_scalar ())
 			ostr << "const ";
 		ostr << typ;
-		if (!t->is_scalar ())
+		if (!t->is_scalar () && !t->is_array ())
 			ostr << "&";
-		ostr << " value) { _" << id << " = value; }" << endl;
+		if (t->is_array ())
+			ostr << " value) { " << typ << "_copy (_" << id << ", value); }" << endl;
+		else
+			ostr << " value) { _" << id << " = value; }" << endl;
 		if (t->is_scalar ())
 		{
 			ostr << indent << typ << " " << id
@@ -147,9 +152,10 @@ IDLCompound::write_member_decls (ostream &ostr,
 		}
 		else
 		{
-			ostr << indent << "const " << typ << "& " << id
+			std::string ref = (t->is_array () ? "&" : "");
+			ostr << indent << "const " << typ << ref << " " << id
 				 << "() const { return _" << id << "; }" << endl;
-			ostr << indent << typ << "& " << id << "() { return _"
+			ostr << indent << typ << ref << " " << id << "() { return _"
 				 << id << "; }" << endl;
 		}
 	}
