@@ -1,3 +1,3 @@
-SUBDIRS := inside_exception of_interface of_structs simple_types
+SUBDIRS := simple_types of_interface inside_exception of_structs
 
 include ../../rules-delegate.mk

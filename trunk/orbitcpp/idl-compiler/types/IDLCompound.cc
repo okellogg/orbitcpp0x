@@ -139,12 +139,9 @@ IDLCompound::write_member_decls (ostream &ostr,
 		if (!t->is_scalar ())
 			ostr << "const ";
 		ostr << typ;
-		if (!t->is_scalar () && !t->is_array ())
+		if (!t->is_scalar ())
 			ostr << "&";
-		if (t->is_array ())
-			ostr << " value) { " << typ << "_copy (_" << id << ", value); }" << endl;
-		else
-			ostr << " value) { _" << id << " = value; }" << endl;
+		ostr << " value) { _" << id << " = value; }" << endl;
 		if (t->is_scalar ())
 		{
 			ostr << indent << typ << " " << id
@@ -152,10 +149,9 @@ IDLCompound::write_member_decls (ostream &ostr,
 		}
 		else
 		{
-			std::string ref = (t->is_array () ? "&" : "");
-			ostr << indent << "const " << typ << ref << " " << id
+			ostr << indent << "const " << typ << "& " << id
 				 << "() const { return _" << id << "; }" << endl;
-			ostr << indent << typ << ref << " " << id << "() { return _"
+			ostr << indent << typ << "& " << id << "() { return _"
 				 << id << "; }" << endl;
 		}
 	}

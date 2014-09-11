@@ -9,15 +9,15 @@ class IFace_impl: public POA_Test::IFace
 {
 public:
 	void array_method (::Test::LongArray_out   long_results,
-					   ::Test::StringArray_out string_results)
+			   ::Test::StringArray_out string_results)
 		throw (CORBA::SystemException);	
 
 
-	void strings_method (const ::Test::StringArray array_in,
-						 ::Test::StringArray       array_inout)
+	void strings_method (const ::Test::StringArray& array_in,
+			     ::Test::StringArray&       array_inout)
 		throw (CORBA::SystemException);	
 
-	Test::StringArray_slice * strings_ret ()
+	Test::StringArray strings_ret ()
 		throw (CORBA::SystemException);	
 };
 
