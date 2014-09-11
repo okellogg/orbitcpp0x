@@ -33,10 +33,10 @@ IMaster_impl::IMaster_impl()
 }
 
 
-::Test::ObjArray_slice *IMaster_impl::array_ret()
+::Test::ObjArray IMaster_impl::array_ret()
 	throw (CORBA::SystemException)
 {
-	::Test::ObjArray_slice *retval = ::Test::ObjArray_alloc();
+	::Test::ObjArray retval;
 
 	retval[0] = ::Test::IMember::_duplicate(array_member_1_ptr);
 	retval[1] = ::Test::IMember::_duplicate(array_member_2_ptr);
@@ -54,7 +54,7 @@ void IMaster_impl::simple_in (::Test::IMember_ptr instance)
 }
 
 
-void IMaster_impl::array_in (const ::Test::ObjArray instances)
+void IMaster_impl::array_in (const ::Test::ObjArray& instances)
 	throw (CORBA::SystemException)
 {
 	int i = 0;

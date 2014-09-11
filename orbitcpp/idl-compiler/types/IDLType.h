@@ -86,7 +86,6 @@ public:
 
 	virtual bool conversion_required () const { return true; }
 	virtual bool is_scalar () const { return false; }
-	virtual bool is_array () const { return false; }
 	virtual bool is_fixed () const = 0;
 
 	////////////////////////////////////////////

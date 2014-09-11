@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	/////////////////////
 	// Call array_method
 	Test::LongArray          long_array;
-	Test::StringArray_slice *string_array;
+	Test::StringArray        string_array;
 	
 	iface_ptr->array_method (long_array, string_array);
 
@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
 		std::cout << "Client:\tstring_array[" << i << "] == "
 				  << '"' << string_array[i] << '"' << std::endl;
 	std::cout << std::endl;
-	Test::StringArray_free (string_array);
 
 	/////////////////////
 	// Call strings_method
@@ -41,11 +40,11 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < 10; i++)
 	{
 		tmp = g_strdup_printf ("IN data #%d", i + 1);
-		in_array[i] = CORBA::string_dup (tmp);
+		in_array[i] = std::string (tmp);
 		g_free (tmp);
 
 		tmp = g_strdup_printf ("INOUT data #%d", i + 1);
-		inout_array[i] = CORBA::string_dup (tmp);
+		inout_array[i] = std::string (tmp);
 		g_free (tmp);
 	}
 
@@ -57,14 +56,13 @@ int main(int argc, char *argv[])
 	
 	/////////////////////
 	// Call strings_ret
-	Test::StringArray_slice * ret_array;
+	Test::StringArray ret_array;
 
 	ret_array = iface_ptr->strings_ret ();
 
 	for (int i = 0; i < 10; i++)
 		std::cout << "Client: RET: " << ret_array[i] << std::endl;
 	std::cout << std::endl;
-	Test::StringArray_free (ret_array);
-	
+
 	return 0;
 }

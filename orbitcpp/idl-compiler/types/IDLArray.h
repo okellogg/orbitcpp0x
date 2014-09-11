@@ -67,7 +67,6 @@ public:
 
 	bool conversion_required () const;
 	bool is_fixed () const;
-	bool is_array () const { return true; }
 
 	////////////////////////////////////////////
 	// Creating typedefs

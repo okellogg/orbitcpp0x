@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	
 	/////////////////////
 	// Call array_ret
-	Test::ObjArray_var array_ret;
+	Test::ObjArray array_ret;
 	
 	array_ret = master_ptr->array_ret ();
 	for (int i = 0; i < 3; i++)

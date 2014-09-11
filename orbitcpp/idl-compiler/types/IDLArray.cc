@@ -268,14 +268,25 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	// Array types
 
 	// Create array typedef
-	ostr << indent << "typedef "
-	     << m_element_type->get_cpp_member_typename () << " " << array_id;
-
+	ostr << indent << "typedef ";
+#ifdef IDL2CPP0X
+	for (const_iterator i = begin (); i != end (); i++)
+		ostr << "std::array< ";
+	ostr << m_element_type->get_cpp_member_typename ();
+	for (Dimensions::const_reverse_iterator j = m_dims.rbegin (); j != m_dims.rend (); j++)
+		ostr << ", " << *j << ">";
+	ostr << " " << array_id;
+#else
+	ostr << m_element_type->get_cpp_member_typename () << " " << array_id;
 	// Write dimensions
 	for (const_iterator i = begin (); i != end (); i++)
 		ostr << '[' << *i << ']';
+#endif
 	ostr << ';' << endl;
-	
+
+	string static_prefix = target.interface_child() ? "static " : "";
+
+#ifndef IDL2CPP0X
 
 	// Create slice typedef
 	ostr << indent << "typedef "
@@ -290,8 +301,6 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	
 	//////////////////////
 	// Array methods
-
-	string static_prefix = target.interface_child() ? "static " : "";
 
 	// Allocator
 	ostr << indent << static_prefix << "inline "
@@ -312,37 +321,53 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	init_cpp_array (ostr, indent, "array");
 	ostr << indent << "return array;" << endl;
 	ostr << --indent << "}" << endl << endl;
-	
+
+#endif
 
 	// copy
 	ostr << indent << static_prefix << "inline "
-	     << "void " << array_id << "_copy ("
-	     << slice_type << " dest, const " << slice_type << " source)" << endl
-	     << indent++ << "{" << endl;
+	     << "void " << array_id << "_copy (";
+#ifdef IDL2CPP0X
+	ostr << array_id << "& dest, const " << array_id << "&";
+#else
+	ostr << slice_type << " dest, const " << slice_type;
+#endif
+	ostr << " source)" << endl << indent << "{" << endl;
 
-	copy_cpp_array (ostr, indent, "source", "dest");
+	copy_cpp_array (ostr, ++indent, "source", "dest");
 
 	ostr << --indent << "}" << endl << endl;
-	
+
 	ostr << indent << static_prefix << "inline "
 	     << "void " << array_id << "_pack ("
-	     << c_slice_type << " dest, " << slice_type << " source)" << endl
-	     << indent++ << "{" << endl;
+	     << c_slice_type << " dest, ";
+#ifdef IDL2CPP0X
+	ostr << "const " << array_id << "&";
+#else
+	ostr << slice_type;
+#endif
+	ostr << " source)" << endl
+	     << indent << "{" << endl;
 
-	member_pack_to_c (ostr, indent, "source", "dest", &target);
+	member_pack_to_c (ostr, ++indent, "source", "dest", &target);
 
 	ostr << --indent << "}" << endl << endl;
 
 	ostr << indent << static_prefix << "inline "
-	     << "void " << array_id << "_unpack ("
-	     << slice_type << " dest, " << c_slice_type << " source)" << endl
+	     << "void " << array_id << "_unpack (";
+#ifdef IDL2CPP0X
+	ostr << array_id << "&";
+#else
+	ostr << slice_type;
+#endif
+	ostr << " dest, " << c_slice_type << " source)" << endl
+	     << indent << "{" << endl;
 
-
-	     << indent++ << "{" << endl;
-
-	member_unpack_from_c  (ostr, indent, "dest", "source", &target);
+	member_unpack_from_c (ostr, ++indent, "dest", "source", &target);
 
 	ostr << --indent << "}" << endl << endl;
+
+#ifndef IDL2CPP0X
 
 	// Dup
 	ostr << indent << static_prefix << "inline "
@@ -355,7 +380,6 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	ostr << indent << "return ret;" << endl;
 	
 	ostr << --indent << "}" << endl << endl;
-	
 
 	// Free
 	ostr << indent << static_prefix << "inline "
@@ -388,7 +412,14 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	// Var
 	ostr << indent << "typedef " << wrapper + "_var< " << slice_id << ", " << length << ", " << props_id << " > "
 	     << array_id + "_var;" << endl;
-	
+
+#endif
+
+#ifdef IDL2CPP0X
+	// Out
+	ostr << indent << "typedef " << array_id << "& "
+	     << array_id + "_out;" << endl;
+#else
 	// Out
 	if (m_element_type->is_fixed ())
 	{
@@ -404,9 +435,9 @@ IDLArray::typedef_decl_write (ostream          &ostr,
 	ostr << indent << "typedef " << wrapper + "_forany< " << slice_id << ", " << length << " > "
 	     << array_id + "_forany;" << endl;
 
-		
+#endif
+
 	ostr << endl;
-	
 
 	ostr << endl;
 	
@@ -430,10 +461,16 @@ IDLArray::stub_decl_arg_get (const string     &cpp_id,
 	{
 	case IDL_PARAM_IN:
 		retval = "const " + get_cpp_typename () + 
+#ifdef IDL2CPP0X
+			"&" +
+#endif
 			" " + cpp_id;	
 		break;
 	case IDL_PARAM_INOUT:
 		retval = get_cpp_typename () + 
+#ifdef IDL2CPP0X
+			"&" +
+#endif
 			" " + cpp_id;	
 		break;
 	case IDL_PARAM_OUT:
@@ -452,9 +489,10 @@ IDLArray::stub_impl_arg_pre (ostream          &ostr,
 			     IDL_param_attr    direction,
 			     const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		return;
-
+#endif
 	string c_id = "_c_" + cpp_id;
 
 	if (direction == IDL_PARAM_OUT && !m_element_type->is_fixed())
@@ -478,9 +516,10 @@ IDLArray::stub_impl_arg_call (const string   &cpp_id,
 			      IDL_param_attr  direction,
 			      const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		return cpp_id;
-
+#endif
 	string retval;
 
 	switch (direction)
@@ -507,15 +546,17 @@ IDLArray::stub_impl_arg_post (ostream          &ostr,
 			      IDL_param_attr    direction,
 			      const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		return;
-	
+#endif
 	string cpp_typename = get_cpp_typename ();
 
+#ifndef IDL2CPP0X
 	// Allocate C++ array (if needed)
 	if (!is_fixed ())
 		ostr << indent << cpp_id << " = " << cpp_typename << "_alloc ();" << endl;
-	
+#endif
 	// Re-load from C array
 	if (direction == IDL_PARAM_INOUT || direction == IDL_PARAM_OUT)
 	fill_cpp_array (ostr, indent, cpp_id, "_c_" + cpp_id);
@@ -532,11 +573,14 @@ IDLArray::stub_impl_arg_post (ostream          &ostr,
 
 
 
-
 string
 IDLArray::stub_decl_ret_get (const IDLTypedef *) const
 {
+#ifdef IDL2CPP0X
+	return get_cpp_typename ();
+#else
 	return get_cpp_typename () + "_slice *";
+#endif
 }
 	
 void
@@ -562,20 +606,27 @@ IDLArray::stub_impl_ret_post (ostream          &ostr,
 			      Indent           &indent,
 			      const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 	{
 		ostr << indent << "return _retval;" << endl;
 		return;
 	}
-	
+#endif
+
 	// Create and fill C++ array
+#ifdef IDL2CPP0X
+	ostr << indent << get_cpp_typename () << " _cpp_retval;" << endl;
+	fill_cpp_array (ostr, indent, "_cpp_retval", "_retval");
+#else
 	ostr << indent << get_cpp_typename ()
 	     << "_slice *_cpp_retval = "
 	     << get_cpp_typename () << "_alloc ();" << endl;
 
 	fill_cpp_array (ostr, indent, "_cpp_retval", "_retval");
-	
+
 	ostr << indent << "CORBA_free (_retval);" << endl;
+#endif
 
 	ostr << indent << "return _cpp_retval;" << endl;
 }
@@ -620,9 +671,11 @@ IDLArray::skel_impl_arg_pre (ostream          &ostr,
 			     IDL_param_attr    direction,
 			     const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		// Do nothing
 		return;
+#endif
 
 	switch (direction)
 	{
@@ -634,8 +687,11 @@ IDLArray::skel_impl_arg_pre (ostream          &ostr,
 		break;
 
 	case IDL_PARAM_OUT:
-		ostr << indent << get_cpp_typename ()
-		     << "_var _cpp_" << c_id << ";" << endl;
+		ostr << indent << get_cpp_typename ();
+#ifndef IDL2CPP0X
+		ostr << "_var";
+#endif
+		ostr << " _cpp_" << c_id << ";" << endl;
 		break;
 	}
 
@@ -649,9 +705,11 @@ IDLArray::skel_impl_arg_call (const string     &c_id,
 {
 #warning "WRITE ME"
 
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		return c_id;
 	else
+#endif
 		return "_cpp_" + c_id;
 }
 	
@@ -662,10 +720,11 @@ IDLArray::skel_impl_arg_post (ostream          &ostr,
 			      IDL_param_attr    direction,
 			      const IDLTypedef *) const
 {
+#ifndef IDL2CPP0X
 	if (!m_element_type->conversion_required ())
 		// Do nothing
 		return;
-	
+#endif
 	if (direction == IDL_PARAM_IN)
 		// No need to reload IN parameters
 		return;
@@ -701,8 +760,12 @@ IDLArray::skel_impl_ret_pre (ostream          &ostr,
 			     Indent           &indent,
 			     const IDLTypedef *) const
 {
-	ostr << indent << get_cpp_typename ()
-	     << "_slice *_retval = 0;" << endl;
+	ostr << indent << get_cpp_typename ();
+#ifdef IDL2CPP0X
+	ostr << " _retval;" << endl;
+#else
+	ostr << "_slice *_retval = 0;" << endl;
+#endif
 }
 
 void
@@ -733,9 +796,10 @@ IDLArray::skel_impl_ret_post (ostream          &ostr,
 
 	fill_c_array (ostr, indent, "_retval", "_c_retval");
 
+#ifndef IDL2CPP0X
 	ostr << indent << get_cpp_typename ()
 	     << "_free (_retval);" << endl;
-	
+#endif
 	ostr << indent << "return _c_retval;" << endl;
 }
 
@@ -883,9 +947,10 @@ IDLArray::create_union_accessors(IDLUnion const& un, IDLCaseStmt const& case_stm
 			"m_target->_u.") +
 		member_name;
 	string member_cpp_type = member.getType ()->get_cpp_member_typename ();
-	string slice_id = member_cpp_type + "_slice";
-	string slice_type = slice_id + "*";
-
+	string slice_type = member_cpp_type;
+#ifndef IDL2CPP0X
+	slice_type += "_slice*";
+#endif
 	header << indent << slice_type << " "
 		<< member_name << " () const;" << endl;
 
@@ -894,13 +959,17 @@ IDLArray::create_union_accessors(IDLUnion const& un, IDLCaseStmt const& case_stm
 		<< " () const" << endl
 		<< mod_indent << "{" << endl;
 
-	 module << ++mod_indent << member_cpp_type << " _ret;" << endl;
-	 member_unpack_from_c (module, mod_indent, "_ret", full_member_name);
+	module << ++mod_indent << member_cpp_type << " _ret;" << endl;
+	member_unpack_from_c (module, mod_indent, "_ret", full_member_name);
 
-	 // FIXME: leaks memory
-	 module << mod_indent << "return " << member_cpp_type << "_dup(_ret);" << endl;
-	 module << --mod_indent << "}" << endl << endl;
+#ifdef IDL2CPP0X
+	module << mod_indent << "return _ret;" << endl;
+#else
+	// FIXME: leaks memory
+	module << mod_indent << "return " << member_cpp_type << "_dup(_ret);" << endl;
+#endif
+	module << --mod_indent << "}" << endl << endl;
 
 	// setter
-	 IDLStandardUnionable::create_union_setter(un, case_stmt, header, indent, module, mod_indent);
+	IDLStandardUnionable::create_union_setter(un, case_stmt, header, indent, module, mod_indent);
 }

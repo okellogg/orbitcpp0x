@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 		for (CORBA::Long i = 0; i < 3; i++)
 		{
 			std::cerr << "Test::ExTest::nums[" << i << "] = "
-					  << ex.nums[i] << std::endl;
-			ex.objs[i]->print_name ();
+					  << ex.nums()[i] << std::endl;
+			ex.objs()[i]->print_name ();
 		}
 	}
 

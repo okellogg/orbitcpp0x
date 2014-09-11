@@ -259,7 +259,7 @@ IDLPassSkels::doOperationSkelPrototype (IDLInterface &iface,
  *  @param      node    The IDL tree node which contains info about this method.
  *
  *  This routine contains considerable complexity to account for the different 
- *  memory management schemes employed by CORBA.
+ *  memory management schemes employed by the pre C++11 CORBA mapping.
  *  The routine is responsible for writing the implementation of a skeleton routine
  *  starting from the method prototype, including the code to unmarshal the C 
  *  structures passed through ORBit to the skeleton. Then the routine must write code
@@ -272,11 +272,11 @@ IDLPassSkels::doOperationSkelPrototype (IDLInterface &iface,
  *  For in and inout types, the type passed through the C skel can be passed directly 
  *  to the servant. For out types, there is typically a need to construct a proxy 
  *  or manager object, as denote by the _out_type of the CORBA type.
- *  The exception to this is arrays of fixed length objects. In this case the _out is
- *  simply a typedef to a T_slice * type. Because the client is responsible for
- *  allocation of the object this gives all the required access to modify individual 
- *  elements inside the servant.
- *  Because variable lenth arrays require a manager object they fall under the general
+ *  In the pre C++11 mapping, the exception to this is arrays of fixed length objects.
+ *  In this case the _out is simply a typedef to a T_slice * type. Because the client
+ *  is responsible for allocation of the object this gives all the required access to
+ *  modify individual elements inside the servant.
+ *  Because variable length arrays require a manager object they fall under the general
  *  case.
  *
  *  In terms of the code which is written, T_out object must be constructed from the C

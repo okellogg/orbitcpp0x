@@ -55,6 +55,9 @@ IDLPassXlate::runPass() {
 		 << "#include <orbitcpp/orb-cpp/orbitcpp.h>" << endl
 		 << endl
 		 << "#include <cstring>" << endl
+#ifdef IDL2CPP0X
+		 << "#include <array>" << endl
+#endif
 		 << "#include \"" << m_state.m_basename << ".h\"" << endl;
 
 	m_module << "#include \"" << m_state.m_basename << IDL_CPP_STUB_HEADER_EXT << "\"" << endl
@@ -1535,7 +1538,9 @@ IDLWriteArrayAnyFuncs::run()
 	string tc =  m_dest.getParentScope ()->get_cpp_typename () +
 		"::_tc_" + m_dest.get_cpp_identifier ();
 
-	
+#ifdef IDL2CPP0X
+	// TODO
+#else
 	// Operator <<=
 	m_header << indent << "inline void operator <<= "
 		 << "(CORBA::Any& the_any, " << forany_id << " &_arr)" << endl
@@ -1562,4 +1567,5 @@ IDLWriteArrayAnyFuncs::run()
 	m_header << indent << "return _retval;" << endl;
 
 	m_header << --indent << "}" << endl << endl;
+#endif
 }
