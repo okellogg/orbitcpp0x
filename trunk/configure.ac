@@ -64,10 +64,11 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl --disable-new-mapping switches back to the original Orbit-C++ IDL mapping
-AC_ARG_ENABLE(new-mapping, [  --enable-new-mapping=[no/yes] Turn on compiler warnings.], [enable_new_mapping="$enableval"],[enable_new_mapping="yes"])
+# --disable-new-mapping switches back to the original Orbit-C++ IDL mapping
+AC_ARG_ENABLE(new-mapping, [  --enable-new-mapping=[no/yes] Turn on new IDL to C++ mapping.],
+                           [enable_new_mapping="$enableval"], [enable_new_mapping="yes"])
 
-dnl --disable-compile-warnings
+# --disable-compile-warnings removes -Wall from CXXFLAGS
 AC_ARG_ENABLE(compile-warnings, [  --enable-compile-warnings=[no/yes] Turn on compiler warnings.], [enable_compile_warnings="$enableval"],[enable_compile_warnings="yes"])
 
 # AC_PROG_AWK
@@ -110,11 +111,29 @@ DISABLE_DEPRECATED_CFLAGS=" \
 	-DG_DISABLE_DEPRECATED"
 AC_SUBST(DISABLE_DEPRECATED_CFLAGS)
 
-AS_IF([test "x$enable_compile_warnings" != xno],
+AS_IF([test "$enable_compile_warnings" != no],
   [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -Wall"])], [])
 
-AS_IF([test "x$enable_new_mapping" != xno],
+AS_IF([test "$enable_new_mapping" != no],
   [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -DIDL2CPP0X"])], [])
+
+AC_LANG_PUSH([C++])
+save_cxxflags="$CXXFLAGS"
+CXXFLAGS="-std=c++0x"
+AC_MSG_CHECKING([whether CXX supports C++11 std::array])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM([[#include <array>]],
+                   [[std::array<int,1> a = {1};]])],
+  [AC_MSG_RESULT([yes])]
+    [have_cpp0x_array=yes],
+  [AC_MSG_RESULT([no])]
+    [have_cpp0x_array=no]
+)
+CXXFLAGS="$save_cxxflags"
+AS_IF([test "$have_cpp0x_array" != no],
+  [echo "CXXFLAGS += -std=c++0x" > test/defs.inc],
+  [echo "CXXFLAGS += -I\${top_srcdir}/orbitcpp/orb-cpp/pre-cpp11" > test/defs.inc])
+AC_LANG_POP()
 
 AC_OUTPUT([
   Makefile
