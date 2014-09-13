@@ -11,7 +11,13 @@ which extends orbitcpp to support the evolving IDL to C++0x mapping.
 The code is developed such that the existing CORBA 2.2 based mapping remains
 intact, in other words the modifications are made non-destructively.
 
-The new C++0x mapping can be enabled at compile time, by invoking "make" as follows:
+By default, the software is configured for the new mapping.
+You can configure the software to use the old mapping as follows:
+  ./configure --disable-new-mapping
 
-  make CXXFLAGS="-DIDL2CPP0X -std=c++0x"
+Tests are not automatically built.
+If you invoked `configure' with --disable-new-mapping then go to the test/cpp directory
+and call `make' there.
+If you invoked `configure' with --enable-new-mapping or without any such switch then
+go to the test/cpp0x directory and call `make CXXFLAGS=-DIDL2CPP0X' there.
 
