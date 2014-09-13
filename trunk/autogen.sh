@@ -9,7 +9,7 @@ cd $srcdir
 
 DIE=0
 
-# Check for autoconf, the required version is set in configure.in
+# Check for autoconf, the required version is set in configure.ac
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have at minimum autoconf version 2.12 installed."
