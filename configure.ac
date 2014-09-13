@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT(configure.ac)
 
 AC_PREREQ(2.12) # required version of autoconf
 
@@ -64,7 +64,10 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl --enable-comile-warnings
+dnl --disable-new-mapping switches back to the original Orbit-C++ IDL mapping
+AC_ARG_ENABLE(new-mapping, [  --enable-new-mapping=[no/yes] Turn on compiler warnings.], [enable_new_mapping="$enableval"],[enable_new_mapping="yes"])
+
+dnl --disable-compile-warnings
 AC_ARG_ENABLE(compile-warnings, [  --enable-compile-warnings=[no/yes] Turn on compiler warnings.], [enable_compile_warnings="$enableval"],[enable_compile_warnings="yes"])
 
 # AC_PROG_AWK
@@ -107,6 +110,12 @@ DISABLE_DEPRECATED_CFLAGS=" \
 	-DG_DISABLE_DEPRECATED"
 AC_SUBST(DISABLE_DEPRECATED_CFLAGS)
 
+AS_IF([test "x$enable_compile_warnings" != xno],
+  [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -Wall"])], [])
+
+AS_IF([test "x$enable_new_mapping" != xno],
+  [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -DIDL2CPP0X"])], [])
+
 AC_OUTPUT([
   Makefile
   ORBit-2.0-cpp.pc
@@ -118,6 +127,4 @@ AC_OUTPUT([
       orbitcpp/orb-cpp/smartpointers/Makefile
     orbitcpp/services/Makefile
       orbitcpp/services/name/Makefile
-
-  test/Makefile
 ])
