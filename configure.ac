@@ -115,7 +115,9 @@ AS_IF([test "$enable_compile_warnings" != no],
   [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -Wall"])], [])
 
 AS_IF([test "$enable_new_mapping" != no],
-  [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -DIDL2CPP0X"])], [])
+  [AC_SUBST(CXXFLAGS, ["${CXXFLAGS} -DIDL2CPP0X"])]
+  [echo -e "SUBDIRS := cpp0x\ninclude rules-delegate.mk" > test/Makefile],
+  [echo -e "SUBDIRS := cpp  \ninclude rules-delegate.mk" > test/Makefile])
 
 AC_LANG_PUSH([C++])
 save_cxxflags="$CXXFLAGS"

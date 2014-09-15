@@ -15,9 +15,3 @@ By default, the software is configured for the new mapping.
 You can configure the software to use the old mapping as follows:
   ./configure --disable-new-mapping
 
-Tests are not automatically built.
-If you invoked `configure' with --disable-new-mapping then go to the test/cpp directory
-and call `make' there.
-If you invoked `configure' with --enable-new-mapping or without any such switch then
-go to the test/cpp0x directory and call `make CXXFLAGS=-DIDL2CPP0X' there.
-
