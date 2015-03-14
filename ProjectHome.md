@@ -1,0 +1,1 @@
+A new [CORBA IDL to C++0x](http://www.orbzone.org/node/202) mapping standard is evolving at [OMG](http://www.omg.org/schedule/) . This project aims at updating the [GNOME](http://projects.gnome.org/ORBit2/) [ORBit](http://orbit-resource.sourceforge.net/) [C++ bindings](http://orbitcpp.sourceforge.net/) to the new mapping.
