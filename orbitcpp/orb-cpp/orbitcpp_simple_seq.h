@@ -74,7 +74,7 @@ namespace _orbitcpp {
 	void _length_set_impl (size_t new_length) {
 	    if (new_length > this->_max)
 	    {
-		buffer_t buffer_tmp = allocbuf (new_length);
+		buffer_t buffer_tmp = this->allocbuf (new_length);
 		if (!buffer_tmp)
 		    throw CORBA::NO_MEMORY ();
 
@@ -82,7 +82,7 @@ namespace _orbitcpp {
 		    buffer_tmp[i] = this->_buffer[i];
 
 		if (this->_release)
-		    freebuf (this->_buffer);
+		    this->freebuf (this->_buffer);
 
 		this->_release = true;
 		this->_buffer = buffer_tmp;
@@ -190,7 +190,7 @@ namespace _orbitcpp {
 	    _length (src._length),
 	    _release (true)
 	    {
-		_buffer = allocbuf (_max);
+		_buffer = this->allocbuf (_max);
 		if (!_buffer)
 		    throw CORBA::NO_MEMORY ();
 
@@ -203,7 +203,7 @@ namespace _orbitcpp {
 	    buffer_t buffer_tmp = 0;
 	    
 	    if (src._max != 0) {
-		buffer_tmp = allocbuf (src._max);
+		buffer_tmp = this->allocbuf (src._max);
 		if (!buffer_tmp)
 		    throw CORBA::NO_MEMORY ();
 	    }
@@ -215,7 +215,7 @@ namespace _orbitcpp {
 	    _max = src._max;
 
 	    if (_release)
-		freebuf (_buffer);
+		this->freebuf (_buffer);
 	    _buffer = buffer_tmp;
 	    
 	    return *this;
@@ -224,7 +224,7 @@ namespace _orbitcpp {
 	// Destructor
 	virtual ~StringUnboundedSeq () {
 	    if (_release)
-		freebuf (_buffer);
+		this->freebuf (_buffer);
 	}
 
 	// Size information
@@ -234,7 +234,7 @@ namespace _orbitcpp {
 	void _length_set_impl (size_t new_length) {
 	    if (new_length > this->_max)
 	    {
-		buffer_t buffer_tmp = allocbuf (new_length);
+		buffer_t buffer_tmp = this->allocbuf (new_length);
 		if (!buffer_tmp)
 		    throw CORBA::NO_MEMORY ();
 
@@ -242,7 +242,7 @@ namespace _orbitcpp {
 		    buffer_tmp[i] = this->_buffer[i];
 
 		if (this->_release)
-		    freebuf (this->_buffer);
+		    this->freebuf (this->_buffer);
 
 		this->_release = true;
 		this->_buffer = buffer_tmp;
