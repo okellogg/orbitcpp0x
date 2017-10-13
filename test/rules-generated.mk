@@ -3,7 +3,7 @@
 
 include $(top_builddir)/test/defs.mk
 
-all: $(check_LIBRARIES)
+all: $(DEPDIR) $(check_LIBRARIES)
 
 include $(top_builddir)/test/rules-common.mk
 
@@ -12,6 +12,9 @@ idl_file = ../$(idlname).idl
 $(idl_built): $(idl_file)
 	$(ORBIT_IDL) -l c $(idl_file)
 	$(ORBIT_IDL) --backenddir=$(top_builddir)/orbitcpp/idl-compiler/.libs -l cpp $(idl_file)
+
+$(DEPDIR):
+	mkdir -p $@
 
 $(libSkels_a): $(libSkels_a_OBJECTS) $(orbitcpp_lib) 
 	$(RM) $(libSkels_a)
