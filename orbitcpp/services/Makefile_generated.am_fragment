@@ -7,6 +7,8 @@ INCLUDES = -I$(top_builddir) -I$(top_srcdir)      \
   -Igenerated \
   -D_ORBITCPP_TESTCODE
 
+include $(abs_top_srcdir)/test/defs.inc
+
 c_common_h = $(idlname).h
 c_common = $(c_common_h) $(idlname)-common.c
 c_stub = $(idlname)-stubs.c
