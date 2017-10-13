@@ -31,7 +31,7 @@ MV ?= /bin/mv
 NM ?= /usr/bin/nm -B
 OBJDUMP ?= objdump
 OBJEXT ?= o
-ORBITCPP_CFLAGS ?= -DORBIT2=1 -pthread -I/usr/include/orbit-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  
+ORBITCPP_CFLAGS ?= $(shell pkg-config --cflags ORBit-2.0)
 ORBITCPP_IDL_CFLAGS ?= -DORBIT2=1 -pthread -I/usr/include/orbit-2.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/libIDL-2.0  
 ORBITCPP_IDL_LIBS ?= -pthread -lORBit-2 -lgobject-2.0 -lgthread-2.0 -lrt -lIDL-2 -lglib-2.0  
 ORBITCPP_LIBS ?= -pthread -lORBit-2 -lgobject-2.0 -lgthread-2.0 -lrt -lglib-2.0  
