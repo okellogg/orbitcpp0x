@@ -13,9 +13,6 @@ $(idl_built): $(idl_file)
 	$(ORBIT_IDL) -l c $(idl_file)
 	$(ORBIT_IDL) --backenddir=$(top_builddir)/orbitcpp/idl-compiler/.libs -l cpp $(idl_file)
 
-$(DEPDIR):
-	mkdir -p $@
-
 $(libSkels_a): $(libSkels_a_OBJECTS) $(orbitcpp_lib) 
 	$(RM) $(libSkels_a)
 	$(CALL_AR) $(libSkels_a) $(libSkels_a_OBJECTS) $(libSkels_a_LIBADD)

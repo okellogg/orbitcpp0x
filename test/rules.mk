@@ -3,7 +3,7 @@
 
 include $(top_builddir)/test/defs.mk
 
-all:
+all: $(DEPDIR)
 	$(MAKE) -C generated
 	$(MAKE) $(check_PROGRAMS)
 

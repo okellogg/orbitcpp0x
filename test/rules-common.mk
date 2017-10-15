@@ -1,6 +1,9 @@
 # rules-common.mk
 # Rules which are common to a test directory and its subdirectory "generated"
 
+$(DEPDIR):
+	mkdir -p $@
+
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
 	$(MV) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
